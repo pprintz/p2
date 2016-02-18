@@ -13,6 +13,7 @@ namespace ConsoleApplication2 {
         public int id = 0;
         public string name;
         public int x { get; }
+        
         public int y { get; }
 
         public Vertex(int x, int y, string name) {

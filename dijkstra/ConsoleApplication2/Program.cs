@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Dijkstra {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine("List of vertices");
+            Console.WriteLine("List of egdes");
             List<Vertex> vertices = new List<Vertex>();
             Vertex a = new Vertex(0, 0, "a");
             Vertex b = new Vertex(3, 0, "b");
@@ -21,22 +21,19 @@ namespace Dijkstra {
             vertices.Add(d);
             vertices.Add(e);
             
-            c.addEgde(c, a);
-            c.addEgde(c, b);
-            c.addEgde(c, d);
+            c.addEgde(c, a, b, d);
             a.addEgde(a, e);
             b.addEgde(b, e);
             d.addEgde(d, e);
-
 
             Graph graf = new Graph(c, e, vertices);
             Graph graft= new Graph(a, e, vertices);
 
             foreach (Vertex vertex in vertices) {
-                Egde.printEgde(vertex);
+                Egde.printEgdeCoordsAndLen(vertex);
             }
-            graft.dijkstra();
-            graft.printPathAndLength();
+            graf.dijkstra();
+            graf.printPathAndLength();
             Console.ReadKey();
         }
     }

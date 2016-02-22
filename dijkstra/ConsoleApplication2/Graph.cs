@@ -31,10 +31,10 @@ namespace Dijkstra {
                 checkEgdes(current);
             }
         }
-        public void checkEgdes(Vertex vertex) {
-            foreach (Egde egde in vertex.egdeList) {
-                 if (egde.length + vertex.lenFromSource < egde.destVertex.lenFromSource) {
-                    egde.destVertex.lenFromSource = egde.length + vertex.lenFromSource;
+        public void checkEgdes(Vertex current) {
+            foreach (Egde egde in current.egdeList) {
+                 if (egde.length + current.lenFromSource < egde.destVertex.lenFromSource) {
+                    egde.destVertex.lenFromSource = egde.length + current.lenFromSource;
                     egde.destVertex.parent = egde.sourceVertex;
                     }
                 } 

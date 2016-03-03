@@ -6,7 +6,14 @@
         xmlns:local="clr-namespace:MakingGrid"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="500" Loaded="Windom_Loaded" >
-    <Grid Name="MyGrid">
+    <Grid Name="MyGrid"
+          
+          SizeChanged="MyGrid_SizeChanged"
+          SizeChanged=""
+          
+        >
+        
+        
         
     </Grid>
 </Window>

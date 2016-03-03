@@ -12,3 +12,17 @@ c:\users\neztnerol\documents\visual studio 2015\Projects\MakingGrid\MakingGrid\o
 c:\users\neztnerol\documents\visual studio 2015\Projects\MakingGrid\MakingGrid\obj\Debug\MakingGrid.csproj.GenerateResource.Cache
 c:\users\neztnerol\documents\visual studio 2015\Projects\MakingGrid\MakingGrid\obj\Debug\MakingGrid.exe
 c:\users\neztnerol\documents\visual studio 2015\Projects\MakingGrid\MakingGrid\obj\Debug\MakingGrid.pdb
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\bin\Debug\MakingGrid.exe.config
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MakingGrid.exe
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MakingGrid.pdb
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\bin\Debug\MakingGrid.exe
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\bin\Debug\MakingGrid.pdb
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MakingGrid.csprojResolveAssemblyReference.cache
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MainWindow.g.cs
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\App.g.cs
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MakingGrid_MarkupCompile.cache
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MakingGrid_MarkupCompile.lref
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MainWindow.baml
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MakingGrid.g.resources
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MakingGrid.Properties.Resources.resources
+C:\Users\peter\Desktop\p2\p2\MakingGrid\MakingGrid\obj\Debug\MakingGrid.csproj.GenerateResource.Cache

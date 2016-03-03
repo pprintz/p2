@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dijkstra {
+namespace astar {
     class Vertex {
 
         public Vertex parent = null;
-        public double lenFromSource { get; set; } = 1000;
-        public string name { get; set; }
+        public double lenFromSource = 1000;
+        public double lenToDestination;
+        public string name;
         public int x { get; }
         public int y { get; }
 

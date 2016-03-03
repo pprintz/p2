@@ -6,30 +6,39 @@ using System.Threading.Tasks;
 
 namespace Dijkstra {
     class Graph {
-        public Vertex source;
-        public Vertex current;
-        public Vertex dest;
-        public string path;
         List<Vertex> vertices = new List<Vertex>();
-        List<Vertex> unvisitedVertices = new List<Vertex>();
-        public Graph(Vertex source, Vertex dest, List<Vertex> vertices) {
-            this.source = source;
-            this.dest = dest;
+        public Vertex current;
+        public Graph(List<Vertex> vertices) {
             this.vertices = vertices;
         }
-        public void dijkstra() {
+        public List<Vertex> dijkstra(Vertex source, Vertex destination) {
+            List<Vertex> unvisitedVertices = new List<Vertex>();
             foreach (Vertex vertex in vertices) {
                 unvisitedVertices.Add(vertex);
             }
+            unvisitedVertices.Remove(source);
+            unvisitedVertices.Remove(destination);
+            unvisitedVertices.Add(destination);
+            unvisitedVertices.Insert(0, source);
+
             source.lenFromSource = 0;
             while(unvisitedVertices.Count != 0) {
-                Vertex current = unvisitedVertices[0];
-                unvisitedVertices.Remove(current);
-                if (current == dest) {
+                if (current == destination) {
                     break;
                 }
+                current = unvisitedVertices[0];
+                unvisitedVertices.Remove(current);
                 checkEgdes(current);
             }
+
+            List<Vertex> path = new List<Vertex>();
+            Vertex parent = destination;
+            do {
+                path.Add(parent);
+                parent = parent.parent;
+            } while (parent != null);
+            path.Reverse();
+            return path;
         }
         public void checkEgdes(Vertex current) {
             foreach (Egde egde in current.egdeList) {
@@ -39,26 +48,18 @@ namespace Dijkstra {
                     }
                 } 
         } 
-        public void printPathAndLength() {
-            Vertex parent = dest;
-            List<string> path = new List<string>();
+        static public void printPathAndLength(List<Vertex> path) {
             Console.WriteLine();
-            do {
-                path.Add(parent.name);
-                parent = parent.parent;
-            } while (parent.parent != null);
-            path.Reverse();
-            Console.Write($"{source.name} --> ");
-            foreach (string item in path) {
+            foreach (Vertex item in path) {
                 if (item != path[path.Count-1]) {
-                    Console.Write(item + " --> ");
+                    Console.Write(item.name + " --> ");
                 }
                 else {
-                    Console.Write(item);
+                    Console.Write(item.name);
                 }
             }
             Console.WriteLine();
-            Console.WriteLine($"Length from {source.name} to {dest.name} is:\n{dest.lenFromSource}");
+            Console.WriteLine($"Length from {path[0].name} to {path[path.Count-1].name} is:\n{path[path.Count-1].lenFromSource}");
         }
     }
 }

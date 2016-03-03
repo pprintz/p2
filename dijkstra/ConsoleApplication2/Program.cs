@@ -15,25 +15,26 @@ namespace Dijkstra {
             Vertex d = new Vertex(2, -6, "d");
             Vertex e = new Vertex(2, -8, "e");
 
-            vertices.Add(a);
-            vertices.Add(b);
-            vertices.Add(c);
             vertices.Add(d);
             vertices.Add(e);
+            vertices.Add(c);
+            vertices.Add(b);
+            vertices.Add(a);
             
             c.addEgde(c, a, b, d);
             a.addEgde(a, e);
             b.addEgde(b, e);
+            e.addEgde(e, d);
             d.addEgde(d, e);
 
-            Graph graf = new Graph(c, e, vertices);
-            Graph graft= new Graph(a, e, vertices);
+            Graph graf = new Graph(vertices);
 
             foreach (Vertex vertex in vertices) {
                 Egde.printEgdeCoordsAndLen(vertex);
             }
-            graf.dijkstra();
-            graf.printPathAndLength();
+            List<Vertex> path = new List<Vertex>();
+            path = graf.dijkstra(a, d);
+            Graph.printPathAndLength(path);
             Console.ReadKey();
         }
     }

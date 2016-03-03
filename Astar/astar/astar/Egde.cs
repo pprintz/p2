@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dijkstra {
+namespace astar {
     class Egde {
         public Vertex sourceVertex, destVertex;
-        public double length { get; set; }
+        public double length;
         public Egde(Vertex from, Vertex to) {
             this.sourceVertex = from;
             this.destVertex = to;
-            length = distEgde();
+            length = calculateDist(sourceVertex, destVertex);
         }
-        private double distEgde() {
-            double length = Math.Sqrt(Math.Pow(Math.Abs(sourceVertex.x - destVertex.x), 2) +
-                     Math.Pow(Math.Abs(sourceVertex.y - destVertex.y), 2));
+        public static double calculateDist(Vertex a, Vertex b) {
+            double length = Math.Sqrt(Math.Pow(Math.Abs(a.x - b.x), 2) +
+                     Math.Pow(Math.Abs(a.y - b.y), 2));
             return length;
         }
         public static void printEgdeCoordsAndLen(Vertex a) {

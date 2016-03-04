@@ -1,0 +1,20 @@
+﻿<Window x:Class="GridTakeThree.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GridTakeThree"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="800"
+        KeyDown="button_Click" >
+    <Canvas Name="canvas">
+        <Button x:Name="button" Content="Make Wall" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="MakeWall" Canvas.Left="674" Canvas.Top="50" />
+        <Button x:Name="button2" Content="Make Door" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="MakeDoor" Canvas.Left="674" Canvas.Top="80" />
+        <Button x:Name="button3" Content="Make Path" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="MakePath" Canvas.Left="674" Canvas.Top="110" />
+        <Button x:Name="button4" Content="Make Free" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="MakeFree" Canvas.Left="674" Canvas.Top="150" />
+
+        <Button x:Name="button5" Content="Calculate neighbours" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="ForceCalculateNeighbours" Canvas.Left="674" Canvas.Top="200" />
+        <Button x:Name="button6" Content="Paaaaath" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="StartPath" Canvas.Left="674" Canvas.Top="300" />
+
+    </Canvas>
+</Window>

@@ -19,3 +19,6 @@ C:\Users\peter\Desktop\p2\p2\Dijkstra\ConsoleApplication2\obj\Debug\ConsoleAppli
 C:\Users\peter\Desktop\p2\p2\Dijkstra\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
 C:\Users\peter\Desktop\p2\p2\Dijkstra\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
 C:\Users\peter\Desktop\p2\p2\Dijkstra\ConsoleApplication2\obj\Debug\Dijkstra.csprojResolveAssemblyReference.cache
+C:\Users\Dennis\Desktop\GitHub\P2\dijkstra\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe.config
+C:\Users\Dennis\Desktop\GitHub\P2\dijkstra\ConsoleApplication2\obj\Debug\ConsoleApplication2.exe
+C:\Users\Dennis\Desktop\GitHub\P2\dijkstra\ConsoleApplication2\obj\Debug\ConsoleApplication2.pdb

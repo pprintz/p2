@@ -13,21 +13,16 @@ namespace GridTakeThree {
         }
 
         public List<Point> dijkstra(Point source, Point destination) {
-            List<Point> unvisitedVertices = new List<Point>();
-            foreach (Point vertex in vertices) {
-                unvisitedVertices.Add(vertex);
-            }
-            unvisitedVertices.Remove(source);
-            unvisitedVertices.Remove(destination);
-            unvisitedVertices.Add(destination);
-            unvisitedVertices.Insert(0, source);
-
-            source.LenghtFromSource = 0;
+            List<Point> unvisitedVertices = vertices.ToList();
+            
+            
+            source.LengthFromSource = 0;
             while(unvisitedVertices.Count != 0) {
+                unvisitedVertices.Sort((x, y) => x.LengthFromSource.CompareTo(y.LengthFromSource));
+                current = unvisitedVertices[0];
                 if (current == destination) {
                     break;
                 }
-                current = unvisitedVertices[0];
                 unvisitedVertices.Remove(current);
                 checkEgdes(current);
             }
@@ -46,8 +41,8 @@ namespace GridTakeThree {
 
         public void checkEgdes(Point currentPoint) {
             foreach (Point neighbour in currentPoint.Neighbours) {
-                 if (currentPoint.DistanceToPoint(neighbour) + currentPoint.LenghtFromSource < neighbour.LenghtFromSource) {
-                    neighbour.LenghtFromSource = currentPoint.DistanceToPoint(neighbour) + currentPoint.LenghtFromSource;
+                 if (currentPoint.DistanceToPoint(neighbour) + currentPoint.LengthFromSource < neighbour.LengthFromSource) {
+                    neighbour.LengthFromSource = currentPoint.DistanceToPoint(neighbour) + currentPoint.LengthFromSource;
                     neighbour.Parent = currentPoint;
                     }
                 } 

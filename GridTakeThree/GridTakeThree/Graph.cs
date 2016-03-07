@@ -9,10 +9,9 @@ namespace GridTakeThree
 {
     class Graph
     {
-        List<Point> vertices = new List<Point>();
-        OrderedBag<Point> priorityQueue = new OrderedBag<Point>();
-        Dictionary<string, Point> closedSet = new Dictionary<string, Point>();
-        public Point current;
+        public List<Point> vertices = new List<Point>();
+        private static bool firstRun = true;
+
         public Graph(List<Point> vertices)
         {
             this.vertices = vertices;
@@ -20,10 +19,18 @@ namespace GridTakeThree
 
         public List<Point> dijkstra(Point source, Point destination)
         {
+            OrderedBag<Point> priorityQueue = new OrderedBag<Point>();
+            Dictionary<string, Point> closedSet = new Dictionary<string, Point>();
             List<Point> unvisitedVertices = vertices.ToList();
+            Point current;
+
             foreach (Point point in unvisitedVertices)
             {
                 point.lengthToDestination = point.DistanceToPoint(destination);
+                if (firstRun)
+                    firstRun = false;
+                else
+                    point.LengthFromSource = 100000;
             }
 
             unvisitedVertices.Remove(source);
@@ -43,7 +50,7 @@ namespace GridTakeThree
                         }
                     }
                 }
-                checkEgdes(current);
+                checkEgdes(current, priorityQueue);
                 if (priorityQueue.Count == 0)
                 {
                     closedSet.Add($"{current.X},{current.Y}", current);
@@ -72,7 +79,7 @@ namespace GridTakeThree
             return path;
         }
 
-        public void checkEgdes(Point currentPoint)
+        public void checkEgdes(Point currentPoint, OrderedBag<Point> priorityQueue)
         {
             foreach (Point neighbour in priorityQueue)
             {

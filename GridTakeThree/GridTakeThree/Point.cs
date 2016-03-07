@@ -26,20 +26,18 @@ namespace GridTakeThree {
             Elevation = elevation;
         }
         public double lengthToDestination;
-        public Boolean isChecked = false;
+        public bool isChecked = false;
         public int CompareTo(Point other)
         {
             if (LengthFromSource + lengthToDestination < other.LengthFromSource + other.lengthToDestination)
             {
                 return -1;
             }
-            else if (LengthFromSource + lengthToDestination > other.LengthFromSource + other.lengthToDestination)
+            if (LengthFromSource + lengthToDestination > other.LengthFromSource + other.lengthToDestination)
             {
                 return 1;
             }
-            else {
-                return 0;
-            }
+            return 0;
         }
 
         public int X { get; }
@@ -65,7 +63,7 @@ namespace GridTakeThree {
         } 
         
         public Ellipse Visual { get; }
-        public double LengthFromSource { get; set; } = 1000000;
+        public double LengthFromSource { get; set; } = 100000;
         public Point Parent { get; set; }
         public List<Point> Neighbours { get; private set; } = new List<Point>();
 

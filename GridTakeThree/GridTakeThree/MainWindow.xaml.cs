@@ -43,8 +43,16 @@ namespace GridTakeThree {
             foreach (Point item in grid.AllPoints.Values) {
                 allPoints.Add(item);
             }
+            int currentStartPointIndex = 0;
+            int currentEndPointIndex = 1;
             Graph graph = new Graph(allPoints);
-            graph.dijkstra(Point.Path[0], Point.Path[1]);
+            while (currentEndPointIndex < Point.Path.Count)
+            {
+                graph.dijkstra(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]);
+                currentStartPointIndex++;
+                currentEndPointIndex++;
+            }
+           
         }
 
         private void MakeWallChecked(object sender, RoutedEventArgs e)

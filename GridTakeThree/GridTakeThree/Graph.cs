@@ -53,7 +53,9 @@ namespace GridTakeThree
                 checkEgdes(current, priorityQueue);
                 if (priorityQueue.Count == 0)
                 {
-                    closedSet.Add($"{current.X},{current.Y}", current);
+                    if(closedSet.ContainsKey($"{current.X},{current.Y}") == false)
+                        closedSet.Add($"{current.X},{current.Y}", current);
+           
                     current = source;
                     foreach (Point point in unvisitedVertices)
                     {
@@ -71,8 +73,12 @@ namespace GridTakeThree
             do
             {
                 path.Add(parent);
-                parent.Elevation = Point.ElevationTypes.Exit;
-                parent.ColorizePoint();
+                if (parent.Elevation != Point.ElevationTypes.Hall)
+                {
+                    parent.Elevation = Point.ElevationTypes.Exit;
+                    parent.ColorizePoint();
+                }
+               
                 parent = parent.Parent;
             } while (parent != null);
             path.Reverse();

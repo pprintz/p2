@@ -20,48 +20,25 @@ namespace GridTakeThree {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-            InitializeProgram();
         }
 
-        private void InitializeProgram() {
-            GridSettings.WindowHeight = Height;
-            GridSettings.WindowWidth = Width;
-        }
-        Grid grid;
+        /*private void InitializeProgram() {
+            grid.WindowHeight = Height;
+            grid.WindowWidth = Width;
+        }*/
+
+        private Grid grid;
         private void button_Click(object sender, RoutedEventArgs e) {
-            grid = new Grid(canvas);
+            grid = new Grid(canvas, 800, 400);
             grid.CreateGrid();
-            MessageBox.Show((GridSettings.PointsInHeight * GridSettings.PointsPerRow).ToString());
         }
-        public static bool makeWall = false;
-        public static bool makeDoor = false;
-        public static bool makePath = false;
-        public static bool makeFree = true;
-
-        private void MakeWall(object sender, RoutedEventArgs e) {
-            makeWall = !makeWall;
-        }
-
-        private void MakeDoor(object sender, RoutedEventArgs e) {
-            makeDoor = !makeDoor;
-        }
-
-        private void MakePath(object sender, RoutedEventArgs e) {
-            makePath = !makePath;
-        }
-
-        private void MakeFree(object sender, RoutedEventArgs e) {
-            makeWall = false;
-            makeDoor = false;
-            makePath = false;
-            makeFree = true;
-        }
-
-        private void ForceCalculateNeighbours(object sender, RoutedEventArgs e) {
-            grid.CalculateAllNeighbours();
-        }
+        public static bool makeWall;
+        public static bool makeDoor;
+        public static bool makePath;
+        public static bool makeFree;
 
         private void StartPath(object sender, RoutedEventArgs e) {
+            grid.CalculateAllNeighbours();
             List<Point> allPoints = new List<Point>();
             foreach (Point item in grid.AllPoints.Values) {
                 allPoints.Add(item);
@@ -69,5 +46,39 @@ namespace GridTakeThree {
             Graph graph = new Graph(allPoints);
             graph.dijkstra(Point.Path[0], Point.Path[1]);
         }
+
+        private void MakeWallChecked(object sender, RoutedEventArgs e)
+        {
+            makeWall = true;
+        }
+        private void MakeDoorChecked(object sender, RoutedEventArgs e)
+        {
+            makeDoor = true;
+        }
+        private void MakePathChecked(object sender, RoutedEventArgs e)
+        {
+            makePath = true;
+        }
+        private void MakeFreeChecked(object sender, RoutedEventArgs e)
+        {
+            makeFree = true;
+        }
+        private void MakeWallUnchecked(object sender, RoutedEventArgs e)
+        {
+            makeWall = false;
+        }
+        private void MakeDoorUnchecked(object sender, RoutedEventArgs e)
+        {
+            makeDoor = false;
+        }
+        private void MakePathUnchecked(object sender, RoutedEventArgs e)
+        {
+            makePath = false;
+        }
+        private void MakeFreeUnchecked(object sender, RoutedEventArgs e)
+        {
+            makeFree = false;
+        }
+
     }
 }

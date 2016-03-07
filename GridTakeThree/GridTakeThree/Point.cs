@@ -48,7 +48,7 @@ namespace GridTakeThree {
         } 
         
         public Ellipse Visual { get; }
-        public double LenghtFromSource { get; set; } = 1000000;
+        public double LengthFromSource { get; set; } = 1000000;
         public Point Parent { get; set; }
         public List<Point> Neighbours { get; private set; } = new List<Point>();
 

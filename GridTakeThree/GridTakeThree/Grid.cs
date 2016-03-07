@@ -15,8 +15,26 @@ using System.Windows.Shapes;
 
 namespace GridTakeThree {
     class Grid {
-        public Grid(Canvas canvas) {
+
+        public int GridSpacing { get; } = 10;
+        public int PointSize { get; private set; } = 10;
+
+        /*public static double MaxPointDistance
+        {
+            get { return Math.Sqrt(Math.Pow(GridSpacing - 0, 2) + Math.Pow(GridSpacing - 0, 2)); }
+        }*/
+
+        public double WindowWidth { get; set; }
+        public double WindowHeight { get; set; }
+
+        public int PointsPerRow => (int)((WindowWidth - 200) / GridSpacing);
+        public int PointsInHeight => (int)(WindowHeight / GridSpacing);
+
+
+        public Grid(Canvas canvas, int windowWidth, int windowHeight) {
             TheCanvas = canvas;
+            WindowWidth = windowWidth;
+            WindowHeight = windowHeight;
         }
 
         public Canvas TheCanvas { get; }
@@ -28,12 +46,12 @@ namespace GridTakeThree {
         public Dictionary<string, Point> AllPoints { get; private set; } = new Dictionary<string, Point>();
 
         public void CreateGrid() {
-            for (int y = 0; y < GridSettings.PointsInHeight; y++) {
-                for (int x = 0; x < GridSettings.PointsPerRow; x++) {
+            for (int y = 0; y < PointsInHeight; y++) {
+                for (int x = 0; x < PointsPerRow; x++) {
                     Ellipse figure = new Ellipse();
-                    figure.Height = GridSettings.PointSize;
-                    figure.Width = GridSettings.PointSize;
-                    figure.Margin = new Thickness(x*GridSettings.GridSpacing, y* GridSettings.GridSpacing, 0, 0);
+                    figure.Height = PointSize;
+                    figure.Width = PointSize;
+                    figure.Margin = new Thickness(x*GridSpacing, y* GridSpacing, 0, 0);
 
                     string coordinate = $"({x}, {y})";
                     AllPoints.Add(coordinate, new Point(x, y, figure));

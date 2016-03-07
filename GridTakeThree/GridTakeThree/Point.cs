@@ -14,7 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace GridTakeThree {
-    class Point {
+    class Point : IComparable<Point>
+    {
         public Point(int x, int y, Ellipse visual) : this (x, y, visual, ElevationTypes.Free) { }
         public Point(int x, int y, Ellipse visual, ElevationTypes elevation) {
             X = x;
@@ -23,6 +24,22 @@ namespace GridTakeThree {
             Visual = visual;
             Visual.MouseLeftButtonDown += OnClick;
             Elevation = elevation;
+        }
+        public double lengthToDestination;
+        public Boolean isChecked = false;
+        public int CompareTo(Point other)
+        {
+            if (LengthFromSource + lengthToDestination < other.LengthFromSource + other.lengthToDestination)
+            {
+                return -1;
+            }
+            else if (LengthFromSource + lengthToDestination > other.LengthFromSource + other.lengthToDestination)
+            {
+                return 1;
+            }
+            else {
+                return 0;
+            }
         }
 
         public int X { get; }

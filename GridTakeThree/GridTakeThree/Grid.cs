@@ -63,7 +63,8 @@ namespace GridTakeThree {
             //CalculateAllNeighbours();
         }
 
-        public void CalculateAllNeighbours() {
+        public void CalculateAllNeighbours()
+        {
             foreach (Point item in AllPoints.Values) {
                 item.CalculateNeighbours(AllPoints);
             }

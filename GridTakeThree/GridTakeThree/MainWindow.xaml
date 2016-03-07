@@ -8,13 +8,10 @@
         Title="MainWindow" Height="600" Width="800"
         KeyDown="button_Click" >
     <Canvas Name="canvas">
-        <Button x:Name="button" Content="Make Wall" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="MakeWall" Canvas.Left="674" Canvas.Top="50" />
-        <Button x:Name="button2" Content="Make Door" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="MakeDoor" Canvas.Left="674" Canvas.Top="80" />
-        <Button x:Name="button3" Content="Make Path" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="MakePath" Canvas.Left="674" Canvas.Top="110" />
-        <Button x:Name="button4" Content="Make Free" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="MakeFree" Canvas.Left="674" Canvas.Top="150" />
-
-        <Button x:Name="button5" Content="Calculate neighbours" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="ForceCalculateNeighbours" Canvas.Left="674" Canvas.Top="200" />
-        <Button x:Name="button6" Content="Paaaaath" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="StartPath" Canvas.Left="674" Canvas.Top="300" />
-
+        <Button x:Name="FindPath" Content="Find Path" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="StartPath" Canvas.Left="674" Canvas.Top="225" />
+        <RadioButton x:Name="MakeWall" GroupName="RadioElevation" Content="Make Wall" Canvas.Left="674" Canvas.Top="122" RenderTransformOrigin="-0.518,1.667" IsChecked="True" Checked="MakeWallChecked" Unchecked="MakeWallUnchecked"/>
+        <RadioButton x:Name="MakeDoor" GroupName="RadioElevation" Content="Make Door" Canvas.Left="674" Canvas.Top="142" RenderTransformOrigin="-0.518,1.667" Checked="MakeDoorChecked" Unchecked="MakeDoorUnchecked"/>
+        <RadioButton x:Name="MakePath" GroupName="RadioElevation" Content="Make Path" Canvas.Left="673" Canvas.Top="162" RenderTransformOrigin="-0.518,1.667" Checked="MakePathChecked" Unchecked="MakePathUnchecked"/>
+        <RadioButton x:Name="MakeFree" GroupName="RadioElevation" Content="Make Free" Canvas.Left="674" Canvas.Top="182" RenderTransformOrigin="-0.518,1.667" Checked="MakeFreeChecked" Unchecked="MakeFreeUnchecked"/>
     </Canvas>
 </Window>

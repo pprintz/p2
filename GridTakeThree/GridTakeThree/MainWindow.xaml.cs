@@ -20,18 +20,17 @@ namespace GridTakeThree {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
-            InitializeProgram();
         }
 
-        private void InitializeProgram() {
-            GridSettings.WindowHeight = Height;
-            GridSettings.WindowWidth = Width;
-        }
-        Grid grid;
+        /*private void InitializeProgram() {
+            grid.WindowHeight = Height;
+            grid.WindowWidth = Width;
+        }*/
+
+        private Grid grid;
         private void button_Click(object sender, RoutedEventArgs e) {
-            grid = new Grid(canvas);
+            grid = new Grid(canvas, 800, 400);
             grid.CreateGrid();
-            MessageBox.Show((GridSettings.PointsInHeight * GridSettings.PointsPerRow).ToString());
         }
         public static bool makeWall = false;
         public static bool makeDoor = false;

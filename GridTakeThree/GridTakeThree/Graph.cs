@@ -17,7 +17,7 @@ namespace GridTakeThree
             this.vertices = vertices;
         }
 
-        public List<Point> dijkstra(Point source, Point destination)
+        public List<Point> AStar(Point source, Point destination)
         {
             OrderedBag<Point> priorityQueue = new OrderedBag<Point>();
             Dictionary<string, Point> closedSet = new Dictionary<string, Point>();
@@ -50,7 +50,7 @@ namespace GridTakeThree
                         }
                     }
                 }
-                checkEgdes(current, priorityQueue);
+                CheckNeighbors(current, priorityQueue);
                 if (priorityQueue.Count == 0)
                 {
                     if(closedSet.ContainsKey($"{current.X},{current.Y}") == false)
@@ -85,7 +85,7 @@ namespace GridTakeThree
             return path;
         }
 
-        public void checkEgdes(Point currentPoint, OrderedBag<Point> priorityQueue)
+        public void CheckNeighbors(Point currentPoint, OrderedBag<Point> priorityQueue)
         {
             foreach (Point neighbour in priorityQueue)
             {

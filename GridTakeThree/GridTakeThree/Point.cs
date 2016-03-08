@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace GridTakeThree {
-    class Point : IComparable<Point>
+    public class Point : IComparable<Point>
     {
         public Point(int x, int y, Ellipse visual) : this (x, y, visual, ElevationTypes.Free) { }
         public Point(int x, int y, Ellipse visual, ElevationTypes elevation) {
@@ -148,7 +148,9 @@ namespace GridTakeThree {
         public static Point SelectedPoint { get; private set; }
         public static List<Point> Path = new List<Point>();
         public void OnClick(object sender, MouseButtonEventArgs e) {
-            if (MainWindow.makeWall)
+            if (MainWindow.lineTool && e != null)
+                MainWindow.InputLineTool(this);
+            else if (MainWindow.makeWall)
                 Elevation = ElevationTypes.Wall;
             else if (MainWindow.makeDoor)
                 Elevation = ElevationTypes.Door;

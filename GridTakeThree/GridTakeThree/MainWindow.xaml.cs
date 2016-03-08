@@ -13,13 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GridTakeThree {
+namespace GridTakeThree
+{
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window {
-        public MainWindow() {
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
             InitializeComponent();
+            mainWindow = this;
         }
 
         /*private void InitializeProgram() {
@@ -28,20 +32,26 @@ namespace GridTakeThree {
         }*/
 
         private Grid grid;
-        private void CreateGrid() {
+        private void CreateGrid()
+        {
             grid = new Grid(canvas, 800, 400);
             grid.CreateGrid();
         }
+
+        private static MainWindow mainWindow;
         public static bool makeWall;
         public static bool makeDoor;
         public static bool makePath;
         public static bool makeFree;
-        private bool lineTool = false;
+        public static bool lineTool = false;
+        private static Point previousPoint;
 
-        private void StartPath(object sender, RoutedEventArgs e) {
+        private void StartPath(object sender, RoutedEventArgs e)
+        {
             grid.CalculateAllNeighbours();
             List<Point> allPoints = new List<Point>();
-            foreach (Point item in grid.AllPoints.Values) {
+            foreach (Point item in grid.AllPoints.Values)
+            {
                 allPoints.Add(item);
             }
             int currentStartPointIndex = 0;
@@ -53,7 +63,38 @@ namespace GridTakeThree {
                 currentStartPointIndex++;
                 currentEndPointIndex++;
             }
-           
+
+        }
+
+        public static void InputLineTool(Point point)
+        {
+            if (previousPoint != null)
+            {
+                mainWindow.DrawLine(previousPoint, point);
+            }
+            previousPoint = point;
+        }
+
+        public void DrawLine(Point from, Point to)
+        {
+            double fromX = from.X, fromY = from.Y;
+            double toX = to.X, toY = to.Y;
+            double pointX, pointY;
+            double distance;
+            foreach (KeyValuePair<string, Point> keyValuePair in grid.AllPoints)
+            {
+                pointX = keyValuePair.Value.X;
+                pointY = keyValuePair.Value.Y;
+
+                distance = Math.Abs((toY - fromY) * pointX - (toX - fromX) * pointY + toX * fromY + toY * fromX)
+                    / Math.Sqrt(Math.Pow(toY - fromY, 2) + Math.Pow(toX - fromX, 2));
+                if (distance <= 0.5)
+                {
+                    keyValuePair.Value.OnClick(null, null);
+                }
+            }
+            from.OnClick(null, null);
+            to.OnClick(null, null);
         }
 
         private void MakeWallChecked(object sender, RoutedEventArgs e)
@@ -93,11 +134,11 @@ namespace GridTakeThree {
         {
             switch (e.Key)
             {
-                case Key.Space:
-                    CreateGrid();
-                    break;
                 case Key.LeftShift:
                     lineTool = true;
+                    break;
+                default:
+                    CreateGrid();
                     break;
             }
         }
@@ -109,6 +150,7 @@ namespace GridTakeThree {
             {
                 case Key.LeftShift:
                     lineTool = false;
+                    previousPoint = null;
                     break;
             }
         }

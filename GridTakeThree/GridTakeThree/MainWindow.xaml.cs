@@ -49,7 +49,7 @@ namespace GridTakeThree {
             Graph graph = new Graph(allPoints);
             while (currentEndPointIndex < Point.Path.Count)
             {
-                graph.dijkstra(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]);
+                graph.AStar(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]);
                 currentStartPointIndex++;
                 currentEndPointIndex++;
             }

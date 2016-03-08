@@ -28,7 +28,7 @@ namespace GridTakeThree {
         }*/
 
         private Grid grid;
-        private void button_Click(object sender, RoutedEventArgs e) {
+        private void CreateGrid() {
             grid = new Grid(canvas, 800, 400);
             grid.CreateGrid();
         }
@@ -36,6 +36,7 @@ namespace GridTakeThree {
         public static bool makeDoor;
         public static bool makePath;
         public static bool makeFree;
+        private bool lineTool = false;
 
         private void StartPath(object sender, RoutedEventArgs e) {
             grid.CalculateAllNeighbours();
@@ -88,5 +89,28 @@ namespace GridTakeThree {
             makeFree = false;
         }
 
+        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Space:
+                    CreateGrid();
+                    break;
+                case Key.LeftShift:
+                    lineTool = true;
+                    break;
+            }
+        }
+
+
+        private void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.LeftShift:
+                    lineTool = false;
+                    break;
+            }
+        }
     }
 }

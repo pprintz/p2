@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:GridTakeThree"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800"
-        KeyDown="button_Click" >
+        KeyDown="MainWindow_OnKeyDown"
+        KeyUp="MainWindow_OnKeyUp">
     <Canvas Name="canvas">
         <Button x:Name="FindPath" Content="Find Path" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="StartPath" Canvas.Left="674" Canvas.Top="225" />
         <RadioButton x:Name="MakeWall" GroupName="RadioElevation" Content="Make Wall" Canvas.Left="674" Canvas.Top="122" RenderTransformOrigin="-0.518,1.667" IsChecked="True" Checked="MakeWallChecked" Unchecked="MakeWallUnchecked"/>

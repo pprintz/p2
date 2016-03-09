@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace GridTakeThree
 {
@@ -34,7 +35,7 @@ namespace GridTakeThree
         private Grid grid;
         private void CreateGrid()
         {
-            grid = new Grid(canvas, 800, 400);
+            grid = new Grid(canvas, 60, 50);
             grid.CreateGrid();
         }
 
@@ -43,7 +44,7 @@ namespace GridTakeThree
         public static bool makeDoor;
         public static bool makePath;
         public static bool makeFree;
-        public static bool lineTool = false;
+        public static bool lineTool;
         private static Point previousPoint;
 
         private void StartPath(object sender, RoutedEventArgs e)
@@ -56,14 +57,30 @@ namespace GridTakeThree
             }
             int currentStartPointIndex = 0;
             int currentEndPointIndex = 1;
+            List<Point> pointsInPath = new List<Point>();
             Graph graph = new Graph(allPoints);
-            while (currentEndPointIndex < Point.Path.Count)
-            {
-                graph.AStar(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]);
+            while (currentEndPointIndex < Point.Path.Count) {
+                pointsInPath.AddRange(graph.AStar(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]));
                 currentStartPointIndex++;
                 currentEndPointIndex++;
             }
+            ColorizePath(pointsInPath);
 
+        }
+        private void Yield(long ticks) {
+            long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
+            while (DateTime.Now.Ticks < dtEnd) {
+                this.Dispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate (object unused) { return null; }, null);
+            }
+        }
+        private void ColorizePath(List<Point> pointsInPath) {
+            foreach (Point pathPoint in pointsInPath) {
+                if (pathPoint.Elevation != Point.ElevationTypes.Hall) {
+                    pathPoint.Elevation = Point.ElevationTypes.Exit;
+                    pathPoint.ColorizePoint();
+                    Yield(100000);
+                }
+            }
         }
 
         public static void InputLineTool(Point point)

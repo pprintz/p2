@@ -24,18 +24,17 @@ namespace GridTakeThree {
             get { return Math.Sqrt(Math.Pow(GridSpacing - 0, 2) + Math.Pow(GridSpacing - 0, 2)); }
         }*/
 
-        public double WindowWidth { get; set; }
-        public double WindowHeight { get; set; }
-
-        public int PointsPerRow => (int)((WindowWidth - 200) / GridSpacing);
-        public int PointsInHeight => (int)(WindowHeight / GridSpacing);
+        public int PointsPerRow { get; }
+        public int PointsPerColumn { get; }
 
 
-        public Grid(Canvas canvas, int windowWidth, int windowHeight) {
+        public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
             TheCanvas = canvas;
-            WindowWidth = windowWidth;
-            WindowHeight = windowHeight;
+            PointsPerRow = pointsPerRow;
+            PointsPerColumn = pointsPerColumn;
         }
+
+        public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
 
         public Canvas TheCanvas { get; }
 
@@ -46,7 +45,7 @@ namespace GridTakeThree {
         public Dictionary<string, Point> AllPoints { get; private set; } = new Dictionary<string, Point>();
 
         public void CreateGrid() {
-            for (int y = 0; y < PointsInHeight; y++) {
+            for (int y = 0; y < PointsPerColumn; y++) {
                 for (int x = 0; x < PointsPerRow; x++) {
                     Ellipse figure = new Ellipse();
                     figure.Height = PointSize;
@@ -68,7 +67,38 @@ namespace GridTakeThree {
             foreach (Point item in AllPoints.Values) {
                 item.CalculateNeighbours(AllPoints);
             }
+            CheckForConnectionsThroughDiagonalUnwalkableElements();
         }
+
+
+
+        public void CheckForConnectionsThroughDiagonalUnwalkableElements()
+        {
+            string illegalConnectedPointCoordinateSetOne;
+            string illegalConnectedPointCoordinateSetTwo;
+
+            foreach (KeyValuePair<string, Point> pair in AllPoints)
+            {
+                if (pair.Value.Elevation == Point.ElevationTypes.Wall ||
+                    pair.Value.Elevation == Point.ElevationTypes.Furniture)
+                {
+                    foreach (Point neighbour in pair.Value.Neighbours)
+                    {
+                        if(neighbour.DistanceToPoint(pair.Value) > 1) // Then it is a diagonal
+                        {
+                            illegalConnectedPointCoordinateSetOne = $"({pair.Value.X}, {neighbour.Y})";
+                            illegalConnectedPointCoordinateSetTwo = $"({neighbour.X}, {pair.Value.Y})";
+                            if (AllPoints.ContainsKey(illegalConnectedPointCoordinateSetOne) && AllPoints.ContainsKey(illegalConnectedPointCoordinateSetTwo))
+                            {
+                                AllPoints[illegalConnectedPointCoordinateSetOne].Neighbours.Remove(AllPoints[illegalConnectedPointCoordinateSetTwo]);
+                                AllPoints[illegalConnectedPointCoordinateSetTwo].Neighbours.Remove(AllPoints[illegalConnectedPointCoordinateSetOne]);
+                            }
+                        }
+                    } 
+                }   
+            }   
+        }
+
 
         /*public void PointToWall() {
             if (!WalledPoints.Contains(this))

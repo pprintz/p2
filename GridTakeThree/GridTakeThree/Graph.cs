@@ -5,28 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Wintellect.PowerCollections;
 
-namespace GridTakeThree
-{
-    class Graph
-    {
+namespace GridTakeThree {
+    class Graph {
         public List<Point> vertices = new List<Point>();
         private static bool firstRun = true;
 
-        public Graph(List<Point> vertices)
-        {
+        public Graph(List<Point> vertices) {
             this.vertices = vertices;
         }
 
-        public List<Point> AStar(Point source, Point destination)
-        {
+        public List<Point> AStar(Point source, Point destination) {
             OrderedBag<Point> priorityQueue = new OrderedBag<Point>();
             Dictionary<string, Point> closedSet = new Dictionary<string, Point>();
             List<Point> unvisitedVertices = vertices.ToList();
             Point current;
 
-            foreach (Point point in unvisitedVertices)
-            {
+            foreach (Point point in unvisitedVertices) {
                 point.lengthToDestination = point.DistanceToPoint(destination);
+                point.Parent = null;
                 if (firstRun)
                     firstRun = false;
                 else
@@ -38,27 +34,21 @@ namespace GridTakeThree
             unvisitedVertices.Insert(0, source);
             current = unvisitedVertices[0];
 
-            while (current != destination)
-            {
-                foreach (Point point in current.Neighbours)
-                {
-                    if (point.isChecked == false)
-                    {
-                        if (!(closedSet.ContainsKey($"{point.X},{point.Y}")))
-                        {
+            while (current != destination) {
+                foreach (Point point in current.Neighbours) {
+                    if (point.isChecked == false) {
+                        if (!(closedSet.ContainsKey($"{point.X},{point.Y}"))) {
                             priorityQueue.Add(point);
                         }
                     }
                 }
                 CheckNeighbors(current, priorityQueue);
-                if (priorityQueue.Count == 0)
-                {
-                    if(closedSet.ContainsKey($"{current.X},{current.Y}") == false)
+                if (priorityQueue.Count == 0) {
+                    if (closedSet.ContainsKey($"{current.X},{current.Y}") == false)
                         closedSet.Add($"{current.X},{current.Y}", current);
-           
+
                     current = source;
-                    foreach (Point point in unvisitedVertices)
-                    {
+                    foreach (Point point in unvisitedVertices) {
                         point.isChecked = false;
                     }
                     continue;
@@ -70,27 +60,17 @@ namespace GridTakeThree
 
             List<Point> path = new List<Point>();
             Point parent = destination;
-            do
-            {
+            do {
                 path.Add(parent);
-                if (parent.Elevation != Point.ElevationTypes.Hall)
-                {
-                    parent.Elevation = Point.ElevationTypes.Exit;
-                    parent.ColorizePoint();
-                }
-               
                 parent = parent.Parent;
             } while (parent != null);
             path.Reverse();
             return path;
         }
 
-        public void CheckNeighbors(Point currentPoint, OrderedBag<Point> priorityQueue)
-        {
-            foreach (Point neighbour in priorityQueue)
-            {
-                if (currentPoint.DistanceToPoint(neighbour) + currentPoint.LengthFromSource < neighbour.LengthFromSource)
-                {
+        public void CheckNeighbors(Point currentPoint, OrderedBag<Point> priorityQueue) {
+            foreach (Point neighbour in priorityQueue) {
+                if (currentPoint.DistanceToPoint(neighbour) + currentPoint.LengthFromSource < neighbour.LengthFromSource) {
                     neighbour.LengthFromSource = currentPoint.DistanceToPoint(neighbour) + currentPoint.LengthFromSource;
                     neighbour.Parent = currentPoint;
                 }

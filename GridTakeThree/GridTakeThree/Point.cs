@@ -139,8 +139,11 @@ namespace GridTakeThree {
                         
                     currentPoint = allPoints[coordinate];
 
-                    if (currentPoint.Elevation != ElevationTypes.Wall && currentPoint.Elevation != ElevationTypes.Furniture)
+                    if (currentPoint.Elevation != ElevationTypes.Wall && currentPoint.Elevation != ElevationTypes.Furniture // Everything else connects to everything else
+                        || currentPoint.Elevation == ElevationTypes.Wall && currentPoint.Elevation == Elevation // Wall connects to walls
+                        || currentPoint.Elevation == ElevationTypes.Furniture && currentPoint.Elevation == Elevation ) // furniture connects to furniture
                         AddPointToNeighbours(currentPoint);
+                    
                  }
             }
         }

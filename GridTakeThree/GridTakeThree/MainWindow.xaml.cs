@@ -35,7 +35,7 @@ namespace GridTakeThree
         private Grid grid;
         private void CreateGrid()
         {
-            grid = new Grid(canvas, 800, 400);
+            grid = new Grid(canvas, 60, 50);
             grid.CreateGrid();
         }
 
@@ -44,7 +44,7 @@ namespace GridTakeThree
         public static bool makeDoor;
         public static bool makePath;
         public static bool makeFree;
-        public static bool lineTool = false;
+        public static bool lineTool;
         private static Point previousPoint;
 
         private void StartPath(object sender, RoutedEventArgs e)

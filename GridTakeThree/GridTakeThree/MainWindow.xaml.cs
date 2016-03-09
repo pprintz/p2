@@ -75,25 +75,38 @@ namespace GridTakeThree
             previousPoint = point;
         }
 
+
+
         public void DrawLine(Point from, Point to)
         {
-            double fromX = from.X, fromY = from.Y;
-            double toX = to.X, toY = to.Y;
-            double pointX, pointY;
-            double distance;
-            foreach (KeyValuePair<string, Point> keyValuePair in grid.AllPoints)
-            {
-                pointX = keyValuePair.Value.X;
-                pointY = keyValuePair.Value.Y;
-
-                distance = Math.Abs((toY - fromY) * pointX - (toX - fromX) * pointY + toX * fromY + toY * fromX)
-                    / Math.Sqrt(Math.Pow(toY - fromY, 2) + Math.Pow(toX - fromX, 2));
-                if (distance <= 0.5)
-                {
-                    keyValuePair.Value.OnClick(null, null);
-                }
-            }
             from.OnClick(null, null);
+            int deltaX = to.X - from.X;
+            int deltaY = to.Y - from.Y;
+            if (deltaX-deltaY == 0)
+            {
+                return;
+            }
+            double deltaTilt = Math.Min(Math.Abs((double)deltaY / (double)deltaX), Math.Abs(deltaY)) * Math.Sign((double)deltaY / (double)deltaX);
+            double tilt = 0;
+
+            int i = 0;
+            do
+            {
+                int j = 0;
+                do
+                {
+                    int x = i + from.X;
+                    int y = (int)(tilt) + from.Y + j;
+                    Point point;
+                    string s = $"({x}, {y})";
+                    grid.AllPoints.TryGetValue(s, out point);
+                    point.OnClick(null, null);
+                    j += Math.Sign(deltaY);
+                } while (Math.Abs(j) < Math.Abs(deltaTilt));
+                tilt += deltaTilt * Math.Sign(deltaX);
+                i += Math.Sign(deltaX);
+            } while (Math.Abs(i) < Math.Abs(deltaX));
+            
             to.OnClick(null, null);
         }
 

@@ -27,6 +27,7 @@ namespace GridTakeThree {
                     firstRun = false;
                 else
                     point.LengthFromSource = 100000;
+                point.isChecked = false;
             }
 
             unvisitedVertices.Remove(source);

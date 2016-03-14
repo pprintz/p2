@@ -23,19 +23,7 @@ namespace GridTakeThree {
         {
             get { return Math.Sqrt(Math.Pow(GridSpacing - 0, 2) + Math.Pow(GridSpacing - 0, 2)); }
         }*/
-
-<<<<<<< HEAD
-        public int PointsPerRow { get; }
-        public int PointsPerColumn { get; }
         
-        public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
-            TheCanvas = canvas;
-            PointsPerRow = pointsPerRow;
-            PointsPerColumn = pointsPerColumn;
-        }
-
-        public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
-=======
         public int PointsPerRow { get; private set; }
         public int PointsPerColumn { get; private set; }
 
@@ -47,7 +35,6 @@ namespace GridTakeThree {
         //}
 
         //public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
->>>>>>> origin/master
 
         public Canvas TheCanvas { get; private set; }
 

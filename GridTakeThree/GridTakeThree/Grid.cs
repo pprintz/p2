@@ -24,19 +24,19 @@ namespace GridTakeThree {
             get { return Math.Sqrt(Math.Pow(GridSpacing - 0, 2) + Math.Pow(GridSpacing - 0, 2)); }
         }*/
 
-        public int PointsPerRow { get; }
-        public int PointsPerColumn { get; }
+        public int PointsPerRow { get; private set; }
+        public int PointsPerColumn { get; private set; }
 
+        
+        //public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
+        //    TheCanvas = canvas;
+        //    PointsPerRow = pointsPerRow;
+        //    PointsPerColumn = pointsPerColumn;
+        //}
 
-        public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
-            TheCanvas = canvas;
-            PointsPerRow = pointsPerRow;
-            PointsPerColumn = pointsPerColumn;
-        }
+        //public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
 
-        public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
-
-        public Canvas TheCanvas { get; }
+        public Canvas TheCanvas { get; private set; }
 
         public List<Point> WalledPoints { get; private set; } = new List<Point>();
         public List<Point> DoorPoints { get; private set; } = new List<Point>();
@@ -44,7 +44,10 @@ namespace GridTakeThree {
 
         public Dictionary<string, Point> AllPoints { get; private set; } = new Dictionary<string, Point>();
 
-        public void CreateGrid() {
+        public void CreateGrid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
+            TheCanvas = canvas;
+            PointsPerRow = pointsPerRow;
+            PointsPerColumn = pointsPerColumn;
             for (int y = 0; y < PointsPerColumn; y++) {
                 for (int x = 0; x < PointsPerRow; x++) {
                     Ellipse figure = new Ellipse();

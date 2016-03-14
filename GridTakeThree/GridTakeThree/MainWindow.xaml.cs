@@ -24,6 +24,8 @@ namespace GridTakeThree
         public MainWindow()
         {
             InitializeComponent();
+            NewOrImport newImp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.Import);
+
             mainWindow = this;
         }
 
@@ -31,12 +33,12 @@ namespace GridTakeThree
             grid.WindowHeight = Height;
             grid.WindowWidth = Width;
         }*/
-
-        private Grid grid;
+        
+        private Grid grid = new Grid();
         private void CreateGrid()
         {
-            grid = new Grid(canvas, 60, 50);
-            grid.CreateGrid();
+            //grid = new Grid(canvas, 60, 50);
+            //grid.CreateGrid();
         }
 
         private static MainWindow mainWindow;
@@ -46,6 +48,14 @@ namespace GridTakeThree
         public static bool makeFree;
         public static bool lineTool;
         private static Point previousPoint;
+
+        private void SaveButtonClick(object sender, RoutedEventArgs e) {
+            Export exp = new Export(grid);
+        }
+        private void LoadButtonClick(object sender, RoutedEventArgs e) {
+            NewOrImport imp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.Import);
+        }
+
 
         private void StartPath(object sender, RoutedEventArgs e)
         {
@@ -168,7 +178,7 @@ namespace GridTakeThree
                     lineTool = true;
                     break;
                 default:
-                    CreateGrid();
+                    //CreateGrid();
                     break;
             }
         }

@@ -1,0 +1,62 @@
+﻿<Window x:Class="GridTakeThree.GridNewOrLoadWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GridTakeThree"
+        mc:Ignorable="d"
+        Title="Grid - new/import" Height="300" Width="300"
+        ResizeMode="NoResize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Window.Resources>
+        <local:IntStringConverter x:Key="IntToString" EmptyStringValue="0"/>
+    </Window.Resources>
+    <Grid>
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="265" VerticalAlignment="Top" Width="288" Margin="0,0,-0.222,0">
+            <TabItem Header="New grid">
+                <Grid Background="#FFE5E5E5">
+                    <GroupBox Header="New grid" Name="NewGridGroup" FontSize="22" Margin="0,0,0.444,0">
+                        <Grid>
+                            <TextBlock x:Name="widthText" HorizontalAlignment="Left" FontSize="12" TextWrapping="Wrap" Text="Width" VerticalAlignment="Top" Width="93" Margin="0,-1,0,0"/>
+                            <TextBox x:Name="WidthInput" HorizontalAlignment="Left" FontSize="12" Height="23" Margin="0,15,0,0" TextWrapping="Wrap" Text="{Binding Path=GridWidth, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToString}}" VerticalAlignment="Top" Width="130"/>
+                            <TextBlock x:Name="heightText" HorizontalAlignment="Left" Margin="139,-1,0,0" FontSize="12" TextWrapping="Wrap" Text="Height" VerticalAlignment="Top" Width="95"/>
+                            <TextBox x:Name="HeightInput" HorizontalAlignment="Left" FontSize="12" Height="23" Margin="139,15,0,0" TextWrapping="Wrap" Text="{Binding Path=GridHeight, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToString}}" VerticalAlignment="Top" Width="130"/>
+                            <TextBlock x:Name="headerText" HorizontalAlignment="Left" Margin="0,43,0,0" FontSize="18" TextWrapping="Wrap" Text="Header" VerticalAlignment="Top" Width="89"/>
+                            <TextBox x:Name="HeaderInput" HorizontalAlignment="Left" FontSize="12" Height="23" Margin="0,67,0,0" TextWrapping="Wrap" Text="{Binding Path=NewHeader, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="269"/>
+                            <TextBlock x:Name="descriptionTextNew" HorizontalAlignment="Left" Margin="0,95,0,0" FontSize="18" TextWrapping="Wrap" Text="Description" VerticalAlignment="Top" Width="115"/>
+                            <TextBox x:Name="descriptionInput" HorizontalAlignment="Left" FontSize="12" Height="35" Margin="0,119,0,0" TextWrapping="Wrap" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="269"/>
+                            <Button x:Name="CreateGridButton" Content="Create new grid" FontSize="18" HorizontalAlignment="Left" Margin="0,159,0,0" VerticalAlignment="Top" Width="269" Height="41"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Import grid">
+                <Grid Background="#FFE5E5E5">
+                    <!--- Control components til browse af grid -->
+                    <GroupBox Name="BrowseGroup" Header="{Binding Path=ImportHeader, UpdateSourceTrigger=PropertyChanged}" FontSize="22">
+                        <Grid>
+                            <Button x:Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="107,85,0,0" VerticalAlignment="Top" Width="75"/>
+
+                        </Grid>
+                    </GroupBox>
+
+
+                    <!--- Control components til når grid'et er loadet og klar til import -->
+                    <GroupBox Name="ImportGroup" Header="{Binding Path=ImportHeader, UpdateSourceTrigger=PropertyChanged}" FontSize="22">
+                        <Grid>
+                            <TextBlock x:Name="descriptionHeader" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Description: " VerticalAlignment="Top" FontSize="12" Margin="0,24,0,0"/>
+                            <TextBlock x:Name="descriptionText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontSize="12" Margin="0,40,0,0"/>
+                            <TextBlock x:Name="widthTextHeader" HorizontalAlignment="Left" Margin="0,152,0,0" TextWrapping="Wrap" Text="Width:" VerticalAlignment="Top" FontSize="12"/>
+                            <TextBlock x:Name="heightTextHeader" HorizontalAlignment="Left" Margin="0,168,0,0" TextWrapping="Wrap" Text="Height:" VerticalAlignment="Top" FontSize="12"/>
+                            <TextBlock x:Name="widthTextImported" HorizontalAlignment="Left" Margin="36,152,0,0" TextWrapping="Wrap" Text="{Binding Path=GridWidth, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontSize="12"/>
+                            <TextBlock x:Name="heightTextImported" HorizontalAlignment="Left" Margin="43,168,0,0" TextWrapping="Wrap" Text="{Binding Path=GridHeight, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontSize="12"/>
+                            <Button x:Name="newBrowse" Content="ANOTHER!" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,152,-0.222,0" Height="32" Width="60"/>
+                            <Button x:Name="ImportGridButton" Content="Import grid" FontSize="18" HorizontalAlignment="Left" Margin="0,189,-0.222,-0.222" VerticalAlignment="Top" Width="270" Height="41"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

@@ -14,5 +14,7 @@
         <RadioButton x:Name="MakeDoor" GroupName="RadioElevation" Content="Make Door" Canvas.Left="674" Canvas.Top="142" RenderTransformOrigin="-0.518,1.667" Checked="MakeDoorChecked" Unchecked="MakeDoorUnchecked"/>
         <RadioButton x:Name="MakePath" GroupName="RadioElevation" Content="Make Path" Canvas.Left="673" Canvas.Top="162" RenderTransformOrigin="-0.518,1.667" Checked="MakePathChecked" Unchecked="MakePathUnchecked"/>
         <RadioButton x:Name="MakeFree" GroupName="RadioElevation" Content="Make Free" Canvas.Left="674" Canvas.Top="182" RenderTransformOrigin="-0.518,1.667" Checked="MakeFreeChecked" Unchecked="MakeFreeUnchecked"/>
+        <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="SaveButtonClick" Canvas.Left="673" Canvas.Top="301" />
+        <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="LoadButtonClick" Canvas.Left="673" Canvas.Top="325" />
     </Canvas>
 </Window>

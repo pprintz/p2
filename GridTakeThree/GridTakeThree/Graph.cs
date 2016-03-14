@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wintellect.PowerCollections;
+using static GridTakeThree.ImportExportSettings;
 
 namespace GridTakeThree {
     class Graph {
         public List<Point> vertices = new List<Point>();
         private static bool firstRun = true;
-
+        
         public Graph(List<Point> vertices) {
             this.vertices = vertices;
         }
@@ -38,15 +39,15 @@ namespace GridTakeThree {
             while (current != destination) {
                 foreach (Point point in current.Neighbours) {
                     if (point.isChecked == false) {
-                        if (!(closedSet.ContainsKey($"{point.X},{point.Y}"))) {
+                        if (!(closedSet.ContainsKey(Coordinate(point.X, point.Y)))) {
                             priorityQueue.Add(point);
                         }
                     }
                 }
                 CheckNeighbors(current, priorityQueue);
                 if (priorityQueue.Count == 0) {
-                    if (closedSet.ContainsKey($"{current.X},{current.Y}") == false)
-                        closedSet.Add($"{current.X},{current.Y}", current);
+                    if (closedSet.ContainsKey(Coordinate(current.X, current.Y)) == false)
+                        closedSet.Add(Coordinate(current.X, current.Y), current);
 
                     current = source;
                     foreach (Point point in unvisitedVertices) {

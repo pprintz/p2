@@ -24,6 +24,7 @@ namespace GridTakeThree {
             get { return Math.Sqrt(Math.Pow(GridSpacing - 0, 2) + Math.Pow(GridSpacing - 0, 2)); }
         }*/
 
+<<<<<<< HEAD
         public int PointsPerRow { get; }
         public int PointsPerColumn { get; }
         
@@ -34,24 +35,41 @@ namespace GridTakeThree {
         }
 
         public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
+=======
+        public int PointsPerRow { get; private set; }
+        public int PointsPerColumn { get; private set; }
 
-        public Canvas TheCanvas { get; }
+        
+        //public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
+        //    TheCanvas = canvas;
+        //    PointsPerRow = pointsPerRow;
+        //    PointsPerColumn = pointsPerColumn;
+        //}
 
-        public List<Point> WalledPoints { get; private set; } = new List<Point>();
-        public List<Point> DoorPoints { get; private set; } = new List<Point>();
-        public List<Point> UnavailablePoints { get; private set; } = new List<Point>();
+        //public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
+>>>>>>> origin/master
+
+        public Canvas TheCanvas { get; private set; }
 
         public Dictionary<string, Point> AllPoints { get; private set; } = new Dictionary<string, Point>();
-
-        public void CreateGrid() {
-            for (int y = 0; y < PointsPerColumn; y++) {
-                for (int x = 0; x < PointsPerRow; x++) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="pointsPerRow"></param>
+        /// <param name="pointsPerColumn"></param>
+        public void CreateGrid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
+            TheCanvas = canvas;
+            PointsPerRow = pointsPerRow;
+            PointsPerColumn = pointsPerColumn;
+            for (int y = 1; y < PointsPerColumn; y++) {
+                for (int x = 1; x < PointsPerRow; x++) {
                     Ellipse figure = new Ellipse();
                     figure.Height = PointSize;
                     figure.Width = PointSize;
                     figure.Margin = new Thickness(x*GridSpacing, y* GridSpacing, 0, 0);
 
-                    string coordinate = $"({x}, {y})";
+                    string coordinate = ImportExportSettings.Coordinate(x,y);
                     AllPoints.Add(coordinate, new Point(x, y, figure));
 
                     TheCanvas.Children.Add(figure);
@@ -85,8 +103,8 @@ namespace GridTakeThree {
                     {
                         if(neighbour.DistanceToPoint(pair.Value) > 1) // Then it is a diagonal
                         {
-                            illegalConnectedPointCoordinateSetOne = $"({pair.Value.X}, {neighbour.Y})";
-                            illegalConnectedPointCoordinateSetTwo = $"({neighbour.X}, {pair.Value.Y})";
+                            illegalConnectedPointCoordinateSetOne = ImportExportSettings.Coordinate(pair.Value.X,neighbour.Y);
+                            illegalConnectedPointCoordinateSetTwo = ImportExportSettings.Coordinate(neighbour.X, pair.Value.Y);
                             if (AllPoints.ContainsKey(illegalConnectedPointCoordinateSetOne) && AllPoints.ContainsKey(illegalConnectedPointCoordinateSetTwo))
                             {
                                 AllPoints[illegalConnectedPointCoordinateSetOne].Neighbours.Remove(AllPoints[illegalConnectedPointCoordinateSetTwo]);

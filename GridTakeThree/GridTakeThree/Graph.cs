@@ -10,7 +10,7 @@ namespace GridTakeThree {
     class Graph {
         public List<Point> vertices = new List<Point>();
         private static bool firstRun = true;
-
+        
         public Graph(List<Point> vertices) {
             this.vertices = vertices;
         }

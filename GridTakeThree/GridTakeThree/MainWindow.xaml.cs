@@ -24,7 +24,7 @@ namespace GridTakeThree
         public MainWindow()
         {
             InitializeComponent();
-            NewOrImport newImp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.Import);
+            NewOrImport newImp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.New);
 
             mainWindow = this;
         }
@@ -125,7 +125,7 @@ namespace GridTakeThree
                     int x = i + from.X;
                     int y = (int)(tilt) + from.Y + j;
                     Point point;
-                    string s = $"({x}, {y})";
+                    string s = ImportExportSettings.Coordinate(x,y);
                     grid.AllPoints.TryGetValue(s, out point);
                     point.OnClick(null, null);
                     j += Math.Sign(deltaY);

@@ -30,7 +30,7 @@ namespace GridTakeThree {
 
         /* Grid write file settings */
         public static string Prefix { get { return "<"; } }
-        public static string Suffix { get { return ">"; } }
+        public static string Suffix { get { return ">"; } }   
         public static string EndModifier { get { return "/"; } }
         public static string Newline { get { return Environment.NewLine; } }
         public enum Settings { NA, Settings, Width, Height, Header, Description, Grid, Row}

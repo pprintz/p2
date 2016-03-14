@@ -26,8 +26,7 @@ namespace GridTakeThree {
 
         public int PointsPerRow { get; }
         public int PointsPerColumn { get; }
-
-
+        
         public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
             TheCanvas = canvas;
             PointsPerRow = pointsPerRow;
@@ -68,10 +67,10 @@ namespace GridTakeThree {
                 item.CalculateNeighbours(AllPoints);
             }
             CheckForConnectionsThroughDiagonalUnwalkableElements();
+            
         }
 
-
-
+        
         public void CheckForConnectionsThroughDiagonalUnwalkableElements()
         {
             string illegalConnectedPointCoordinateSetOne;
@@ -97,6 +96,104 @@ namespace GridTakeThree {
                     } 
                 }   
             }   
+        }
+
+
+        public bool CheckConnection(Point a, Point b)
+        {
+            bool result = true;
+            Point p;
+            AllPoints.TryGetValue($"({a.X}, {b.Y})", out p);
+            foreach (Point point in ReturnLine(a,p))
+            {
+                if (point.Elevation == Point.ElevationTypes.Wall)
+                {
+                    result = false;
+                    break;
+                }
+            }
+            if (result)
+            {
+                foreach (Point point in ReturnLine(p, b))
+                {
+                    if (point.Elevation == Point.ElevationTypes.Wall)
+                    {
+                        return false;
+                    }
+                }
+            }
+            result = true;
+            AllPoints.TryGetValue($"({b.X}, {a.Y})", out p);
+            foreach (Point point in ReturnLine(a, p))
+            {
+                if (point.Elevation == Point.ElevationTypes.Wall)
+                {
+                    result = false;
+                    break;
+                }
+            }
+            if (result)
+            {
+                foreach (Point point in ReturnLine(p, b))
+                {
+                    if (point.Elevation == Point.ElevationTypes.Wall)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public IEnumerable<Point> ReturnLine(Point a, Point b)
+        {
+            if (a.X==b.X)
+            {
+                if (a.Y<b.Y)
+                {
+                    return ReturnLineX(a,b);
+                }
+                else
+                {
+                    return ReturnLineX(b,a);
+                }
+            }
+            else if (a.Y==b.Y)
+            {
+                if (a.Y<b.Y)
+                {
+                    return ReturnLineY(a, b);
+                }
+                else
+                {
+                    return ReturnLineY(b, a);
+                }
+            }
+            throw new ArgumentException("De to punkter er ikke på linje.");
+        }
+
+        private IEnumerable<Point> ReturnLineX(Point a, Point b)
+        {
+            List<Point> points = new List<Point>();
+            for (int x = a.X; x < b.X; x++)
+            {
+                Point point;
+                AllPoints.TryGetValue($"({x}, {a.Y}", out point);
+                points.Add(point);
+            }
+            return points;
+        }
+
+        private IEnumerable<Point> ReturnLineY(Point a, Point b)
+        {
+            List<Point> points = new List<Point>();
+            for (int y = a.Y; y < b.Y; y++)
+            {
+                Point point;
+                AllPoints.TryGetValue($"({a.X}, {y}", out point);
+                points.Add(point);
+            }
+            return points;
         }
 
 

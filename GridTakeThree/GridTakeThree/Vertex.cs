@@ -14,10 +14,15 @@ namespace GridTakeThree
 
         public List<Vertex> neighbours;
 
-        public void SetNeighbour(Vertex vertex)
+        /// <summary>
+        /// Attempt to add two vertices "this" and "vertex" to eachothers neighbours.
+        /// </summary>
+        /// <param name="vertex">Other vector to add</param>
+        /// <returns>Returns weather or not the attempt was successful.</returns>
+        public bool SetNeighbour(Vertex vertex)
         {
             if (vertex.neighbours.Contains(this))
-                return;
+                return false;
             Point a, b;
             grid.AllPoints.TryGetValue($"({x}, {y})", out a);
             grid.AllPoints.TryGetValue($"({vertex.x}, {vertex.y})", out b);
@@ -25,7 +30,9 @@ namespace GridTakeThree
             {
                 neighbours.Add(vertex);
                 vertex.neighbours.Add(this);
+                return true;
             }
+            return false;
         }
 
         public Vertex(Grid grid, int x, int y)

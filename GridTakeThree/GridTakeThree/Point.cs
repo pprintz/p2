@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static GridTakeThree.ImportExportSettings;
 
 namespace GridTakeThree {
     public class Point : IComparable<Point>
@@ -133,7 +134,7 @@ namespace GridTakeThree {
             {
                 for (int currentX = topLeftNeighbourX; currentX <= topLeftNeighbourX + 2; currentX++) 
                 {
-                    string coordinate = $"({currentX}, {currentY})";
+                    string coordinate = Coordinate(currentX, currentY);
                     if (allPoints.ContainsKey(coordinate) == false || allPoints[coordinate] == this) 
                         continue;
                         

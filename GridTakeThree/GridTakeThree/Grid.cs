@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static GridTakeThree.ImportExportSettings;
 
 namespace GridTakeThree {
     class Grid {
@@ -49,8 +50,8 @@ namespace GridTakeThree {
             TheCanvas = canvas;
             PointsPerRow = pointsPerRow;
             PointsPerColumn = pointsPerColumn;
-            for (int y = 1; y < PointsPerColumn; y++) {
-                for (int x = 1; x < PointsPerRow; x++) {
+            for (int y = 1; y <= PointsPerColumn; y++) {
+                for (int x = 1; x <= PointsPerRow; x++) {
                     Ellipse figure = new Ellipse();
                     figure.Height = PointSize;
                     figure.Width = PointSize;
@@ -108,7 +109,7 @@ namespace GridTakeThree {
         {
             bool result = true;
             Point p;
-            AllPoints.TryGetValue($"({a.X}, {b.Y})", out p);
+            AllPoints.TryGetValue(Coordinate(a.X, b.Y), out p);
             foreach (Point point in ReturnLine(a,p))
             {
                 if (point.Elevation == Point.ElevationTypes.Wall)
@@ -128,7 +129,7 @@ namespace GridTakeThree {
                 }
             }
             result = true;
-            AllPoints.TryGetValue($"({b.X}, {a.Y})", out p);
+            AllPoints.TryGetValue(Coordinate(b.X, a.Y), out p);
             foreach (Point point in ReturnLine(a, p))
             {
                 if (point.Elevation == Point.ElevationTypes.Wall)
@@ -183,7 +184,7 @@ namespace GridTakeThree {
             for (int x = a.X; x < b.X; x++)
             {
                 Point point;
-                AllPoints.TryGetValue($"({x}, {a.Y}", out point);
+                AllPoints.TryGetValue(Coordinate(x, a.Y), out point);
                 points.Add(point);
             }
             return points;
@@ -195,7 +196,7 @@ namespace GridTakeThree {
             for (int y = a.Y; y < b.Y; y++)
             {
                 Point point;
-                AllPoints.TryGetValue($"({a.X}, {y}", out point);
+                AllPoints.TryGetValue(Coordinate(a.X, y), out point);
                 points.Add(point);
             }
             return points;

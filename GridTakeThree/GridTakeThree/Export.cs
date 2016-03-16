@@ -66,9 +66,9 @@ namespace GridTakeThree {
         private List<string> GridToFile() {
             string rowString;
             List<string> rows = new List<string>();
-            for (int x = 0; x < CurrentGrid.PointsPerRow; x++) {
+            for (int x = 1; x <= CurrentGrid.PointsPerRow; x++) {
                 rowString = string.Empty;
-                for (int y = 0; y < CurrentGrid.PointsPerColumn; y++) {
+                for (int y = 1; y <= CurrentGrid.PointsPerColumn; y++) {
                     rowString += (int)CurrentGrid.AllPoints[Coordinate(x, y)].Elevation;
                 }
                 rows.Add(rowString);

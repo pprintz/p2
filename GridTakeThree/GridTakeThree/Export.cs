@@ -28,6 +28,9 @@ namespace GridTakeThree {
             exportWindow.GridWidth = CurrentGrid.PointsPerRow;
             exportWindow.GridHeight = CurrentGrid.PointsPerColumn;
 
+            exportWindow.Header = String.IsNullOrWhiteSpace(CurrentGrid.Header) ? String.Empty : CurrentGrid.Header;
+            exportWindow.Description = String.IsNullOrWhiteSpace(CurrentGrid.Description) ? String.Empty : CurrentGrid.Description;
+
             exportWindow.ShowDialog();
         }
 

@@ -23,6 +23,7 @@ namespace GridTakeThree
     {
         public MainWindow()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
             NewOrImport newImp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.New);
 

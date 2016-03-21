@@ -40,7 +40,6 @@ namespace GridTakeThree {
         private List<string> ImportedRows = new List<string>();
 
         private bool ValidateInputs() {
-            //MessageBoxResult result = MessageBoxResult.None;          // <------- Currently not used
             string message, caption;
             /* First check: Are either or both width and/or height <= 0? */
             if (NewOrImportWindow.GridWidth <= 0 || NewOrImportWindow.GridHeight <= 0) {
@@ -74,11 +73,8 @@ namespace GridTakeThree {
                 ImportedGridDescription = NewOrImportWindow.Description;
             }
 
-            //Grid grid = new Grid(CurrentCanvas, NewOrImportWindow.GridWidth, NewOrImportWindow.GridHeight);
-            /*NewGrid = new Grid(CurrentCanvas, ImportedGridWidth, ImportedGridHeight) /*{
-                Indsæt settings her 
-            };*/
-
+            NewGrid.Header = ImportedGridHeader;
+            NewGrid.Description = ImportedGridDescription;
             NewGrid.CreateGrid(CurrentCanvas, ImportedGridWidth, ImportedGridHeight);
 
             if (ImportedGrid)
@@ -96,17 +92,15 @@ namespace GridTakeThree {
         }
 
         private void ReadGridFile(string path) {
+            /* Der bliver aktuelt ikke taget højde for corrupt files - 
+            der skal tages forbehold for, hvis det ikke er lykkedes at læse width, height og tilsvarende Row-informationer*/
             try {
                 using(StreamReader sr = new StreamReader(path)){
                     string line;
                     while((line = sr.ReadLine()) != null) {
                         DeconstructSettingsFromFile(line);
                     }
-                    //Når vi når enden, skal der laves et nyt grid med de pågældende indstillinger.
-                    //NewGrid = new Grid(CurrentCanvas, ImportedGridWidth, ImportedGridHeight) {
-                    //    WindowHeight = 300,
-                    //    WindowWidth = 300
-                    //};
+
                     ImportedGrid = true;
                     CreateGrid();
                 }

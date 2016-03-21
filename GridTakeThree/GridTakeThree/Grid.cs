@@ -16,28 +16,13 @@ using static GridTakeThree.ImportExportSettings;
 
 namespace GridTakeThree {
     class Grid {
-
         public int GridSpacing { get; } = 10;
         public int PointSize { get; private set; } = 10;
-
-        /*public static double MaxPointDistance
-        {
-            get { return Math.Sqrt(Math.Pow(GridSpacing - 0, 2) + Math.Pow(GridSpacing - 0, 2)); }
-        }*/
-        
+        public Canvas TheCanvas { get; private set; }
         public int PointsPerRow { get; private set; }
         public int PointsPerColumn { get; private set; }
-
-        
-        //public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
-        //    TheCanvas = canvas;
-        //    PointsPerRow = pointsPerRow;
-        //    PointsPerColumn = pointsPerColumn;
-        //}
-
-        //public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
-
-        public Canvas TheCanvas { get; private set; }
+        public string Header { get; set; }
+        public string Description { get; set; }
 
         public Dictionary<string, Point> AllPoints { get; private set; } = new Dictionary<string, Point>();
         /// <summary>
@@ -63,8 +48,6 @@ namespace GridTakeThree {
                     TheCanvas.Children.Add(figure);
                 }
             }
-
-            //CalculateAllNeighbours();
         }
 
         public void CalculateAllNeighbours()
@@ -201,42 +184,5 @@ namespace GridTakeThree {
             }
             return points;
         }
-
-
-        /*public void PointToWall() {
-            if (!WalledPoints.Contains(this))
-                WalledPoints.Add(this);
-        }
-
-        public void PointToDoor() {
-            if (WalledPoints.Contains(this) && !DoorPoints.Contains(this)) {
-                DoorPoints.Add(this);
-                WalledPoints.Remove(this);
-            }
-        }
-
-        public void PointToFurniture() {
-            if (!UnavailablePoints.Contains(this))
-                UnavailablePoints.Add(this);
-        }
-
-        public void FreePoint() {
-            List<List<Point>> listOfPoints = new List<List<Point>>();
-
-            if (WalledPoints != null)
-                listOfPoints?.Add(WalledPoints);
-
-            if (DoorPoints != null)
-                listOfPoints.Add(DoorPoints);
-
-            if (UnavailablePoints != null)
-                listOfPoints.Add(UnavailablePoints);
-
-            if (listOfPoints.Count > 0)
-                foreach (List<Point> pointList in listOfPoints) {
-                    if (pointList.Contains(this))
-                        pointList.Remove(this);
-                }
-        }*/
     }
 }

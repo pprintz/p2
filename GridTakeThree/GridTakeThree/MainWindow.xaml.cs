@@ -21,26 +21,30 @@ namespace GridTakeThree
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
+        public MainWindow() {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            
             InitializeComponent();
-            NewOrImport newImp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.New);
-
+            
+            NewOrImport newImp = new NewOrImport(GridContainer, grid, GridNewOrLoadWindow.NewOrImport.New);
+            scrollViewerComponent.UpdateLayout();
+            SetupZoomDrag();
             mainWindow = this;
         }
 
-        /*private void InitializeProgram() {
-            grid.WindowHeight = Height;
-            grid.WindowWidth = Width;
-        }*/
+        private void SetupZoomDrag() {
+            ZoomDrag zoomDrag = new ZoomDrag() {
+                slider = sliderComponent,
+                scrollViewer = scrollViewerComponent,
+                Container = GridContainer
+            };
+            GridContainer.MouseEnter += zoomDrag.MouseEnter;
+            GridContainer.MouseLeave += zoomDrag.MouseLeave;
+            GridContainer.MouseWheel += zoomDrag.ZoomMouseWheel;
+            scrollViewerComponent.ScrollChanged += zoomDrag.OnScrollViewerScrollChanged;
+        }
         
         private Grid grid = new Grid();
-        private void CreateGrid()
-        {
-            //grid = new Grid(canvas, 60, 50);
-            //grid.CreateGrid();
-        }
 
         private static MainWindow mainWindow;
         public static bool makeWall;
@@ -50,11 +54,17 @@ namespace GridTakeThree
         public static bool lineTool;
         private static Point previousPoint;
 
+        private void GetOptions(object sender, RoutedEventArgs e) {
+            //MessageBox.Show($"With/height:\n\t-Grid size: {gridsss.ActualWidth}/{gridsss.ActualHeight}\n\t-Canvas size: {GridContainer.ActualWidth}/{GridContainer.ActualHeight}");
+            MessageBox.Show($"With/height:\n\t-Canvas size: {GridContainer.ActualWidth}/{GridContainer.ActualHeight}");
+        }
+
         private void SaveButtonClick(object sender, RoutedEventArgs e) {
             Export exp = new Export(grid);
         }
         private void LoadButtonClick(object sender, RoutedEventArgs e) {
-            NewOrImport imp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.Import);
+            NewOrImport imp = new NewOrImport(GridContainer, grid, GridNewOrLoadWindow.NewOrImport.Import);
+         
         }
 
 
@@ -194,6 +204,10 @@ namespace GridTakeThree
                     previousPoint = null;
                     break;
             }
+        }
+
+        private void GridContainer_SizeChanged(object sender, SizeChangedEventArgs e) {
+            scrollViewerComponent.UpdateLayout();
         }
     }
 }

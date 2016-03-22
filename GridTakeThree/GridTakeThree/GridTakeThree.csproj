@@ -76,6 +76,7 @@
     </ApplicationDefinition>
     <Compile Include="ToDoList.cs" />
     <Compile Include="Vertex.cs" />
+    <Compile Include="ZoomDrag.cs" />
     <Page Include="ExportWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

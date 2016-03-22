@@ -21,8 +21,8 @@ namespace GridTakeThree {
         }
 
         /* Grid default values */
-        public static int DefaultWidth { get { return 20; } }
-        public static int DefaultHeight { get { return 20; } }
+        public static int DefaultWidth { get { return 100; } }
+        public static int DefaultHeight { get { return 100; } }
         public static string DefaultImportHeader { get { return "Import grid"; } }
         public static string DefaultNewHeader { get { return string.Empty; } }
         public static string DefaultDescription { get { return string.Empty; } }

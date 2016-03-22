@@ -43,12 +43,14 @@ namespace GridTakeThree {
 
         public int X { get; }
         public int Y { get; }
-        
-        public enum ElevationTypes { Free, Occupied, Furniture, Wall, Door, Hall, Exit }
+
+        public enum ElevationTypes { Free, Occupied, Furniture, Wall, Door, Hall, Exit, Person }
         private ElevationTypes _elevation;
-        public ElevationTypes Elevation {
+        public ElevationTypes Elevation
+        {
             get { return _elevation; }
-            set {
+            set
+            {
                 /*if (value == ElevationTypes.Wall)
                     //PointToWall();
                 else if (value == ElevationTypes.Door)
@@ -61,14 +63,15 @@ namespace GridTakeThree {
                 _elevation = value;
                 ColorizePoint();
             }
-        } 
-        
+        }
+
         public Ellipse Visual { get; }
         public double LengthFromSource { get; set; } = 100000;
         public Point Parent { get; set; }
         public List<Point> Neighbours { get; private set; } = new List<Point>();
 
-        public void ColorizePoint() {
+        public void ColorizePoint()
+        {
             SolidColorBrush newColor = new SolidColorBrush();
 
             if (SelectedPoint == this) {
@@ -97,6 +100,9 @@ namespace GridTakeThree {
                     break;
                 case ElevationTypes.Exit:
                     newColor = new SolidColorBrush(Colors.Green);
+                    break;
+                case ElevationTypes.Person:
+                    newColor = new SolidColorBrush(Colors.Crimson);
                     break;
                 default:
                     break;
@@ -161,6 +167,10 @@ namespace GridTakeThree {
             else if (MainWindow.makePath) {
                 Elevation = ElevationTypes.Hall;
                 Path.Add(this);
+            }
+            else if (MainWindow.makePerson) {
+                Elevation = ElevationTypes.Person;
+                MainWindow.PList.Add(new Person(this));
             }
             else
                 Elevation = ElevationTypes.Free;

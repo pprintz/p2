@@ -51,6 +51,7 @@ namespace GridTakeThree
         public static bool makeDoor;
         public static bool makePath;
         public static bool makeFree;
+        public static bool makePerson;
         public static bool lineTool;
         private static Point previousPoint;
 
@@ -68,25 +69,50 @@ namespace GridTakeThree
         }
 
 
+        public static List<Person> PList = new List<Person>();
         private void StartPath(object sender, RoutedEventArgs e)
         {
             grid.CalculateAllNeighbours();
-            List<Point> allPoints = new List<Point>();
-            foreach (Point item in grid.AllPoints.Values)
-            {
-                allPoints.Add(item);
-            }
-            int currentStartPointIndex = 0;
-            int currentEndPointIndex = 1;
-            List<Point> pointsInPath = new List<Point>();
+            List<Point> allPoints = grid.AllPoints.Values.ToList();
             Graph graph = new Graph(allPoints);
-            while (currentEndPointIndex < Point.Path.Count) {
-                pointsInPath.AddRange(graph.AStar(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]));
-                currentStartPointIndex++;
-                currentEndPointIndex++;
+            foreach (Person person in PList) {
+                CalculatePath(person, graph);
             }
-            ColorizePath(pointsInPath);
+            Simulate();
+            //int currentStartPointIndex = 0;
+            //int currentEndPointIndex = 1;
+            //List<Point> pointsInPath = new List<Point>();
+            //while (currentEndPointIndex < Point.Path.Count) {
+            //    pointsInPath.AddRange(graph.AStar(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]));
+            //    currentStartPointIndex++;
+            //    currentEndPointIndex++;
+            //}
+            //ColorizePath(pointsInPath);
 
+        }
+
+        public static int ReachedCounter = 0;
+        public void Simulate()
+        {
+            int max = PList.Max(p => p.AmountOfMoves);
+            for (int index = 0; index < max; index++) {
+                foreach (Person person in PList) {
+                    person.Move();
+                }
+                Yield(1000000);
+            }
+        }
+        private void CalculatePath(Person person, Graph graf)
+        {
+            int sourceIndex = 0;
+            int destIndex = 1;
+            person.PathList.AddRange(graf.AStar(person.Position, Point.Path[sourceIndex]));
+            while (destIndex < Point.Path.Count) {
+                person.PathList.AddRange(graf.AStar(Point.Path[sourceIndex], Point.Path[destIndex]));
+                sourceIndex++;
+                destIndex++;
+            }
+            person.AmountOfMoves = person.PathList.Count;
         }
         private void Yield(long ticks) {
             long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
@@ -164,6 +190,10 @@ namespace GridTakeThree
         {
             makeFree = true;
         }
+        private void MakePersonChecked(object sender, RoutedEventArgs e)
+        {
+            makePerson = true;
+        }
         private void MakeWallUnchecked(object sender, RoutedEventArgs e)
         {
             makeWall = false;
@@ -179,6 +209,10 @@ namespace GridTakeThree
         private void MakeFreeUnchecked(object sender, RoutedEventArgs e)
         {
             makeFree = false;
+        }
+        private void MakePersonUnchecked(object sender, RoutedEventArgs e)
+        {
+            makePerson = false;
         }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)

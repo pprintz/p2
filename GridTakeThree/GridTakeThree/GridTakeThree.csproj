@@ -74,6 +74,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Person.cs" />
     <Compile Include="ToDoList.cs" />
     <Compile Include="Vertex.cs" />
     <Compile Include="ZoomDrag.cs" />

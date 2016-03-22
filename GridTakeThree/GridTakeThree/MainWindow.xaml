@@ -22,7 +22,8 @@
             <RadioButton x:Name="MakeWall" GroupName="RadioElevation" Content="Make Wall" Canvas.Left="74" Canvas.Top="122" RenderTransformOrigin="-0.518,1.667" IsChecked="True" Checked="MakeWallChecked" Unchecked="MakeWallUnchecked"/>
             <RadioButton x:Name="MakeDoor" GroupName="RadioElevation" Content="Make Door" Canvas.Left="74" Canvas.Top="142" RenderTransformOrigin="-0.518,1.667" Checked="MakeDoorChecked" Unchecked="MakeDoorUnchecked"/>
             <RadioButton x:Name="MakePath" GroupName="RadioElevation" Content="Make Path" Canvas.Left="74" Canvas.Top="162" RenderTransformOrigin="-0.518,1.667" Checked="MakePathChecked" Unchecked="MakePathUnchecked"/>
-            <RadioButton x:Name="MakeFree" GroupName="RadioElevation" Content="Make Free" Canvas.Left="74" Canvas.Top="182" RenderTransformOrigin="-0.518,1.667" Checked="MakeFreeChecked" Unchecked="MakeFreeUnchecked"/>
+            <RadioButton x:Name="MakeFree" GroupName="RadioElevation" Content="Make Free" Canvas.Left="75" Canvas.Top="182" RenderTransformOrigin="-0.518,1.667" Checked="MakeFreeChecked" Unchecked="MakeFreeUnchecked"/>
+            <RadioButton x:Name="MakePerson" GroupName="RadioElevation" Content="Make Person" Canvas.Left="74" Canvas.Top="202" RenderTransformOrigin="-0.518,1.667" Checked="MakePersonChecked" Unchecked="MakePersonUnchecked"/>
             <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="SaveButtonClick" Canvas.Left="74" Canvas.Top="301" />
             <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="LoadButtonClick" Canvas.Left="74" Canvas.Top="325" />
             <Button x:Name="GetStatus" Content="Get" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="GetOptions" Canvas.Left="74" Canvas.Top="382" />
@@ -36,8 +37,8 @@
                     </TransformGroup>
                 </Grid.LayoutTransform>
                 <Canvas Grid.Column="0" Name="GridContainer" Width="{Binding ActualWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}" Height="{Binding ActualHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}">
-            </Canvas>
-                
+                </Canvas>
+
             </Grid>
         </ScrollViewer>
     </Grid>

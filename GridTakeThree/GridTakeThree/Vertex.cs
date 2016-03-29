@@ -41,31 +41,40 @@ namespace GridTakeThree
         {
             if (SetNeighbour(vertex))
             {
-                double 
+                double
                     x0 = x,
                     y0 = y,
                     x1 = vertex.x,
                     y1 = vertex.y,
-                    d = Math.Sqrt(Math.Pow(x1 - x0, 2) + Math.Pow(y1 - y0, 2)),
                     deltaX = x1 - x0,
                     deltaY = y1 - y0,
-                    x2 = deltaX + x0,
-                    y2 = deltaY + y0,
-                    x3 = (x2 + deltaY) / d,
-                    y3 = (y2 - deltaX) / d,
-                    x4 = (x2 - deltaY) / d,
-                    y4 = (y2 + deltaX) / d;
-                if (0 < x3 && x3 < grid.PointsPerRow && 0 < y3 && y3 < grid.PointsPerColumn)
+                    dist = Math.Sqrt(Math.Abs(deltaX * deltaX - deltaY * deltaY)),
+                    a = (dist * dist) / (2 * dist),
+                    h = Math.Sqrt(dist * dist - a * a),
+                    x2 = x0 + a * deltaX / dist,
+                    y2 = y0 + a * deltaY / dist,
+                    x3 = x2 + h * deltaY / dist,
+                    y3 = y2 - h * deltaX / dist,
+                    x4 = x2 - h * deltaY / dist,
+                    y4 = y2 + h * deltaX / dist;
+
+                Vertex vertexOne = null;
+                Vertex vertexTwo = null;
+                if (0 < (int)x3 && (int)x3 < grid.PointsPerRow && 0 < (int)y3 && (int)y3 < grid.PointsPerColumn)
                 {
-                    Vertex vertexOne = new Vertex(grid, x3, y3);
-                    if (database.Add(vertexOne))
-                    { FillVertexGrid(vertexOne, ref database); }
+                    vertexOne = new Vertex(grid, x3, y3);
+                    vertexOne = database.Add(vertexOne);
+                    vertexOne.FillVertexGrid(this, ref database);
                 }
-                if (0 < x4 && x4 < grid.PointsPerRow && 0 < y4 && y4 < grid.PointsPerColumn)
+                if (0 < (int)x4 && (int)x4 < grid.PointsPerRow && 0 < (int)y4 && (int)y4 < grid.PointsPerColumn)
                 {
-                    Vertex vertexTwo = new Vertex(grid, x4, y4);
-                    if (database.Add(vertexTwo))
-                    { FillVertexGrid(vertexTwo, ref database); }
+                    vertexTwo = new Vertex(grid, x4, y4);
+                    vertexTwo = database.Add(vertexTwo);
+                    vertexTwo.FillVertexGrid(this, ref database);
+                }
+                if (vertexOne != null && vertexTwo != null)
+                {
+                    vertexOne.FillVertexGrid(vertexTwo,ref database);
                 }
             }
         }

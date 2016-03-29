@@ -64,8 +64,11 @@ namespace GridTakeThree {
 
         public void CalculateAllNeighbours()
         {
+            //NUnit.Framework.Assert.AreEqual(1, 2);
             Vertex vertexOne = new Vertex(this, 10, 10);
+            vertexDatabase.Add(vertexOne);
             Vertex vertexTwo = new Vertex(this, 10, 13);
+            vertexDatabase.Add(vertexTwo);
             vertexOne.FillVertexGrid(vertexTwo, ref vertexDatabase);
             foreach (Vertex vertex in vertexDatabase)
             {

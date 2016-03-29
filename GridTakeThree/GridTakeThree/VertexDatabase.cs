@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GridTakeThree
 {
+    
     class VertexDatabase : IEnumerable<Vertex>
     {
         List<Vertex> vertices;
@@ -16,17 +17,17 @@ namespace GridTakeThree
         /// </summary>
         /// <param name="vertex">Vertex to add</param>
         /// <returns>Bool, wether or not the vertex was added.</returns>
-        public bool Add(Vertex vertex)
+        public Vertex Add(Vertex vertex)
         {
             foreach (Vertex v in vertices)
             {
-                if ((int)v.x == (int)vertex.x && (int)v.y == (int) vertex.y)
+                if (Math.Abs(v.x-vertex.x)<0.1 && Math.Abs(v.y-vertex.y)<0.1)
                 {
-                    return false;
+                    return v;
                 }
             }
             vertices.Add(vertex);
-            return true;
+            return vertex;
         }
 
         public IEnumerator<Vertex> GetEnumerator()

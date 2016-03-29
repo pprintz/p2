@@ -27,6 +27,8 @@ namespace GridTakeThree {
         public int PointsPerRow { get; private set; }
         public int PointsPerColumn { get; private set; }
 
+        private VertexDatabase vertexDatabase;
+
         
         //public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
         //    TheCanvas = canvas;
@@ -39,12 +41,7 @@ namespace GridTakeThree {
         public Canvas TheCanvas { get; private set; }
 
         public Dictionary<string, Point> AllPoints { get; private set; } = new Dictionary<string, Point>();
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="pointsPerRow"></param>
-        /// <param name="pointsPerColumn"></param>
+
         public void CreateGrid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
             TheCanvas = canvas;
             PointsPerRow = pointsPerRow;
@@ -62,12 +59,18 @@ namespace GridTakeThree {
                     TheCanvas.Children.Add(figure);
                 }
             }
-
-            //CalculateAllNeighbours();
+            vertexDatabase = new VertexDatabase();
         }
 
         public void CalculateAllNeighbours()
         {
+            Vertex vertexOne = new Vertex(this, 10, 10);
+            Vertex vertexTwo = new Vertex(this, 10, 13);
+            vertexOne.FillVertexGrid(vertexTwo, ref vertexDatabase);
+            foreach (Vertex vertex in vertexDatabase)
+            {
+                TheCanvas.Children.Add(vertex.ToDrawableObject());
+            }
             foreach (Point item in AllPoints.Values) {
                 item.CalculateNeighbours(AllPoints);
             }

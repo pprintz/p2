@@ -104,6 +104,7 @@ namespace GridTakeThree
         }
         private void CalculatePath(Person person, Graph graf)
         {
+            /* Exception ved ingen path samt håndtering af personer, der ikke kan finde en path */
             int sourceIndex = 0;
             int destIndex = 1;
             person.PathList.AddRange(graf.AStar(person.Position, Point.Path[sourceIndex]));

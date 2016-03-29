@@ -29,7 +29,7 @@
             <Button x:Name="GetStatus" Content="Get" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="GetOptions" Canvas.Left="74" Canvas.Top="382" />
         </Canvas>
         <Slider x:Name="sliderComponent" Height="26" Width="150" Value="1" Minimum="0.1" Maximum="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="436,13.889,0,0" Grid.Row="1"/>
-        <ScrollViewer Grid.Column="0" Name="scrollViewerComponent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="0" Background="LightGray" Name="scrollViewerComponent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Grid Name="gridsss">
                 <Grid.LayoutTransform>
                     <TransformGroup>

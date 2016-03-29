@@ -37,7 +37,8 @@ namespace GridTakeThree {
             PointsPerColumn = pointsPerColumn;
             for (int y = 1; y <= PointsPerColumn; y++) {
                 for (int x = 1; x <= PointsPerRow; x++) {
-                    Ellipse figure = new Ellipse();
+                    //Ellipse figure = new Ellipse();
+                    Rectangle figure = new Rectangle();
                     figure.Height = PointSize;
                     figure.Width = PointSize;
                     figure.Margin = new Thickness(x*GridSpacing, y* GridSpacing, 0, 0);

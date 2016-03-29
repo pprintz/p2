@@ -17,8 +17,8 @@ using static GridTakeThree.ImportExportSettings;
 namespace GridTakeThree {
     public class Point : IComparable<Point>
     {
-        public Point(int x, int y, Ellipse visual) : this (x, y, visual, ElevationTypes.Free) { }
-        public Point(int x, int y, Ellipse visual, ElevationTypes elevation) {
+        public Point(int x, int y, Rectangle visual) : this (x, y, visual, ElevationTypes.Free) { }
+        public Point(int x, int y, Rectangle visual, ElevationTypes elevation) {
             X = x;
             Y = y;
 
@@ -65,7 +65,7 @@ namespace GridTakeThree {
             }
         }
 
-        public Ellipse Visual { get; }
+        public Rectangle Visual { get; }
         public double LengthFromSource { get; set; } = 100000;
         public Point Parent { get; set; }
         public List<Point> Neighbours { get; private set; } = new List<Point>();
@@ -81,7 +81,7 @@ namespace GridTakeThree {
 
             switch (Elevation) {
                 case ElevationTypes.Free:
-                    newColor = new SolidColorBrush(Colors.Wheat);
+                    newColor = new SolidColorBrush(Colors.White);
                     break;
                 case ElevationTypes.Occupied:
                     newColor = new SolidColorBrush(Colors.Yellow);

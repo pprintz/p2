@@ -42,6 +42,9 @@ namespace GridTakeThree
             GridContainer.MouseLeave += zoomDrag.MouseLeave;
             GridContainer.MouseWheel += zoomDrag.ZoomMouseWheel;
             scrollViewerComponent.ScrollChanged += zoomDrag.OnScrollViewerScrollChanged;
+            scrollViewerComponent.MouseRightButtonDown += zoomDrag.OnMouseRightButtonDown;
+            scrollViewerComponent.MouseRightButtonUp += zoomDrag.OnMouseRightButtonUp;
+            scrollViewerComponent.MouseMove += zoomDrag.OnMouseMove;
         }
         
         private Grid grid = new Grid();

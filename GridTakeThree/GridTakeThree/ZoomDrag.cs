@@ -99,5 +99,39 @@ namespace GridTakeThree {
                 }
             }
         }
+
+        public void OnMouseMove(object sender, MouseEventArgs e) {
+            if (lastDragPoint.HasValue) {
+                System.Windows.Point posNow = e.GetPosition(scrollViewer);
+
+                double dX = posNow.X - lastDragPoint.Value.X;
+                double dY = posNow.Y - lastDragPoint.Value.Y;
+
+                lastDragPoint = posNow;
+
+                scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - dX);
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - dY);
+            }
+        }
+        public void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+
+            var mousePos = e.GetPosition(scrollViewer);
+            if (mousePos.X <= scrollViewer.ViewportWidth && mousePos.Y <
+                scrollViewer.ViewportHeight) //make sure we still can use the scrollbars
+            {
+                scrollViewer.Cursor = Cursors.SizeAll;
+                lastDragPoint = mousePos;
+                Mouse.Capture(scrollViewer);
+            }
+        }
+
+
+
+        public void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+
+            scrollViewer.Cursor = Cursors.Arrow;
+            scrollViewer.ReleaseMouseCapture();
+            lastDragPoint = null;
+        }
     }
 }

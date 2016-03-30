@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using static GridTakeThree.ImportExportSettings;
 
 namespace GridTakeThree
 {
@@ -26,8 +27,8 @@ namespace GridTakeThree
             if (vertex.neighbours.Contains(this))
                 return false;
             Point a, b;
-            grid.AllPoints.TryGetValue($"({(int)x}, {(int)y})", out a);
-            grid.AllPoints.TryGetValue($"({(int)vertex.x}, {(int)vertex.y})", out b);
+            grid.AllPoints.TryGetValue(Coordinate((int)x, (int)y), out a);
+            grid.AllPoints.TryGetValue(Coordinate((int)vertex.x, (int)vertex.y), out b);
             if (grid.CheckConnection(a, b))
             {
                 neighbours.Add(vertex);

@@ -28,6 +28,9 @@ namespace GridTakeThree {
             exportWindow.GridWidth = CurrentGrid.PointsPerRow;
             exportWindow.GridHeight = CurrentGrid.PointsPerColumn;
 
+            exportWindow.Header = String.IsNullOrWhiteSpace(CurrentGrid.Header) ? String.Empty : CurrentGrid.Header;
+            exportWindow.Description = String.IsNullOrWhiteSpace(CurrentGrid.Description) ? String.Empty : CurrentGrid.Description;
+
             exportWindow.ShowDialog();
         }
 
@@ -35,9 +38,9 @@ namespace GridTakeThree {
         public Grid CurrentGrid { get; } 
         public string FullGridPath { get { return exportWindow.Path + "\\" + FullFileName; } }
         public string FullFileName { get { return exportWindow.FileName + Extension; } }
-        private Dictionary<Settings, object> _settings = new Dictionary<Settings, object>();
-        private Dictionary<Settings, object> GridMatrix = new Dictionary<Settings, object>();
-        private Dictionary<Settings, object> Settings {
+        private Dictionary<FileSettings, object> _settings = new Dictionary<FileSettings, object>();
+        private Dictionary<FileSettings, object> GridMatrix = new Dictionary<FileSettings, object>();
+        private Dictionary<FileSettings, object> Settings {
             get {
                 if (_settings.Count == 0)
                     FillSettings();
@@ -55,20 +58,20 @@ namespace GridTakeThree {
             }
         }
         private void FillSettings() {
-            _settings.Add(ImportExportSettings.Settings.Width, exportWindow.GridWidth);
-            _settings.Add(ImportExportSettings.Settings.Height, exportWindow.GridHeight);
+            _settings.Add(ImportExportSettings.FileSettings.Width, exportWindow.GridWidth);
+            _settings.Add(ImportExportSettings.FileSettings.Height, exportWindow.GridHeight);
             if(!string.IsNullOrWhiteSpace(exportWindow.Header))
-                _settings.Add(ImportExportSettings.Settings.Header, exportWindow.Header);
+                _settings.Add(ImportExportSettings.FileSettings.Header, exportWindow.Header);
             if (!string.IsNullOrWhiteSpace(exportWindow.Description))
-                _settings.Add(ImportExportSettings.Settings.Description, exportWindow.Description);
+                _settings.Add(ImportExportSettings.FileSettings.Description, exportWindow.Description);
         }
 
         private List<string> GridToFile() {
             string rowString;
             List<string> rows = new List<string>();
-            for (int x = 0; x < CurrentGrid.PointsPerRow; x++) {
+            for (int x = 1; x <= CurrentGrid.PointsPerRow; x++) {
                 rowString = string.Empty;
-                for (int y = 0; y < CurrentGrid.PointsPerColumn; y++) {
+                for (int y = 1; y <= CurrentGrid.PointsPerColumn; y++) {
                     rowString += (int)CurrentGrid.AllPoints[Coordinate(x, y)].Elevation;
                 }
                 rows.Add(rowString);

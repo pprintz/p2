@@ -16,7 +16,7 @@ namespace GridTakeThree {
         }
 
         public List<Point> AStar(Point source, Point destination) {
-            OrderedBag<Point> priorityQueue = new OrderedBag<Point>();
+            SortedSet<Point> priorityQueue = new SortedSet<Point>(Comparer<Point>.Default);
             Dictionary<string, Point> closedSet = new Dictionary<string, Point>();
             List<Point> unvisitedVertices = vertices.ToList();
             Point current;
@@ -56,7 +56,7 @@ namespace GridTakeThree {
                     continue;
                 }
                 current.isChecked = true;
-                current = priorityQueue[0];
+                current = priorityQueue.First();
                 priorityQueue.Clear();
             }
 
@@ -70,7 +70,7 @@ namespace GridTakeThree {
             return path;
         }
 
-        public void CheckNeighbors(Point currentPoint, OrderedBag<Point> priorityQueue) {
+        public void CheckNeighbors(Point currentPoint, SortedSet<Point> priorityQueue) {
             foreach (Point neighbour in priorityQueue) {
                 if (currentPoint.DistanceToPoint(neighbour) + currentPoint.LengthFromSource < neighbour.LengthFromSource) {
                     neighbour.LengthFromSource = currentPoint.DistanceToPoint(neighbour) + currentPoint.LengthFromSource;

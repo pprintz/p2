@@ -21,6 +21,7 @@ namespace GridTakeThree {
     /// </summary>
     public partial class GridNewOrLoadWindow : Window, INotifyPropertyChanged {
         public GridNewOrLoadWindow(NewOrImport window) {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
 
             /* Initial setup for the window */

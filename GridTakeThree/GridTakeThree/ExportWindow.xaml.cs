@@ -22,6 +22,7 @@ namespace GridTakeThree {
         /// Instantiates a new Export Window to handle the export of a grid.
         /// </summary>
         public ExportWindow() {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             Extension = ImportExportSettings.Extension;
             FileName = ImportExportSettings.FileName;
             Path = ImportExportSettings.GridDirectoryPath;
@@ -39,8 +40,25 @@ namespace GridTakeThree {
             }
         }
         public string FileName { get; set; }
-        public string Description { get; set; }
-        public string Header { get; set; }
+        private string _description;
+        private string _header;
+        public string Description {
+            get { return _description; }
+            set
+            {
+                _description = value;
+                OnPropertyChanged("Description");
+            }
+        }
+        public string Header
+        {
+            get { return _header; }
+            set
+            {
+                _header = value;
+                OnPropertyChanged("Header");
+            }
+        }
         private int _gridWidth;
         private int _gridHeight;
         public int GridWidth {

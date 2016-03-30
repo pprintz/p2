@@ -12,12 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static GridTakeThree.ImportExportSettings;
+using static GridTakeThree.Settings;
 
 namespace GridTakeThree {
     public class Point : IComparable<Point>
     {
-        public Point(int x, int y, Ellipse visual) : this (x, y, visual, ElevationTypes.Free) { }
-        public Point(int x, int y, Ellipse visual, ElevationTypes elevation) {
+        public Point(int x, int y, Rectangle visual) : this (x, y, visual, ElevationTypes.Free) { }
+        public Point(int x, int y, Rectangle visual, ElevationTypes elevation) {
             X = x;
             Y = y;
 
@@ -42,12 +44,14 @@ namespace GridTakeThree {
 
         public int X { get; }
         public int Y { get; }
-        
-        public enum ElevationTypes { Free, Occupied, Furniture, Wall, Door, Hall, Exit }
+        public int HeatmapCounter { get; set; }
+        public enum ElevationTypes { Free, Occupied, Furniture, Wall, Door, Hall, Exit, Person }
         private ElevationTypes _elevation;
-        public ElevationTypes Elevation {
+        public ElevationTypes Elevation
+        {
             get { return _elevation; }
-            set {
+            set
+            {
                 /*if (value == ElevationTypes.Wall)
                     //PointToWall();
                 else if (value == ElevationTypes.Door)
@@ -60,24 +64,28 @@ namespace GridTakeThree {
                 _elevation = value;
                 ColorizePoint();
             }
-        } 
-        
-        public Ellipse Visual { get; }
+        }
+
+        public Rectangle Visual { get; }
         public double LengthFromSource { get; set; } = 100000;
         public Point Parent { get; set; }
         public List<Point> Neighbours { get; private set; } = new List<Point>();
 
-        public void ColorizePoint() {
+        public void ColorizePoint()
+        {
             SolidColorBrush newColor = new SolidColorBrush();
 
             if (SelectedPoint == this) {
                 Visual.Fill = new SolidColorBrush(Colors.Red);
                 return;
             }
-
             switch (Elevation) {
                 case ElevationTypes.Free:
-                    newColor = new SolidColorBrush(Colors.Wheat);
+                    if(ShowHeatMap == false)
+                        newColor = new SolidColorBrush(Colors.White);
+                    else {
+                        newColor = HeatMapColor();
+                    }
                     break;
                 case ElevationTypes.Occupied:
                     newColor = new SolidColorBrush(Colors.Yellow);
@@ -97,11 +105,37 @@ namespace GridTakeThree {
                 case ElevationTypes.Exit:
                     newColor = new SolidColorBrush(Colors.Green);
                     break;
+                case ElevationTypes.Person:
+                    newColor = new SolidColorBrush(Colors.Crimson);
+                    break;
                 default:
                     break;
             }
 
             Visual.Fill = newColor;
+        }
+
+        private SolidColorBrush HeatMapColor() {
+            int red, green, blue;
+            int multiplier = (int)Math.Round(765f / PersonCount);
+            int count = multiplier * HeatmapCounter;
+            if (count <= 255) {
+                red = 255 - count;
+                green = 255;
+                blue = 255 - count;
+            }
+            else if (count <= 510) {
+                red = count - 255;
+                green = 255;
+                blue = 0;
+            }
+            else { // if (count <= 765) {
+                red = 255;
+                green = Math.Min(765 - count, 255);
+                blue = 0;
+            }
+
+            return new SolidColorBrush(Color.FromRgb((byte)red, (byte)green, (byte)blue));
         }
 
         private void RemoveNeighbours() {
@@ -133,7 +167,7 @@ namespace GridTakeThree {
             {
                 for (int currentX = topLeftNeighbourX; currentX <= topLeftNeighbourX + 2; currentX++) 
                 {
-                    string coordinate = $"({currentX}, {currentY})";
+                    string coordinate = Coordinate(currentX, currentY);
                     if (allPoints.ContainsKey(coordinate) == false || allPoints[coordinate] == this) 
                         continue;
                         
@@ -160,6 +194,10 @@ namespace GridTakeThree {
             else if (MainWindow.makePath) {
                 Elevation = ElevationTypes.Hall;
                 Path.Add(this);
+            }
+            else if (MainWindow.makePerson) {
+                Elevation = ElevationTypes.Person;
+                MainWindow.PList.Add(new Person(this));
             }
             else
                 Elevation = ElevationTypes.Free;

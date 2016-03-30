@@ -12,20 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static GridTakeThree.ImportExportSettings;
 
 namespace GridTakeThree {
     class Grid {
-
         public int GridSpacing { get; } = 10;
         public int PointSize { get; private set; } = 10;
-
-        /*public static double MaxPointDistance
-        {
-            get { return Math.Sqrt(Math.Pow(GridSpacing - 0, 2) + Math.Pow(GridSpacing - 0, 2)); }
-        }*/
-        
+        public Canvas TheCanvas { get; private set; }
         public int PointsPerRow { get; private set; }
         public int PointsPerColumn { get; private set; }
+<<<<<<< HEAD
 
         private VertexDatabase vertexDatabase;
 
@@ -39,6 +35,10 @@ namespace GridTakeThree {
         //public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
 
         public Canvas TheCanvas { get; private set; }
+=======
+        public string Header { get; set; }
+        public string Description { get; set; }
+>>>>>>> origin/master
 
         public Dictionary<string, Point> AllPoints { get; private set; } = new Dictionary<string, Point>();
 
@@ -46,9 +46,10 @@ namespace GridTakeThree {
             TheCanvas = canvas;
             PointsPerRow = pointsPerRow;
             PointsPerColumn = pointsPerColumn;
-            for (int y = 1; y < PointsPerColumn; y++) {
-                for (int x = 1; x < PointsPerRow; x++) {
-                    Ellipse figure = new Ellipse();
+            for (int y = 1; y <= PointsPerColumn; y++) {
+                for (int x = 1; x <= PointsPerRow; x++) {
+                    //Ellipse figure = new Ellipse();
+                    Rectangle figure = new Rectangle();
                     figure.Height = PointSize;
                     figure.Width = PointSize;
                     figure.Margin = new Thickness(x*GridSpacing, y* GridSpacing, 0, 0);
@@ -59,7 +60,10 @@ namespace GridTakeThree {
                     TheCanvas.Children.Add(figure);
                 }
             }
+<<<<<<< HEAD
             vertexDatabase = new VertexDatabase();
+=======
+>>>>>>> origin/master
         }
 
         public void CalculateAllNeighbours()
@@ -114,7 +118,7 @@ namespace GridTakeThree {
         {
             bool result = true;
             Point p;
-            AllPoints.TryGetValue($"({a.X}, {b.Y})", out p);
+            AllPoints.TryGetValue(Coordinate(a.X, b.Y), out p);
             foreach (Point point in ReturnLine(a,p))
             {
                 if (point.Elevation == Point.ElevationTypes.Wall)
@@ -134,7 +138,7 @@ namespace GridTakeThree {
                 }
             }
             result = true;
-            AllPoints.TryGetValue($"({b.X}, {a.Y})", out p);
+            AllPoints.TryGetValue(Coordinate(b.X, a.Y), out p);
             foreach (Point point in ReturnLine(a, p))
             {
                 if (point.Elevation == Point.ElevationTypes.Wall)
@@ -189,7 +193,7 @@ namespace GridTakeThree {
             for (int x = a.X; x < b.X; x++)
             {
                 Point point;
-                AllPoints.TryGetValue($"({x}, {a.Y}", out point);
+                AllPoints.TryGetValue(Coordinate(x, a.Y), out point);
                 points.Add(point);
             }
             return points;
@@ -201,47 +205,10 @@ namespace GridTakeThree {
             for (int y = a.Y; y < b.Y; y++)
             {
                 Point point;
-                AllPoints.TryGetValue($"({a.X}, {y}", out point);
+                AllPoints.TryGetValue(Coordinate(a.X, y), out point);
                 points.Add(point);
             }
             return points;
         }
-
-
-        /*public void PointToWall() {
-            if (!WalledPoints.Contains(this))
-                WalledPoints.Add(this);
-        }
-
-        public void PointToDoor() {
-            if (WalledPoints.Contains(this) && !DoorPoints.Contains(this)) {
-                DoorPoints.Add(this);
-                WalledPoints.Remove(this);
-            }
-        }
-
-        public void PointToFurniture() {
-            if (!UnavailablePoints.Contains(this))
-                UnavailablePoints.Add(this);
-        }
-
-        public void FreePoint() {
-            List<List<Point>> listOfPoints = new List<List<Point>>();
-
-            if (WalledPoints != null)
-                listOfPoints?.Add(WalledPoints);
-
-            if (DoorPoints != null)
-                listOfPoints.Add(DoorPoints);
-
-            if (UnavailablePoints != null)
-                listOfPoints.Add(UnavailablePoints);
-
-            if (listOfPoints.Count > 0)
-                foreach (List<Point> pointList in listOfPoints) {
-                    if (pointList.Contains(this))
-                        pointList.Remove(this);
-                }
-        }*/
     }
 }

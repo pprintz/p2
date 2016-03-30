@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static GridTakeThree.Settings;
 
 namespace GridTakeThree
 {
@@ -21,61 +23,102 @@ namespace GridTakeThree
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
+        public MainWindow() {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+            
             InitializeComponent();
-            NewOrImport newImp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.New);
-
+            
+            NewOrImport newImp = new NewOrImport(GridContainer, grid, GridNewOrLoadWindow.NewOrImport.New);
+            scrollViewerComponent.UpdateLayout();
+            SetupZoomDrag();
             mainWindow = this;
         }
 
-        /*private void InitializeProgram() {
-            grid.WindowHeight = Height;
-            grid.WindowWidth = Width;
-        }*/
+        private void SetupZoomDrag() {
+            ZoomDrag zoomDrag = new ZoomDrag() {
+                slider = sliderComponent,
+                scrollViewer = scrollViewerComponent,
+                Container = GridContainer
+            };
+            GridContainer.MouseEnter += zoomDrag.MouseEnter;
+            GridContainer.MouseLeave += zoomDrag.MouseLeave;
+            GridContainer.MouseWheel += zoomDrag.ZoomMouseWheel;
+            scrollViewerComponent.ScrollChanged += zoomDrag.OnScrollViewerScrollChanged;
+            scrollViewerComponent.MouseRightButtonDown += zoomDrag.OnMouseRightButtonDown;
+            scrollViewerComponent.MouseRightButtonUp += zoomDrag.OnMouseRightButtonUp;
+            scrollViewerComponent.MouseMove += zoomDrag.OnMouseMove;
+        }
         
         private Grid grid = new Grid();
-        private void CreateGrid()
-        {
-            //grid = new Grid(canvas, 60, 50);
-            //grid.CreateGrid();
-        }
 
         private static MainWindow mainWindow;
         public static bool makeWall;
         public static bool makeDoor;
         public static bool makePath;
         public static bool makeFree;
+        public static bool makePerson;
         public static bool lineTool;
         private static Point previousPoint;
+
+        private void GetOptions(object sender, RoutedEventArgs e) {
+            //MessageBox.Show($"With/height:\n\t-Grid size: {gridsss.ActualWidth}/{gridsss.ActualHeight}\n\t-Canvas size: {GridContainer.ActualWidth}/{GridContainer.ActualHeight}");
+            MessageBox.Show($"With/height:\n\t-Canvas size: {GridContainer.ActualWidth}/{GridContainer.ActualHeight}");
+        }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e) {
             Export exp = new Export(grid);
         }
         private void LoadButtonClick(object sender, RoutedEventArgs e) {
-            NewOrImport imp = new NewOrImport(canvas, grid, GridNewOrLoadWindow.NewOrImport.Import);
+            NewOrImport imp = new NewOrImport(GridContainer, grid, GridNewOrLoadWindow.NewOrImport.Import);
+         
         }
 
 
+        public static List<Person> PList = new List<Person>();
         private void StartPath(object sender, RoutedEventArgs e)
         {
             grid.CalculateAllNeighbours();
-            List<Point> allPoints = new List<Point>();
-            foreach (Point item in grid.AllPoints.Values)
-            {
-                allPoints.Add(item);
-            }
-            int currentStartPointIndex = 0;
-            int currentEndPointIndex = 1;
-            List<Point> pointsInPath = new List<Point>();
+            List<Point> allPoints = grid.AllPoints.Values.ToList();
             Graph graph = new Graph(allPoints);
-            while (currentEndPointIndex < Point.Path.Count) {
-                pointsInPath.AddRange(graph.AStar(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]));
-                currentStartPointIndex++;
-                currentEndPointIndex++;
+            foreach (Person person in PList) {
+                CalculatePath(person, graph);
             }
-            ColorizePath(pointsInPath);
+            Simulate();
+            //int currentStartPointIndex = 0;
+            //int currentEndPointIndex = 1;
+            //List<Point> pointsInPath = new List<Point>();
+            //while (currentEndPointIndex < Point.Path.Count) {
+            //    pointsInPath.AddRange(graph.AStar(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]));
+            //    currentStartPointIndex++;
+            //    currentEndPointIndex++;
+            //}
+            //ColorizePath(pointsInPath);
 
+        }
+
+        public static int ReachedCounter = 0;
+        public void Simulate()
+        {
+            int max = PList.Max(p => p.AmountOfMoves);
+            for (int index = 0; index < max; index++) {
+                foreach (Person person in PList) {
+                    person.Move();
+                }
+                Yield(1000000);
+            }
+        }
+        private void CalculatePath(Person person, Graph graf)
+        {
+            /* Exception ved ingen path samt håndtering af personer, der ikke kan finde en path */
+            int sourceIndex = 0;
+            int destIndex = 1;
+            person.PathList.AddRange(graf.AStar(person.Position, Point.Path[sourceIndex]));
+            while (destIndex < Point.Path.Count) {
+                person.PathList.AddRange(graf.AStar(Point.Path[sourceIndex], Point.Path[destIndex]));
+                sourceIndex++;
+                destIndex++;
+            }
+            person.AmountOfMoves = person.PathList.Count;
         }
         private void Yield(long ticks) {
             long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
@@ -153,6 +196,10 @@ namespace GridTakeThree
         {
             makeFree = true;
         }
+        private void MakePersonChecked(object sender, RoutedEventArgs e)
+        {
+            makePerson = true;
+        }
         private void MakeWallUnchecked(object sender, RoutedEventArgs e)
         {
             makeWall = false;
@@ -168,6 +215,10 @@ namespace GridTakeThree
         private void MakeFreeUnchecked(object sender, RoutedEventArgs e)
         {
             makeFree = false;
+        }
+        private void MakePersonUnchecked(object sender, RoutedEventArgs e)
+        {
+            makePerson = false;
         }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
@@ -193,6 +244,14 @@ namespace GridTakeThree
                     previousPoint = null;
                     break;
             }
+        }
+
+        private void GridContainer_SizeChanged(object sender, SizeChangedEventArgs e) {
+            scrollViewerComponent.UpdateLayout();
+        }
+
+        private void HeatmapToggle(object sender, RoutedEventArgs e) {
+            ShowHeatMap = (sender as CheckBox).IsChecked.Value == true ? true : false;
         }
     }
 }

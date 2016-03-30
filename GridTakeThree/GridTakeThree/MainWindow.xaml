@@ -27,6 +27,11 @@
             <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="SaveButtonClick" Canvas.Left="74" Canvas.Top="301" />
             <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="LoadButtonClick" Canvas.Left="74" Canvas.Top="325" />
             <Button x:Name="GetStatus" Content="Get" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="GetOptions" Canvas.Left="74" Canvas.Top="382" />
+            <Grid Name="ToggleHeatmapGrid" Width="90" Height="Auto" Canvas.Left="37" Canvas.Top="424">
+                <Label Content="Heatmap: "/>
+                <CheckBox Margin="65,7,-64,-7.222" Width="Auto" Height="Auto" Click="HeatmapToggle"/>
+            </Grid>
+            <!--<ToggleButton Content="Toggle heatmap: Off" Click="HeatmapToggle"></ToggleButton>-->
         </Canvas>
         <Slider x:Name="sliderComponent" Height="26" Width="150" Value="1" Minimum="0.1" Maximum="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="436,13.889,0,0" Grid.Row="1"/>
         <ScrollViewer Grid.Column="0" Background="LightGray" Name="scrollViewerComponent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static GridTakeThree.Settings;
 
 namespace GridTakeThree
 {
@@ -246,6 +248,10 @@ namespace GridTakeThree
 
         private void GridContainer_SizeChanged(object sender, SizeChangedEventArgs e) {
             scrollViewerComponent.UpdateLayout();
+        }
+
+        private void HeatmapToggle(object sender, RoutedEventArgs e) {
+            ShowHeatMap = (sender as CheckBox).IsChecked.Value == true ? true : false;
         }
     }
 }

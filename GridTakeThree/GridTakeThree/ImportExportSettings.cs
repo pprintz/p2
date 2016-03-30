@@ -33,8 +33,8 @@ namespace GridTakeThree {
         public static string Suffix { get { return ">"; } }   
         public static string EndModifier { get { return "/"; } }
         public static string Newline { get { return Environment.NewLine; } }
-        public enum Settings { NA, Settings, Width, Height, Header, Description, Grid, Row}
-        private static Settings Setting { get; set; }
+        public enum FileSettings { NA, Settings, Width, Height, Header, Description, Grid, Row}
+        private static FileSettings Setting { get; set; }
         private static string Pre { get { return Prefix + Setting.ToString() + Suffix; } }
         private static string Post { get { return Prefix + EndModifier + Setting.ToString() + Suffix + Newline; } }
         public static string GridKeyFormat { get { return "({0}, {1})"; } }
@@ -46,7 +46,7 @@ namespace GridTakeThree {
         /// <param name="type">The Settings type that wraps the input</param>
         /// <param name="input">The value to save. Input is cast to string.</param>
         /// <returns>A single entry string containing the value stringed and wrapped in the corresponding Settings type.</returns>
-        public static string WriteSingleItem(Settings type, object input) {
+        public static string WriteSingleItem(FileSettings type, object input) {
             Setting = type;
             return Pre + input.ToString() + Post;
         }
@@ -60,12 +60,12 @@ namespace GridTakeThree {
         /// A dictionary containing the entries. Each entry is of type object with key of type Settings.
         /// </param>
         /// <returns>Returns each value as string concatinated into a single string.</returns>
-        public static string WriteSettings(Dictionary<Settings, object> container) {
+        public static string WriteSettings(Dictionary<FileSettings, object> container) {
             string toFile = string.Empty;
             foreach (var item in container) {
                 toFile += WriteSingleItem(item.Key, item.Value.ToString());
             }
-            Setting = Settings.Settings; //container.First().Key < Settings.Grid ? Settings.Settings : Settings.Grid;
+            Setting = FileSettings.Settings; //container.First().Key < Settings.Grid ? Settings.Settings : Settings.Grid;
             return Pre + Newline + toFile + Post;
         }
         /// <summary>
@@ -78,9 +78,9 @@ namespace GridTakeThree {
         public static string WriteRows(List<string> container) {
             string toFile = string.Empty;
             foreach (string row in container) {
-                toFile += WriteSingleItem(Settings.Row, row);
+                toFile += WriteSingleItem(FileSettings.Row, row);
             }
-            Setting = Settings.Grid;
+            Setting = FileSettings.Grid;
             return Pre + Newline + toFile + Post;
         }
         /// <summary>
@@ -88,26 +88,26 @@ namespace GridTakeThree {
         /// </summary>
         /// <param name="line">The string read from a grid-file containing the Settings info</param>
         /// <returns>On succes returns the extracted Settings type. On failure returns Settings.NA</returns>
-        public static Settings ExtractSettingFromFile(string line) {
+        public static FileSettings ExtractSettingFromFile(string line) {
             /* searchPattern returns the name of the setting encapsulated in the prefrix and suffix */
             string searchPattern = $@"{Prefix}([^<\s>/]*){Suffix}";   /* Captures <This> */
             //Alternate version: (?<={Prefix + EndModifier}).*(?={Suffix})  ---- This is the same version used in SubtractValue-method
 
             if (Regex.IsMatch(line, searchPattern)) {
                 Match match = Regex.Match(line, searchPattern);
-                if (match.Value == EncapsulateSetting(Settings.Settings) || match.Value == EncapsulateSetting(Settings.Grid))
-                    return Settings.NA;
+                if (match.Value == EncapsulateSetting(FileSettings.Settings) || match.Value == EncapsulateSetting(FileSettings.Grid))
+                    return FileSettings.NA;
 
-                foreach (Settings setting in Enum.GetValues(typeof(Settings))) {
+                foreach (FileSettings setting in Enum.GetValues(typeof(FileSettings))) {
                     if (EncapsulateSetting(setting) == match.Value)
                         return setting;
                 }
             }
 
-            return Settings.NA;
+            return FileSettings.NA;
         }
 
-        private static string EncapsulateSetting(Settings type) {
+        private static string EncapsulateSetting(FileSettings type) {
             return Prefix + type.ToString() + Suffix;
         }
         /// <summary>

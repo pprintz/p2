@@ -38,9 +38,9 @@ namespace GridTakeThree {
         public Grid CurrentGrid { get; } 
         public string FullGridPath { get { return exportWindow.Path + "\\" + FullFileName; } }
         public string FullFileName { get { return exportWindow.FileName + Extension; } }
-        private Dictionary<Settings, object> _settings = new Dictionary<Settings, object>();
-        private Dictionary<Settings, object> GridMatrix = new Dictionary<Settings, object>();
-        private Dictionary<Settings, object> Settings {
+        private Dictionary<FileSettings, object> _settings = new Dictionary<FileSettings, object>();
+        private Dictionary<FileSettings, object> GridMatrix = new Dictionary<FileSettings, object>();
+        private Dictionary<FileSettings, object> Settings {
             get {
                 if (_settings.Count == 0)
                     FillSettings();
@@ -58,12 +58,12 @@ namespace GridTakeThree {
             }
         }
         private void FillSettings() {
-            _settings.Add(ImportExportSettings.Settings.Width, exportWindow.GridWidth);
-            _settings.Add(ImportExportSettings.Settings.Height, exportWindow.GridHeight);
+            _settings.Add(ImportExportSettings.FileSettings.Width, exportWindow.GridWidth);
+            _settings.Add(ImportExportSettings.FileSettings.Height, exportWindow.GridHeight);
             if(!string.IsNullOrWhiteSpace(exportWindow.Header))
-                _settings.Add(ImportExportSettings.Settings.Header, exportWindow.Header);
+                _settings.Add(ImportExportSettings.FileSettings.Header, exportWindow.Header);
             if (!string.IsNullOrWhiteSpace(exportWindow.Description))
-                _settings.Add(ImportExportSettings.Settings.Description, exportWindow.Description);
+                _settings.Add(ImportExportSettings.FileSettings.Description, exportWindow.Description);
         }
 
         private List<string> GridToFile() {

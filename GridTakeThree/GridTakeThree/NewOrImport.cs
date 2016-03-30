@@ -111,25 +111,25 @@ namespace GridTakeThree {
         }
         
         private void DeconstructSettingsFromFile(string line) {
-            ImportExportSettings.Settings setting = ImportExportSettings.ExtractSettingFromFile(line);
-            if (setting == Settings.NA)
+            ImportExportSettings.FileSettings setting = ImportExportSettings.ExtractSettingFromFile(line);
+            if (setting == FileSettings.NA)
                 return;
 
             string value = ImportExportSettings.ExtractValueFromLine(line);
             switch (setting) {
-                case ImportExportSettings.Settings.Width:
+                case ImportExportSettings.FileSettings.Width:
                     ImportedGridWidth = int.Parse(value);
                     break;
-                case ImportExportSettings.Settings.Height:
+                case ImportExportSettings.FileSettings.Height:
                     ImportedGridHeight = int.Parse(value);
                     break;
-                case ImportExportSettings.Settings.Header:
+                case ImportExportSettings.FileSettings.Header:
                     ImportedGridHeader = value;
                     break;
-                case ImportExportSettings.Settings.Description:
+                case ImportExportSettings.FileSettings.Description:
                     ImportedGridDescription = value;
                     break;
-                case ImportExportSettings.Settings.Row:
+                case ImportExportSettings.FileSettings.Row:
                     ImportedRows.Add(value);
                     break;
                 default:

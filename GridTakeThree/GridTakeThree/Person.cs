@@ -23,6 +23,7 @@ namespace GridTakeThree
                 Position.ColorizePoint();
                 Position = PathList[0];
                 Position.Elevation = Point.ElevationTypes.Person;
+                Position.HeatmapCounter++;
                 Position.ColorizePoint();
                 PathList.Remove(Position);
             }

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static GridTakeThree.ImportExportSettings;
+using static GridTakeThree.Settings;
 
 namespace GridTakeThree {
     public class Point : IComparable<Point>
@@ -43,7 +44,7 @@ namespace GridTakeThree {
 
         public int X { get; }
         public int Y { get; }
-
+        public int HeatmapCounter { get; set; }
         public enum ElevationTypes { Free, Occupied, Furniture, Wall, Door, Hall, Exit, Person }
         private ElevationTypes _elevation;
         public ElevationTypes Elevation
@@ -78,10 +79,13 @@ namespace GridTakeThree {
                 Visual.Fill = new SolidColorBrush(Colors.Red);
                 return;
             }
-
             switch (Elevation) {
                 case ElevationTypes.Free:
-                    newColor = new SolidColorBrush(Colors.White);
+                    if(ShowHeatMap == false)
+                        newColor = new SolidColorBrush(Colors.White);
+                    else {
+                        newColor = HeatMapColor();
+                    }
                     break;
                 case ElevationTypes.Occupied:
                     newColor = new SolidColorBrush(Colors.Yellow);
@@ -109,6 +113,29 @@ namespace GridTakeThree {
             }
 
             Visual.Fill = newColor;
+        }
+
+        private SolidColorBrush HeatMapColor() {
+            int red, green, blue;
+            int multiplier = (int)Math.Round(765f / PersonCount);
+            int count = multiplier * HeatmapCounter;
+            if (count <= 255) {
+                red = 255 - count;
+                green = 255;
+                blue = 255 - count;
+            }
+            else if (count <= 510) {
+                red = count - 255;
+                green = 255;
+                blue = 0;
+            }
+            else { // if (count <= 765) {
+                red = 255;
+                green = Math.Min(765 - count, 255);
+                blue = 0;
+            }
+
+            return new SolidColorBrush(Color.FromRgb((byte)red, (byte)green, (byte)blue));
         }
 
         private void RemoveNeighbours() {

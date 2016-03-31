@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GridTakeThree
+namespace Evacuation_Master_3000
 {
     
     class VertexDatabase : IEnumerable<Vertex>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Globalization;
 
-namespace GridTakeThree {
+namespace Evacuation_Master_3000 {
     public class IntStringConverter : IValueConverter {
         public int EmptyStringValue { get; set; }
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {

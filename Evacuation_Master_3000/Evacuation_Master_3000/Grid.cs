@@ -12,9 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static GridTakeThree.ImportExportSettings;
+using static Evacuation_Master_3000.ImportExportSettings;
 
-namespace GridTakeThree {
+namespace Evacuation_Master_3000 {
     class Grid {
         public int GridSpacing { get; } = 10;
         public int PointSize { get; private set; } = 10;

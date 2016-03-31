@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.IO;
-using static GridTakeThree.ImportExportSettings;
+using static Evacuation_Master_3000.ImportExportSettings;
 
-namespace GridTakeThree {
+namespace Evacuation_Master_3000 {
     class Export {
         /// <summary>
         /// Exports/saves the grid from the canvas provided.

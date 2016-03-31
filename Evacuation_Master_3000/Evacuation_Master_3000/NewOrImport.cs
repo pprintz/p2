@@ -14,9 +14,9 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using System.IO;
 using Microsoft.Win32;
-using static GridTakeThree.ImportExportSettings;
+using static Evacuation_Master_3000.ImportExportSettings;
 
-namespace GridTakeThree {
+namespace Evacuation_Master_3000 {
     class NewOrImport {
         public NewOrImport(Canvas canvas, Grid grid, GridNewOrLoadWindow.NewOrImport window) {
             CurrentCanvas = canvas;

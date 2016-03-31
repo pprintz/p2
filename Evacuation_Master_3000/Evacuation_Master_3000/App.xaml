@@ -1,7 +1,7 @@
-﻿<Application x:Class="GridTakeThree.App"
+﻿<Application x:Class="Evacuation_Master_3000.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:GridTakeThree"
+             xmlns:local="clr-namespace:Evacuation_Master_3000"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

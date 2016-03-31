@@ -12,10 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static GridTakeThree.ImportExportSettings;
-using static GridTakeThree.Settings;
+using static Evacuation_Master_3000.ImportExportSettings;
+using static Evacuation_Master_3000.Settings;
 
-namespace GridTakeThree {
+namespace Evacuation_Master_3000 {
     public class Point : IComparable<Point>
     {
         public Point(int x, int y, Rectangle visual) : this (x, y, visual, ElevationTypes.Free) { }

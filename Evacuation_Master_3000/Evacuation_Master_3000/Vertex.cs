@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
-using static GridTakeThree.ImportExportSettings;
+using static Evacuation_Master_3000.ImportExportSettings;
 
-namespace GridTakeThree
+namespace Evacuation_Master_3000
 {
     class Vertex
     {

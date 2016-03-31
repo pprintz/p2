@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
-using static GridTakeThree.ImportExportSettings;
+using static Evacuation_Master_3000.ImportExportSettings;
 
-namespace GridTakeThree {
+namespace Evacuation_Master_3000 {
     /// <summary>
     /// Interaction logic for GridNewOrLoadWindow.xaml
     /// </summary>

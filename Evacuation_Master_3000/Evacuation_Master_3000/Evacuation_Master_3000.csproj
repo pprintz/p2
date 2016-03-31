@@ -7,8 +7,8 @@
     <ProjectGuid>{773904C3-60C2-4001-B032-165A9A96CA9E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GridTakeThree</RootNamespace>
-    <AssemblyName>GridTakeThree</AssemblyName>
+    <RootNamespace>Evacuation_Master_3000</RootNamespace>
+    <AssemblyName>Evacuation_Master_3000</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace GridTakeThree {
+namespace Evacuation_Master_3000 {
     public static class ImportExportSettings {
         /* Grid file extension */
         public static string Extension { get { return ".grid"; } }

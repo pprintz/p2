@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
 
-namespace GridTakeThree {
+namespace Evacuation_Master_3000 {
     /// <summary>
     /// Interaction logic for ExportWindow.xaml
     /// </summary>

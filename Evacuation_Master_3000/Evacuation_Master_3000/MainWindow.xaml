@@ -35,7 +35,7 @@
         </Canvas>
         <Slider x:Name="sliderComponent" Height="26" Width="150" Value="1" Minimum="0.1" Maximum="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="436,13.889,0,0" Grid.Row="1"/>
         <ScrollViewer Grid.Column="0" Background="LightGray" Name="scrollViewerComponent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <Grid Name="gridsss">
+            <Grid Name="SuperSliderSolutionGridAndFriends">
                 <Grid.LayoutTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="{Binding ElementName=sliderComponent, Path=Value}" ScaleY="{Binding ElementName=sliderComponent, Path=Value}"/>

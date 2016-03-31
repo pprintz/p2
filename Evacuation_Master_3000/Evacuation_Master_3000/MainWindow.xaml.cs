@@ -40,9 +40,9 @@ namespace Evacuation_Master_3000
                 scrollViewer = scrollViewerComponent,
                 Container = GridContainer
             };
-            GridContainer.MouseEnter += zoomDrag.MouseEnter;
-            GridContainer.MouseLeave += zoomDrag.MouseLeave;
-            GridContainer.MouseWheel += zoomDrag.ZoomMouseWheel;
+            SuperSliderSolutionGridAndFriends.MouseEnter += zoomDrag.MouseEnter;
+            SuperSliderSolutionGridAndFriends.MouseLeave += zoomDrag.MouseLeave;
+            SuperSliderSolutionGridAndFriends.MouseWheel += zoomDrag.ZoomMouseWheel;
             scrollViewerComponent.ScrollChanged += zoomDrag.OnScrollViewerScrollChanged;
             scrollViewerComponent.MouseRightButtonDown += zoomDrag.OnMouseRightButtonDown;
             scrollViewerComponent.MouseRightButtonUp += zoomDrag.OnMouseRightButtonUp;

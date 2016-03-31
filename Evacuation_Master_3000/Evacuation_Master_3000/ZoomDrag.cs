@@ -14,7 +14,8 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 
 namespace Evacuation_Master_3000 {
-    class ZoomDrag : INotifyPropertyChanged {
+    class ZoomDrag : INotifyPropertyChanged
+    {
         public ZoomDrag() { }
         public Slider slider { get; set; }
         public ScrollViewer scrollViewer { get; set; }
@@ -27,27 +28,35 @@ namespace Evacuation_Master_3000 {
         private System.Windows.Point? lastDragPoint;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string property) {
+        private void OnPropertyChanged(string property)
+        {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
 
-        public void MouseEnter(object sender, MouseEventArgs e) {
+        public void MouseEnter(object sender, MouseEventArgs e)
+        {
             CanZoom = true;
         }
-        public void MouseLeave(object sender, MouseEventArgs e) {
+        public void MouseLeave(object sender, MouseEventArgs e)
+        {
             CanZoom = false;
         }
-        public void ZoomMouseWheel(object sender, MouseWheelEventArgs e) {
-            if (CanZoom) {
-                if (e.Delta > 0) {
-                    if (slider.Value < slider.Maximum) {
+        public void ZoomMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (CanZoom)
+            {
+                if (e.Delta > 0)
+                {
+                    if (slider.Value < slider.Maximum)
+                    {
                         ZoomValue += 0.1;
                         slider.Value += 0.1;
                     }
                 }
                 else {
-                    if (slider.Value > slider.Minimum) {
+                    if (slider.Value > slider.Minimum)
+                    {
                         ZoomValue -= 0.1;
                         slider.Value -= 0.1;
                     }
@@ -55,13 +64,17 @@ namespace Evacuation_Master_3000 {
             }
         }
 
-        public void OnScrollViewerScrollChanged(object sender, ScrollChangedEventArgs e) {
-            if (e.ExtentHeightChange != 0 || e.ExtentWidthChange != 0) {
+        public void OnScrollViewerScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (e.ExtentHeightChange != 0 || e.ExtentWidthChange != 0)
+            {
                 System.Windows.Point? targetBefore = null;
                 System.Windows.Point? targetNow = null;
 
-                if (!lastMousePositionOnTarget.HasValue) {
-                    if (lastCenterPositionOnTarget.HasValue) {
+                if (!lastMousePositionOnTarget.HasValue)
+                {
+                    if (lastCenterPositionOnTarget.HasValue)
+                    {
                         var centerOfViewport = new System.Windows.Point(scrollViewer.ViewportWidth / 2,
                                                          scrollViewer.ViewportHeight / 2);
                         System.Windows.Point centerOfTargetNow =
@@ -78,7 +91,8 @@ namespace Evacuation_Master_3000 {
                     lastMousePositionOnTarget = null;
                 }
 
-                if (targetBefore.HasValue) {
+                if (targetBefore.HasValue)
+                {
                     double dXInTargetPixels = targetNow.Value.X - targetBefore.Value.X;
                     double dYInTargetPixels = targetNow.Value.Y - targetBefore.Value.Y;
 
@@ -90,7 +104,8 @@ namespace Evacuation_Master_3000 {
                     double newOffsetY = scrollViewer.VerticalOffset -
                                         dYInTargetPixels * multiplicatorY;
 
-                    if (double.IsNaN(newOffsetX) || double.IsNaN(newOffsetY)) {
+                    if (double.IsNaN(newOffsetX) || double.IsNaN(newOffsetY))
+                    {
                         return;
                     }
 
@@ -100,8 +115,10 @@ namespace Evacuation_Master_3000 {
             }
         }
 
-        public void OnMouseMove(object sender, MouseEventArgs e) {
-            if (lastDragPoint.HasValue) {
+        public void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            if (lastDragPoint.HasValue)
+            {
                 System.Windows.Point posNow = e.GetPosition(scrollViewer);
 
                 double dX = posNow.X - lastDragPoint.Value.X;
@@ -113,7 +130,8 @@ namespace Evacuation_Master_3000 {
                 scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - dY);
             }
         }
-        public void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+        public void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
 
             var mousePos = e.GetPosition(scrollViewer);
             if (mousePos.X <= scrollViewer.ViewportWidth && mousePos.Y <
@@ -127,7 +145,8 @@ namespace Evacuation_Master_3000 {
 
 
 
-        public void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+        public void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
 
             scrollViewer.Cursor = Cursors.Arrow;
             scrollViewer.ReleaseMouseCapture();

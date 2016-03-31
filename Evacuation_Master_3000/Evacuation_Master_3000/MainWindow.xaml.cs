@@ -58,7 +58,7 @@ namespace Evacuation_Master_3000
         public static bool makeFree;
         public static bool makePerson;
         public static bool lineTool;
-        private static Point previousPoint;
+        private static BuildingBlock previousPoint;
 
         private void GetOptions(object sender, RoutedEventArgs e) {
             //MessageBox.Show($"With/height:\n\t-Grid size: {gridsss.ActualWidth}/{gridsss.ActualHeight}\n\t-Canvas size: {GridContainer.ActualWidth}/{GridContainer.ActualHeight}");
@@ -78,7 +78,7 @@ namespace Evacuation_Master_3000
         private void StartPath(object sender, RoutedEventArgs e)
         {
             grid.CalculateAllNeighbours();
-            List<Point> allPoints = grid.AllPoints.Values.ToList();
+            List<BuildingBlock> allPoints = grid.AllPoints.Values.ToList();
             Graph graph = new Graph(allPoints);
             foreach (Person person in PList) {
                 CalculatePath(person, graph);
@@ -86,9 +86,9 @@ namespace Evacuation_Master_3000
             Simulate();
             //int currentStartPointIndex = 0;
             //int currentEndPointIndex = 1;
-            //List<Point> pointsInPath = new List<Point>();
-            //while (currentEndPointIndex < Point.Path.Count) {
-            //    pointsInPath.AddRange(graph.AStar(Point.Path[currentStartPointIndex], Point.Path[currentEndPointIndex]));
+            //List<BuildingBlock> pointsInPath = new List<BuildingBlock>();
+            //while (currentEndPointIndex < BuildingBlock.Path.Count) {
+            //    pointsInPath.AddRange(graph.AStar(BuildingBlock.Path[currentStartPointIndex], BuildingBlock.Path[currentEndPointIndex]));
             //    currentStartPointIndex++;
             //    currentEndPointIndex++;
             //}
@@ -112,9 +112,9 @@ namespace Evacuation_Master_3000
             /* Exception ved ingen path samt håndtering af personer, der ikke kan finde en path */
             int sourceIndex = 0;
             int destIndex = 1;
-            person.PathList.AddRange(graf.AStar(person.Position, Point.Path[sourceIndex]));
-            while (destIndex < Point.Path.Count) {
-                person.PathList.AddRange(graf.AStar(Point.Path[sourceIndex], Point.Path[destIndex]));
+            person.PathList.AddRange(graf.AStar(person.Position, BuildingBlock.Path[sourceIndex]));
+            while (destIndex < BuildingBlock.Path.Count) {
+                person.PathList.AddRange(graf.AStar(BuildingBlock.Path[sourceIndex], BuildingBlock.Path[destIndex]));
                 sourceIndex++;
                 destIndex++;
             }
@@ -126,17 +126,17 @@ namespace Evacuation_Master_3000
                 this.Dispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate (object unused) { return null; }, null);
             }
         }
-        private void ColorizePath(List<Point> pointsInPath) {
-            foreach (Point pathPoint in pointsInPath) {
-                if (pathPoint.Elevation != Point.ElevationTypes.Hall) {
-                    pathPoint.Elevation = Point.ElevationTypes.Exit;
+        private void ColorizePath(List<BuildingBlock> pointsInPath) {
+            foreach (BuildingBlock pathPoint in pointsInPath) {
+                if (pathPoint.Elevation != BuildingBlock.ElevationTypes.Hall) {
+                    pathPoint.Elevation = BuildingBlock.ElevationTypes.Exit;
                     pathPoint.ColorizePoint();
                     Yield(100000);
                 }
             }
         }
 
-        public static void InputLineTool(Point point)
+        public static void InputLineTool(BuildingBlock point)
         {
             if (previousPoint != null)
             {
@@ -147,7 +147,7 @@ namespace Evacuation_Master_3000
 
 
 
-        public void DrawLine(Point from, Point to)
+        public void DrawLine(BuildingBlock from, BuildingBlock to)
         {
             from.OnClick(null, null);
             int deltaX = to.X - from.X;
@@ -167,7 +167,7 @@ namespace Evacuation_Master_3000
                 {
                     int x = i + from.X;
                     int y = (int)(tilt) + from.Y + j;
-                    Point point;
+                    BuildingBlock point;
                     string s = ImportExportSettings.Coordinate(x,y);
                     grid.AllPoints.TryGetValue(s, out point);
                     point.OnClick(null, null);

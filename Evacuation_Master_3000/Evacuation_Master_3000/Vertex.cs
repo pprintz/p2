@@ -26,7 +26,7 @@ namespace Evacuation_Master_3000
         {
             if (vertex.neighbours.Contains(this))
                 return false;
-            Point a, b;
+            BuildingBlock a, b;
             grid.AllPoints.TryGetValue(Coordinate((int)x, (int)y), out a);
             grid.AllPoints.TryGetValue(Coordinate((int)vertex.x, (int)vertex.y), out b);
             if (grid.CheckConnection(a, b))

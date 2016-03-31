@@ -36,7 +36,7 @@ namespace Evacuation_Master_3000 {
         public string Header { get; set; }
         public string Description { get; set; }
 
-        public Dictionary<string, Point> AllPoints { get; private set; } = new Dictionary<string, Point>();
+        public Dictionary<string, BuildingBlock> AllPoints { get; private set; } = new Dictionary<string, BuildingBlock>();
 
         public void CreateGrid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
             TheCanvas = canvas;
@@ -51,7 +51,7 @@ namespace Evacuation_Master_3000 {
                     figure.Margin = new Thickness(x*GridSpacing, y* GridSpacing, 0, 0);
 
                     string coordinate = ImportExportSettings.Coordinate(x,y);
-                    AllPoints.Add(coordinate, new Point(x, y, figure));
+                    AllPoints.Add(coordinate, new BuildingBlock(x, y, figure));
 
                     TheCanvas.Children.Add(figure);
                 }
@@ -71,7 +71,7 @@ namespace Evacuation_Master_3000 {
             {
                 TheCanvas.Children.Add(vertex.ToDrawableObject());
             }
-            foreach (Point item in AllPoints.Values) {
+            foreach (BuildingBlock item in AllPoints.Values) {
                 item.CalculateNeighbours(AllPoints);
             }
             CheckForConnectionsThroughDiagonalUnwalkableElements();
@@ -84,12 +84,12 @@ namespace Evacuation_Master_3000 {
             string illegalConnectedPointCoordinateSetOne;
             string illegalConnectedPointCoordinateSetTwo;
 
-            foreach (KeyValuePair<string, Point> pair in AllPoints)
+            foreach (KeyValuePair<string, BuildingBlock> pair in AllPoints)
             {
-                if (pair.Value.Elevation == Point.ElevationTypes.Wall ||
-                    pair.Value.Elevation == Point.ElevationTypes.Furniture)
+                if (pair.Value.Elevation == BuildingBlock.ElevationTypes.Wall ||
+                    pair.Value.Elevation == BuildingBlock.ElevationTypes.Furniture)
                 {
-                    foreach (Point neighbour in pair.Value.Neighbours)
+                    foreach (BuildingBlock neighbour in pair.Value.Neighbours)
                     {
                         if(neighbour.DistanceToPoint(pair.Value) > 1) // Then it is a diagonal
                         {
@@ -107,14 +107,14 @@ namespace Evacuation_Master_3000 {
         }
 
 
-        public bool CheckConnection(Point a, Point b)
+        public bool CheckConnection(BuildingBlock a, BuildingBlock b)
         {
             bool result = true;
-            Point p;
+            BuildingBlock p;
             AllPoints.TryGetValue(Coordinate(a.X, b.Y), out p);
-            foreach (Point point in ReturnLine(a,p))
+            foreach (BuildingBlock point in ReturnLine(a,p))
             {
-                if (point.Elevation == Point.ElevationTypes.Wall)
+                if (point.Elevation == BuildingBlock.ElevationTypes.Wall)
                 {
                     result = false;
                     break;
@@ -122,9 +122,9 @@ namespace Evacuation_Master_3000 {
             }
             if (result)
             {
-                foreach (Point point in ReturnLine(p, b))
+                foreach (BuildingBlock point in ReturnLine(p, b))
                 {
-                    if (point.Elevation == Point.ElevationTypes.Wall)
+                    if (point.Elevation == BuildingBlock.ElevationTypes.Wall)
                     {
                         return false;
                     }
@@ -132,9 +132,9 @@ namespace Evacuation_Master_3000 {
             }
             result = true;
             AllPoints.TryGetValue(Coordinate(b.X, a.Y), out p);
-            foreach (Point point in ReturnLine(a, p))
+            foreach (BuildingBlock point in ReturnLine(a, p))
             {
-                if (point.Elevation == Point.ElevationTypes.Wall)
+                if (point.Elevation == BuildingBlock.ElevationTypes.Wall)
                 {
                     result = false;
                     break;
@@ -142,9 +142,9 @@ namespace Evacuation_Master_3000 {
             }
             if (result)
             {
-                foreach (Point point in ReturnLine(p, b))
+                foreach (BuildingBlock point in ReturnLine(p, b))
                 {
-                    if (point.Elevation == Point.ElevationTypes.Wall)
+                    if (point.Elevation == BuildingBlock.ElevationTypes.Wall)
                     {
                         return false;
                     }
@@ -153,7 +153,7 @@ namespace Evacuation_Master_3000 {
             return result;
         }
 
-        public IEnumerable<Point> ReturnLine(Point a, Point b)
+        public IEnumerable<BuildingBlock> ReturnLine(BuildingBlock a, BuildingBlock b)
         {
             if (a.X==b.X)
             {
@@ -180,24 +180,24 @@ namespace Evacuation_Master_3000 {
             throw new ArgumentException("De to punkter er ikke på linje.");
         }
 
-        private IEnumerable<Point> ReturnLineX(Point a, Point b)
+        private IEnumerable<BuildingBlock> ReturnLineX(BuildingBlock a, BuildingBlock b)
         {
-            List<Point> points = new List<Point>();
+            List<BuildingBlock> points = new List<BuildingBlock>();
             for (int x = a.X; x < b.X; x++)
             {
-                Point point;
+                BuildingBlock point;
                 AllPoints.TryGetValue(Coordinate(x, a.Y), out point);
                 points.Add(point);
             }
             return points;
         }
 
-        private IEnumerable<Point> ReturnLineY(Point a, Point b)
+        private IEnumerable<BuildingBlock> ReturnLineY(BuildingBlock a, BuildingBlock b)
         {
-            List<Point> points = new List<Point>();
+            List<BuildingBlock> points = new List<BuildingBlock>();
             for (int y = a.Y; y < b.Y; y++)
             {
-                Point point;
+                BuildingBlock point;
                 AllPoints.TryGetValue(Coordinate(a.X, y), out point);
                 points.Add(point);
             }

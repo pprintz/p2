@@ -8,10 +8,10 @@ namespace Evacuation_Master_3000
 {
     public class Person
     {
-        public Point Position { get; private set; }
-        public List<Point> PathList = new List<Point>();
+        public BuildingBlock Position { get; private set; }
+        public List<BuildingBlock> PathList = new List<BuildingBlock>();
         public int AmountOfMoves = 0;
-        public Person(Point position)
+        public Person(BuildingBlock position)
         {
             this.Position = position;
         }
@@ -19,10 +19,10 @@ namespace Evacuation_Master_3000
         public void Move()
         {
             if (this.PathList.Count > 0) {
-                Position.Elevation = Point.ElevationTypes.Free;
+                Position.Elevation = BuildingBlock.ElevationTypes.Free;
                 Position.ColorizePoint();
                 Position = PathList[0];
-                Position.Elevation = Point.ElevationTypes.Person;
+                Position.Elevation = BuildingBlock.ElevationTypes.Person;
                 Position.HeatmapCounter++;
                 Position.ColorizePoint();
                 PathList.Remove(Position);

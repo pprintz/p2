@@ -16,10 +16,10 @@ using static Evacuation_Master_3000.ImportExportSettings;
 using static Evacuation_Master_3000.Settings;
 
 namespace Evacuation_Master_3000 {
-    public class Point : IComparable<Point>
+    public class BuildingBlock : IComparable<BuildingBlock>
     {
-        public Point(int x, int y, Rectangle visual) : this (x, y, visual, ElevationTypes.Free) { }
-        public Point(int x, int y, Rectangle visual, ElevationTypes elevation) {
+        public BuildingBlock(int x, int y, Rectangle visual) : this (x, y, visual, ElevationTypes.Free) { }
+        public BuildingBlock(int x, int y, Rectangle visual, ElevationTypes elevation) {
             X = x;
             Y = y;
 
@@ -29,7 +29,7 @@ namespace Evacuation_Master_3000 {
         }
         public double lengthToDestination;
         public bool isChecked = false;
-        public int CompareTo(Point other)
+        public int CompareTo(BuildingBlock other)
         {
             if (LengthFromSource + lengthToDestination < other.LengthFromSource + other.lengthToDestination)
             {
@@ -68,8 +68,8 @@ namespace Evacuation_Master_3000 {
 
         public Rectangle Visual { get; }
         public double LengthFromSource { get; set; } = 100000;
-        public Point Parent { get; set; }
-        public List<Point> Neighbours { get; private set; } = new List<Point>();
+        public BuildingBlock Parent { get; set; }
+        public List<BuildingBlock> Neighbours { get; private set; } = new List<BuildingBlock>();
 
         public void ColorizePoint()
         {
@@ -139,30 +139,30 @@ namespace Evacuation_Master_3000 {
         }
 
         private void RemoveNeighbours() {
-            foreach (Point neighbour in this.Neighbours) {
+            foreach (BuildingBlock neighbour in this.Neighbours) {
                 neighbour.RemovePointFromNeighbours(this);
             }
         }
 
-        public void RemovePointFromNeighbours(Point point) {
+        public void RemovePointFromNeighbours(BuildingBlock point) {
             if (Neighbours.Contains(point))
                 Neighbours.Remove(point);
         }
         
-        public void AddPointToNeighbours(Point point) {
+        public void AddPointToNeighbours(BuildingBlock point) {
             //if(GridSettings.MaxPointDistance <= DistanceToPoint(point) && !this.Neighbours.Contains(point))
                 this.Neighbours.Add(point);
         } 
         
-        public double DistanceToPoint(Point point) {
+        public double DistanceToPoint(BuildingBlock point) {
             return Math.Abs(Math.Sqrt(Math.Pow(point.X - this.X, 2) + Math.Pow(point.Y - this.Y, 2)));
         }
 
-        public void CalculateNeighbours(Dictionary<string, Point> allPoints) {
+        public void CalculateNeighbours(Dictionary<string, BuildingBlock> allPoints) {
             int topLeftNeighbourX = X - 1;
             int topLeftNeighbourY = Y - 1;
 
-            Point currentPoint;
+            BuildingBlock currentPoint;
             for(int currentY = topLeftNeighbourY; currentY <= topLeftNeighbourY + 2; currentY++) 
             {
                 for (int currentX = topLeftNeighbourX; currentX <= topLeftNeighbourX + 2; currentX++) 
@@ -182,8 +182,8 @@ namespace Evacuation_Master_3000 {
             }
         }
 
-        public static Point SelectedPoint { get; private set; }
-        public static List<Point> Path = new List<Point>();
+        public static BuildingBlock SelectedPoint { get; private set; }
+        public static List<BuildingBlock> Path = new List<BuildingBlock>();
         public void OnClick(object sender, MouseButtonEventArgs e) {
             if (MainWindow.lineTool && e != null)
                 MainWindow.InputLineTool(this);
@@ -209,7 +209,7 @@ namespace Evacuation_Master_3000 {
             SelectedPoint = this;
             this.ColorizePoint();
 
-            foreach (Point neighbour in Neighbours) {
+            foreach (BuildingBlock neighbour in Neighbours) {
                 neighbour.Elevation = ElevationTypes.Exit;
                 neighbour.ColorizePoint();
             }*/

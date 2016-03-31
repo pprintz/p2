@@ -23,9 +23,9 @@ namespace Evacuation_Master_3000 {
         private double ZoomValue { get; set; }
         private bool CanZoom { get; set; }
 
-        private System.Windows.Point? lastCenterPositionOnTarget;
-        private System.Windows.Point? lastMousePositionOnTarget;
-        private System.Windows.Point? lastDragPoint;
+        private Point? lastCenterPositionOnTarget;
+        private Point? lastMousePositionOnTarget;
+        private Point? lastDragPoint;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string property)
@@ -68,16 +68,16 @@ namespace Evacuation_Master_3000 {
         {
             if (e.ExtentHeightChange != 0 || e.ExtentWidthChange != 0)
             {
-                System.Windows.Point? targetBefore = null;
-                System.Windows.Point? targetNow = null;
+                Point? targetBefore = null;
+                Point? targetNow = null;
 
                 if (!lastMousePositionOnTarget.HasValue)
                 {
                     if (lastCenterPositionOnTarget.HasValue)
                     {
-                        var centerOfViewport = new System.Windows.Point(scrollViewer.ViewportWidth / 2,
+                        Point centerOfViewport = new Point(scrollViewer.ViewportWidth / 2,
                                                          scrollViewer.ViewportHeight / 2);
-                        System.Windows.Point centerOfTargetNow =
+                        Point centerOfTargetNow =
                               scrollViewer.TranslatePoint(centerOfViewport, Container);
 
                         targetBefore = lastCenterPositionOnTarget;
@@ -119,7 +119,7 @@ namespace Evacuation_Master_3000 {
         {
             if (lastDragPoint.HasValue)
             {
-                System.Windows.Point posNow = e.GetPosition(scrollViewer);
+                Point posNow = e.GetPosition(scrollViewer);
 
                 double dX = posNow.X - lastDragPoint.Value.X;
                 double dY = posNow.Y - lastDragPoint.Value.Y;
@@ -133,7 +133,7 @@ namespace Evacuation_Master_3000 {
         public void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
 
-            var mousePos = e.GetPosition(scrollViewer);
+            Point mousePos = e.GetPosition(scrollViewer);
             if (mousePos.X <= scrollViewer.ViewportWidth && mousePos.Y <
                 scrollViewer.ViewportHeight) //make sure we still can use the scrollbars
             {

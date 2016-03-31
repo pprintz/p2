@@ -143,8 +143,8 @@ namespace Evacuation_Master_3000 {
             int[,] gridMatrix = new int[ImportedGridWidth, ImportedGridHeight];
             TransformGridMatrix(ref gridMatrix);
 
-            const int FreeAsInt = (int)Point.ElevationTypes.Free;
-            Point.ElevationTypes newType;
+            const int FreeAsInt = (int)BuildingBlock.ElevationTypes.Free;
+            BuildingBlock.ElevationTypes newType;
 
             for (int x = 0; x < ImportedGridWidth; x++) {
                 for (int y = 0; y < ImportedGridHeight; y++) {
@@ -153,7 +153,7 @@ namespace Evacuation_Master_3000 {
                     if (type == FreeAsInt)
                         continue;
                     
-                    newType = (Point.ElevationTypes)type;
+                    newType = (BuildingBlock.ElevationTypes)type;
 
                     NewGrid.AllPoints[Coordinate(x, y)].Elevation = newType;
                 }

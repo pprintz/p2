@@ -14,37 +14,34 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 
 namespace Evacuation_Master_3000 {
-    class ZoomDrag : INotifyPropertyChanged
+    class ZoomDrag
     {
         public ZoomDrag() { }
         public Slider slider { get; set; }
         public ScrollViewer scrollViewer { get; set; }
+        //public ScaleTransform scaleTransform { get; set; }
         public Canvas Container { get; set; }
         private double ZoomValue { get; set; }
-        private bool CanZoom { get; set; }
+        public bool CanZoom { get; set; }
+        private bool MouseInGrid { get; set; }
 
         private Point? lastCenterPositionOnTarget;
         private Point? lastMousePositionOnTarget;
         private Point? lastDragPoint;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-        }
-
         public void MouseEnter(object sender, MouseEventArgs e)
         {
-            CanZoom = true;
+            MouseInGrid = true;
         }
         public void MouseLeave(object sender, MouseEventArgs e)
         {
-            CanZoom = false;
+            MouseInGrid = false;
         }
         public void ZoomMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (CanZoom)
+            lastMousePositionOnTarget = Mouse.GetPosition(Container);
+            e.Handled = CanZoom == true ? true : false;
+            if (CanZoom && MouseInGrid)
             {
                 if (e.Delta > 0)
                 {
@@ -64,6 +61,14 @@ namespace Evacuation_Master_3000 {
             }
         }
 
+        public void OnSliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            //scaleTransform.ScaleX = e.NewValue;
+            //scaleTransform.ScaleY = e.NewValue;
+
+            var centerOfViewport = new Point(scrollViewer.ViewportWidth / 2,
+                                             scrollViewer.ViewportHeight / 2);
+            lastCenterPositionOnTarget = scrollViewer.TranslatePoint(centerOfViewport, Container);
+        }
         public void OnScrollViewerScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (e.ExtentHeightChange != 0 || e.ExtentWidthChange != 0)
@@ -147,7 +152,6 @@ namespace Evacuation_Master_3000 {
 
         public void OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-
             scrollViewer.Cursor = Cursors.Arrow;
             scrollViewer.ReleaseMouseCapture();
             lastDragPoint = null;

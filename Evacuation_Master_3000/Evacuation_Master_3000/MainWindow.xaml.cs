@@ -32,10 +32,12 @@ namespace Evacuation_Master_3000
             scrollViewerComponent.UpdateLayout();
             SetupZoomDrag();
             mainWindow = this;
-        }
 
+            
+        }
+        ZoomDrag zoomDrag;
         private void SetupZoomDrag() {
-            ZoomDrag zoomDrag = new ZoomDrag() {
+            zoomDrag = new ZoomDrag() {
                 slider = sliderComponent,
                 scrollViewer = scrollViewerComponent,
                 Container = GridContainer
@@ -43,6 +45,7 @@ namespace Evacuation_Master_3000
             SuperSliderSolutionGridAndFriends.MouseEnter += zoomDrag.MouseEnter;
             SuperSliderSolutionGridAndFriends.MouseLeave += zoomDrag.MouseLeave;
             SuperSliderSolutionGridAndFriends.MouseWheel += zoomDrag.ZoomMouseWheel;
+            sliderComponent.ValueChanged += zoomDrag.OnSliderValueChanged;
             scrollViewerComponent.ScrollChanged += zoomDrag.OnScrollViewerScrollChanged;
             scrollViewerComponent.MouseRightButtonDown += zoomDrag.OnMouseRightButtonDown;
             scrollViewerComponent.MouseRightButtonUp += zoomDrag.OnMouseRightButtonUp;
@@ -228,8 +231,8 @@ namespace Evacuation_Master_3000
                 case Key.LeftShift:
                     lineTool = true;
                     break;
-                default:
-                    //CreateGrid();
+                case Key.LeftCtrl:
+                    zoomDrag.CanZoom = true;
                     break;
             }
         }
@@ -242,6 +245,9 @@ namespace Evacuation_Master_3000
                 case Key.LeftShift:
                     lineTool = false;
                     previousPoint = null;
+                    break;
+                case Key.LeftCtrl:
+                    zoomDrag.CanZoom = false;
                     break;
             }
         }

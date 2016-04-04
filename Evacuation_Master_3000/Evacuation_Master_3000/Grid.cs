@@ -50,7 +50,7 @@ namespace Evacuation_Master_3000 {
                     figure.Width = PointSize;
                     figure.Margin = new Thickness(x*GridSpacing, y* GridSpacing, 0, 0);
 
-                    string coordinate = ImportExportSettings.Coordinate(x,y);
+                    string coordinate = Coordinate(x,y);
                     AllPoints.Add(coordinate, new BuildingBlock(x, y, figure));
 
                     TheCanvas.Children.Add(figure);

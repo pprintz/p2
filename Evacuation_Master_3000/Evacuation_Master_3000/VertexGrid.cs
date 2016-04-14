@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Evacuation_Master_3000
+﻿namespace Evacuation_Master_3000
 {
     class VertexGrid
     {
-        private Grid grid;
-
-        public double vertexGridSize { get; set; } = 3;
-        private VertexDatabase vertexDatabase;
+        private Grid _grid;
+        private readonly VertexDatabase _vertexDatabase;
 
         public VertexGrid(Grid grid)
         {
-            this.grid = grid;
-            Vertex verticeOne = new Vertex(grid, vertexGridSize, vertexGridSize);
-            Vertex verticeTwo = new Vertex(grid, vertexGridSize, vertexGridSize*2);
-            verticeOne.FillVertexGrid(verticeTwo, ref vertexDatabase);
+            _grid = grid;
+            Vertex verticeOne = new Vertex(grid, VertexGridSize, VertexGridSize);
+            Vertex verticeTwo = new Vertex(grid, VertexGridSize, VertexGridSize*2);
+            verticeOne.FillVertexGrid(verticeTwo, ref _vertexDatabase);
         }
+
+        public double VertexGridSize { get; set; } = 3;
     }
 }

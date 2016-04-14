@@ -1,38 +1,25 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#endregion
 
 namespace Evacuation_Master_3000
 {
-    
     class VertexDatabase : IEnumerable<Vertex>
     {
-        List<Vertex> vertices;
+        private readonly List<Vertex> _vertices;
 
-        /// <summary>
-        /// Adds the vertex to the database and returns true if another vertex is not already nearby, else returns false.
-        /// </summary>
-        /// <param name="vertex">Vertex to add</param>
-        /// <returns>Bool, wether or not the vertex was added.</returns>
-        public Vertex Add(Vertex vertex)
+        public VertexDatabase()
         {
-            foreach (Vertex v in vertices)
-            {
-                if (Math.Abs(v.x-vertex.x)<0.1 && Math.Abs(v.y-vertex.y)<0.1)
-                {
-                    return v;
-                }
-            }
-            vertices.Add(vertex);
-            return vertex;
+            _vertices = new List<Vertex>();
         }
 
         public IEnumerator<Vertex> GetEnumerator()
         {
-            foreach (Vertex vertex in vertices)
+            foreach (Vertex vertex in _vertices)
             {
                 yield return vertex;
             }
@@ -43,9 +30,22 @@ namespace Evacuation_Master_3000
             return GetEnumerator();
         }
 
-        public VertexDatabase()
+        /// <summary>
+        ///     Adds the vertex to the database and returns true if another vertex is not already nearby, else returns false.
+        /// </summary>
+        /// <param name="vertex">Vertex to add</param>
+        /// <returns>Bool, wether or not the vertex was added.</returns>
+        public Vertex Add(Vertex vertex)
         {
-            vertices = new List<Vertex>();
+            foreach (Vertex v in _vertices)
+            {
+                if (Math.Abs(v.X - vertex.X) < 0.1 && Math.Abs(v.Y - vertex.Y) < 0.1)
+                {
+                    return v;
+                }
+            }
+            _vertices.Add(vertex);
+            return vertex;
         }
     }
 }

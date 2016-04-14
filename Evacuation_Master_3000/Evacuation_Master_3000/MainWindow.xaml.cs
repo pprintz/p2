@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using static Evacuation_Master_3000.Settings;
 
@@ -28,40 +19,41 @@ namespace Evacuation_Master_3000
             
             InitializeComponent();
             
-            NewOrImport newImp = new NewOrImport(GridContainer, grid, GridNewOrLoadWindow.NewOrImport.New);
-            scrollViewerComponent.UpdateLayout();
+            NewOrImport newImp = new NewOrImport(GridContainer, _grid, GridNewOrLoadWindow.NewOrImport.New);
+            ScrollViewerComponent.UpdateLayout();
             SetupZoomDrag();
-            mainWindow = this;
+            _mainWindow = this;
 
             
         }
-        ZoomDrag zoomDrag;
+
+        private ZoomDrag _zoomDrag;
         private void SetupZoomDrag() {
-            zoomDrag = new ZoomDrag() {
-                slider = sliderComponent,
-                scrollViewer = scrollViewerComponent,
+            _zoomDrag = new ZoomDrag() {
+                Slider = SliderComponent,
+                ScrollViewer = ScrollViewerComponent,
                 Container = GridContainer
             };
-            SuperSliderSolutionGridAndFriends.MouseEnter += zoomDrag.MouseEnter;
-            SuperSliderSolutionGridAndFriends.MouseLeave += zoomDrag.MouseLeave;
-            SuperSliderSolutionGridAndFriends.MouseWheel += zoomDrag.ZoomMouseWheel;
-            sliderComponent.ValueChanged += zoomDrag.OnSliderValueChanged;
-            scrollViewerComponent.ScrollChanged += zoomDrag.OnScrollViewerScrollChanged;
-            scrollViewerComponent.MouseRightButtonDown += zoomDrag.OnMouseRightButtonDown;
-            scrollViewerComponent.MouseRightButtonUp += zoomDrag.OnMouseRightButtonUp;
-            scrollViewerComponent.MouseMove += zoomDrag.OnMouseMove;
+            SuperSliderSolutionGridAndFriends.MouseEnter += _zoomDrag.MouseEnter;
+            SuperSliderSolutionGridAndFriends.MouseLeave += _zoomDrag.MouseLeave;
+            SuperSliderSolutionGridAndFriends.MouseWheel += _zoomDrag.ZoomMouseWheel;
+            SliderComponent.ValueChanged += _zoomDrag.OnSliderValueChanged;
+            ScrollViewerComponent.ScrollChanged += _zoomDrag.OnScrollViewerScrollChanged;
+            ScrollViewerComponent.MouseRightButtonDown += _zoomDrag.OnMouseRightButtonDown;
+            ScrollViewerComponent.MouseRightButtonUp += _zoomDrag.OnMouseRightButtonUp;
+            ScrollViewerComponent.MouseMove += _zoomDrag.OnMouseMove;
         }
         
-        private Grid grid = new Grid();
+        private readonly Grid _grid = new Grid();
 
-        private static MainWindow mainWindow;
+        private static MainWindow _mainWindow;
         public static bool makeWall;
         public static bool makeDoor;
         public static bool makePath;
         public static bool makeFree;
         public static bool makePerson;
         public static bool lineTool;
-        private static BuildingBlock previousPoint;
+        private static BuildingBlock _previousPoint;
 
         private void GetOptions(object sender, RoutedEventArgs e) {
             //MessageBox.Show($"With/height:\n\t-Grid size: {gridsss.ActualWidth}/{gridsss.ActualHeight}\n\t-Canvas size: {GridContainer.ActualWidth}/{GridContainer.ActualHeight}");
@@ -69,10 +61,10 @@ namespace Evacuation_Master_3000
         }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e) {
-            Export exp = new Export(grid);
+            Export exp = new Export(_grid);
         }
         private void LoadButtonClick(object sender, RoutedEventArgs e) {
-            NewOrImport imp = new NewOrImport(GridContainer, grid, GridNewOrLoadWindow.NewOrImport.Import);
+            NewOrImport imp = new NewOrImport(GridContainer, _grid, GridNewOrLoadWindow.NewOrImport.Import);
          
         }
 
@@ -80,8 +72,8 @@ namespace Evacuation_Master_3000
         public static List<Person> PList = new List<Person>();
         private void StartPath(object sender, RoutedEventArgs e)
         {
-            grid.CalculateAllNeighbours();
-            List<BuildingBlock> allPoints = grid.AllPoints.Values.ToList();
+            _grid.CalculateAllNeighbours();
+            List<BuildingBlock> allPoints = _grid.AllPoints.Values.ToList();
             Graph graph = new Graph(allPoints);
             foreach (Person person in PList) {
                 CalculatePath(person, graph);
@@ -141,11 +133,11 @@ namespace Evacuation_Master_3000
 
         public static void InputLineTool(BuildingBlock point)
         {
-            if (previousPoint != null)
+            if (_previousPoint != null)
             {
-                mainWindow.DrawLine(previousPoint, point);
+                _mainWindow.DrawLine(_previousPoint, point);
             }
-            previousPoint = point;
+            _previousPoint = point;
         }
 
 
@@ -172,7 +164,7 @@ namespace Evacuation_Master_3000
                     int y = (int)(tilt) + from.Y + j;
                     BuildingBlock point;
                     string s = ImportExportSettings.Coordinate(x,y);
-                    grid.AllPoints.TryGetValue(s, out point);
+                    _grid.AllPoints.TryGetValue(s, out point);
                     point.OnClick(null, null);
                     j += Math.Sign(deltaY);
                 } while (Math.Abs(j) < Math.Abs(deltaTilt));
@@ -232,7 +224,7 @@ namespace Evacuation_Master_3000
                     lineTool = true;
                     break;
                 case Key.LeftCtrl:
-                    zoomDrag.CanZoom = true;
+                    _zoomDrag.CanZoom = true;
                     break;
             }
         }
@@ -244,16 +236,16 @@ namespace Evacuation_Master_3000
             {
                 case Key.LeftShift:
                     lineTool = false;
-                    previousPoint = null;
+                    _previousPoint = null;
                     break;
                 case Key.LeftCtrl:
-                    zoomDrag.CanZoom = false;
+                    _zoomDrag.CanZoom = false;
                     break;
             }
         }
 
         private void GridContainer_SizeChanged(object sender, SizeChangedEventArgs e) {
-            scrollViewerComponent.UpdateLayout();
+            ScrollViewerComponent.UpdateLayout();
         }
 
         private void HeatmapToggle(object sender, RoutedEventArgs e) {

@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Evacuation_Master_3000"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

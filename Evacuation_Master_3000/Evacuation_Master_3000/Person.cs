@@ -1,24 +1,27 @@
-﻿using System;
+﻿#region
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#endregion
 
 namespace Evacuation_Master_3000
 {
     public class Person
     {
-        public BuildingBlock Position { get; private set; }
-        public List<BuildingBlock> PathList = new List<BuildingBlock>();
         public int AmountOfMoves = 0;
+        public List<BuildingBlock> PathList = new List<BuildingBlock>();
+
         public Person(BuildingBlock position)
         {
-            this.Position = position;
+            Position = position;
         }
+
+        public BuildingBlock Position { get; private set; }
 
         public void Move()
         {
-            if (this.PathList.Count > 0) {
+            if (PathList.Count > 0)
+            {
                 Position.Elevation = BuildingBlock.ElevationTypes.Free;
                 Position.ColorizePoint();
                 Position = PathList[0];

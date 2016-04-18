@@ -40,11 +40,10 @@ namespace Evacuation_Master_3000
             TheCanvas = canvas;
             PointsPerRow = pointsPerRow;
             PointsPerColumn = pointsPerColumn;
-            for (int y = 1; y <= PointsPerColumn; y++)
+            for (int y = 0; y < PointsPerColumn; y++)
             {
-                for (int x = 1; x <= PointsPerRow; x++)
+                for (int x = 0; x < PointsPerRow; x++)
                 {
-                    //Ellipse figure = new Ellipse();
                     Rectangle figure = new Rectangle();
                     figure.Height = PointSize;
                     figure.Width = PointSize;

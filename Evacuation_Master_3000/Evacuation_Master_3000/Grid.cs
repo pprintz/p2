@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -15,19 +16,10 @@ namespace Evacuation_Master_3000
     {
         private VertexDatabase _vertexDatabase;
         public int GridSpacing { get; } = 10;
-        public int PointSize { get; } = 10;
-        public Canvas TheCanvas { get; private set; }
+        private int PointSize { get; } = 10;
+        private Canvas TheCanvas { get; set; }
         public int PointsPerRow { get; private set; }
         public int PointsPerColumn { get; private set; }
-
-
-        //public Grid(Canvas canvas, int pointsPerRow, int pointsPerColumn) {
-        //    TheCanvas = canvas;
-        //    PointsPerRow = pointsPerRow;
-        //    PointsPerColumn = pointsPerColumn;
-        //}
-
-        //public Grid(Canvas canvas, int pointsPerRowAndColumn) : this(canvas, pointsPerRowAndColumn, pointsPerRowAndColumn) { }
 
         public string Header { get; set; }
         public string Description { get; set; }
@@ -45,10 +37,12 @@ namespace Evacuation_Master_3000
                 for (int x = 1; x <= PointsPerRow; x++)
                 {
                     //Ellipse figure = new Ellipse();
-                    Rectangle figure = new Rectangle();
-                    figure.Height = PointSize;
-                    figure.Width = PointSize;
-                    figure.Margin = new Thickness(x*GridSpacing, y*GridSpacing, 0, 0);
+                    Rectangle figure = new Rectangle
+                    {
+                        Height = PointSize,
+                        Width = PointSize,
+                        Margin = new Thickness(x*GridSpacing, y*GridSpacing, 0, 0)
+                    };
 
                     string coordinate = Coordinate(x, y);
                     AllPoints.Add(coordinate, new BuildingBlock(x, y, figure));
@@ -61,16 +55,15 @@ namespace Evacuation_Master_3000
 
         public void CalculateAllNeighbours()
         {
-            //NUnit.Framework.Assert.AreEqual(1, 2);
-            Vertex vertexOne = new Vertex(this, 10, 10);
-            _vertexDatabase.Add(vertexOne);
-            Vertex vertexTwo = new Vertex(this, 10, 13);
-            _vertexDatabase.Add(vertexTwo);
-            vertexOne.FillVertexGrid(vertexTwo, ref _vertexDatabase);
-            foreach (Vertex vertex in _vertexDatabase)
-            {
-                TheCanvas.Children.Add(vertex.ToDrawableObject());
-            }
+            //Vertex vertexOne = new Vertex(this, 10, 10);
+            //_vertexDatabase.Add(vertexOne);
+            //Vertex vertexTwo = new Vertex(this, 10, 13);
+            //_vertexDatabase.Add(vertexTwo);
+            //vertexOne.FillVertexGrid(vertexTwo, ref _vertexDatabase);
+            //foreach (Vertex vertex in _vertexDatabase)
+            //{
+            //    TheCanvas.Children.Add(vertex.ToDrawableObject());
+            //}
             foreach (BuildingBlock item in AllPoints.Values)
             {
                 item.CalculateNeighbours(AllPoints);
@@ -79,11 +72,8 @@ namespace Evacuation_Master_3000
         }
 
 
-        public void CheckForConnectionsThroughDiagonalUnwalkableElements()
+        private void CheckForConnectionsThroughDiagonalUnwalkableElements()
         {
-            string illegalConnectedPointCoordinateSetOne;
-            string illegalConnectedPointCoordinateSetTwo;
-
             foreach (KeyValuePair<string, BuildingBlock> pair in AllPoints)
             {
                 if (pair.Value.Elevation == BuildingBlock.ElevationTypes.Wall ||
@@ -93,18 +83,16 @@ namespace Evacuation_Master_3000
                     {
                         if (neighbour.DistanceToPoint(pair.Value) > 1) // Then it is a diagonal
                         {
-                            illegalConnectedPointCoordinateSetOne = Coordinate(pair.Value.X,
+                            var illegalConnectedPointCoordinateSetOne = Coordinate(pair.Value.X,
                                 neighbour.Y);
-                            illegalConnectedPointCoordinateSetTwo = Coordinate(neighbour.X,
+                            var illegalConnectedPointCoordinateSetTwo = Coordinate(neighbour.X,
                                 pair.Value.Y);
-                            if (AllPoints.ContainsKey(illegalConnectedPointCoordinateSetOne) &&
-                                AllPoints.ContainsKey(illegalConnectedPointCoordinateSetTwo))
-                            {
-                                AllPoints[illegalConnectedPointCoordinateSetOne].Neighbours.Remove(
-                                    AllPoints[illegalConnectedPointCoordinateSetTwo]);
-                                AllPoints[illegalConnectedPointCoordinateSetTwo].Neighbours.Remove(
-                                    AllPoints[illegalConnectedPointCoordinateSetOne]);
-                            }
+                            if (!AllPoints.ContainsKey(illegalConnectedPointCoordinateSetOne) ||
+                                !AllPoints.ContainsKey(illegalConnectedPointCoordinateSetTwo)) continue;
+                            AllPoints[illegalConnectedPointCoordinateSetOne].Neighbours.Remove(
+                                AllPoints[illegalConnectedPointCoordinateSetTwo]);
+                            AllPoints[illegalConnectedPointCoordinateSetTwo].Neighbours.Remove(
+                                AllPoints[illegalConnectedPointCoordinateSetOne]);
                         }
                     }
                 }
@@ -114,51 +102,29 @@ namespace Evacuation_Master_3000
 
         public bool CheckConnection(BuildingBlock a, BuildingBlock b)
         {
-            bool result = true;
             BuildingBlock p;
             AllPoints.TryGetValue(Coordinate(a.X, b.Y), out p);
-            foreach (BuildingBlock point in ReturnLine(a, p))
-            {
-                if (point.Elevation == BuildingBlock.ElevationTypes.Wall)
-                {
-                    result = false;
-                    break;
-                }
-            }
+            bool result = ReturnLine(a, p).All(point => point.Elevation != BuildingBlock.ElevationTypes.Wall);
             if (result)
             {
-                foreach (BuildingBlock point in ReturnLine(p, b))
+                if (ReturnLine(p, b).Any(point => point.Elevation == BuildingBlock.ElevationTypes.Wall))
                 {
-                    if (point.Elevation == BuildingBlock.ElevationTypes.Wall)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
-            result = true;
             AllPoints.TryGetValue(Coordinate(b.X, a.Y), out p);
-            foreach (BuildingBlock point in ReturnLine(a, p))
+            result = ReturnLine(a, p).All(point => point.Elevation != BuildingBlock.ElevationTypes.Wall);
+            if (!result) return false;
             {
-                if (point.Elevation == BuildingBlock.ElevationTypes.Wall)
+                if (ReturnLine(p, b).Any(point => point.Elevation == BuildingBlock.ElevationTypes.Wall))
                 {
-                    result = false;
-                    break;
+                    return false;
                 }
             }
-            if (result)
-            {
-                foreach (BuildingBlock point in ReturnLine(p, b))
-                {
-                    if (point.Elevation == BuildingBlock.ElevationTypes.Wall)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return result;
+            return true;
         }
 
-        public IEnumerable<BuildingBlock> ReturnLine(BuildingBlock a, BuildingBlock b)
+        private IEnumerable<BuildingBlock> ReturnLine(BuildingBlock a, BuildingBlock b)
         {
             if (a.X == b.X)
             {

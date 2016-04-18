@@ -12,22 +12,42 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
+
+        private readonly Grid _grid;
+
+        private static MainWindow _mainWindow;
+        public static bool makeWall;
+        public static bool makeDoor;
+        public static bool makePath;
+        public static bool makeFree;
+        public static bool makePerson;
+        public static bool lineTool;
+        public static BuildingBlock _previousPoint;
+        private ZoomDrag _zoomDrag;
+
         public MainWindow() {
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            
+
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
+
+            _grid = new Grid();
             
+            // GridContainer is a canvas, which is part of the XML
+            // It makes changes to the _grid and GridContainer -- maybe they should be ref or out? ??      <----- KIG HER DENNIS 
             NewOrImport newImp = new NewOrImport(GridContainer, _grid, GridNewOrLoadWindow.NewOrImport.New);
+
+            // Used for zooming and changes made in the window size etc.
             ScrollViewerComponent.UpdateLayout();
             SetupZoomDrag();
+
             _mainWindow = this;
 
             
         }
 
-        private ZoomDrag _zoomDrag;
+        
         private void SetupZoomDrag() {
             _zoomDrag = new ZoomDrag() {
                 Slider = SliderComponent,
@@ -43,17 +63,6 @@ namespace Evacuation_Master_3000
             ScrollViewerComponent.MouseRightButtonUp += _zoomDrag.OnMouseRightButtonUp;
             ScrollViewerComponent.MouseMove += _zoomDrag.OnMouseMove;
         }
-        
-        private readonly Grid _grid = new Grid();
-
-        private static MainWindow _mainWindow;
-        public static bool makeWall;
-        public static bool makeDoor;
-        public static bool makePath;
-        public static bool makeFree;
-        public static bool makePerson;
-        public static bool lineTool;
-        private static BuildingBlock _previousPoint;
 
         private void GetOptions(object sender, RoutedEventArgs e) {
             //MessageBox.Show($"With/height:\n\t-Grid size: {gridsss.ActualWidth}/{gridsss.ActualHeight}\n\t-Canvas size: {GridContainer.ActualWidth}/{GridContainer.ActualHeight}");
@@ -91,7 +100,6 @@ namespace Evacuation_Master_3000
 
         }
 
-        public static int ReachedCounter = 0;
         public void Simulate()
         {
             int max = PList.Max(p => p.AmountOfMoves);
@@ -104,7 +112,7 @@ namespace Evacuation_Master_3000
         }
         private void CalculatePath(Person person, Graph graf)
         {
-            /* Exception ved ingen path samt håndtering af personer, der ikke kan finde en path */
+            /* Exception needed for when not path is given, and when a person can't find a route. */
             int sourceIndex = 0;
             int destIndex = 1;
             person.PathList.AddRange(graf.AStar(person.Position, BuildingBlock.Path[sourceIndex]));
@@ -118,16 +126,7 @@ namespace Evacuation_Master_3000
         private void Yield(long ticks) {
             long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
             while (DateTime.Now.Ticks < dtEnd) {
-                this.Dispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate (object unused) { return null; }, null);
-            }
-        }
-        private void ColorizePath(List<BuildingBlock> pointsInPath) {
-            foreach (BuildingBlock pathPoint in pointsInPath) {
-                if (pathPoint.Elevation != BuildingBlock.ElevationTypes.Hall) {
-                    pathPoint.Elevation = BuildingBlock.ElevationTypes.Exit;
-                    pathPoint.ColorizePoint();
-                    Yield(100000);
-                }
+                Dispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate (object unused) { return null; }, null);
             }
         }
 
@@ -248,8 +247,10 @@ namespace Evacuation_Master_3000
             ScrollViewerComponent.UpdateLayout();
         }
 
-        private void HeatmapToggle(object sender, RoutedEventArgs e) {
-            ShowHeatMap = (sender as CheckBox).IsChecked.Value == true ? true : false;
+        private void HeatmapToggle(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            if (checkBox?.IsChecked != null) ShowHeatMap = checkBox.IsChecked.Value;
         }
     }
 }

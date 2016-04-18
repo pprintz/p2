@@ -11,20 +11,19 @@ namespace Evacuation_Master_3000
     class Graph
     {
         private static bool _firstRun = true;
-        public List<BuildingBlock> Vertices = new List<BuildingBlock>();
+        private readonly List<BuildingBlock> _vertices;
 
         public Graph(List<BuildingBlock> vertices)
         {
-            Vertices = vertices;
+            _vertices = vertices;
         }
 
         public List<BuildingBlock> AStar(BuildingBlock source, BuildingBlock destination)
         {
             SortedSet<BuildingBlock> priorityQueue = new SortedSet<BuildingBlock>(Comparer<BuildingBlock>.Default);
             Dictionary<string, BuildingBlock> closedSet = new Dictionary<string, BuildingBlock>();
-            List<BuildingBlock> unvisitedVertices = Vertices.ToList();
-            BuildingBlock current;
-
+            List<BuildingBlock> unvisitedVertices = _vertices.ToList();
+            
             foreach (BuildingBlock point in unvisitedVertices)
             {
                 point.LengthToDestination = point.DistanceToPoint(destination);
@@ -39,7 +38,7 @@ namespace Evacuation_Master_3000
             unvisitedVertices.Remove(source);
             source.LengthFromSource = 0;
             unvisitedVertices.Insert(0, source);
-            current = unvisitedVertices[0];
+            BuildingBlock current = unvisitedVertices[0];
 
             while (current != destination)
             {
@@ -82,7 +81,7 @@ namespace Evacuation_Master_3000
             return path;
         }
 
-        public void CheckNeighbors(BuildingBlock currentPoint, SortedSet<BuildingBlock> priorityQueue)
+        private void CheckNeighbors(BuildingBlock currentPoint, SortedSet<BuildingBlock> priorityQueue)
         {
             foreach (BuildingBlock neighbour in priorityQueue)
             {

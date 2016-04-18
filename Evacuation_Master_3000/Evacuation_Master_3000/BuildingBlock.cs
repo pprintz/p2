@@ -25,19 +25,20 @@ namespace Evacuation_Master_3000
             Exit,
             Person
         }
-
-        public static List<BuildingBlock> Path = new List<BuildingBlock>();
-
-        private ElevationTypes _elevation;
+        public static readonly List<BuildingBlock> Path = new List<BuildingBlock>();
         public bool IsChecked = false;
-
         public double LengthToDestination;
+        public int X { get; }
+        public int Y { get; }
+        public double LengthFromSource { get; set; } = 100000;
+        public BuildingBlock Parent { get; set; }
+        public List<BuildingBlock> Neighbours { get; } = new List<BuildingBlock>();
+        public int HeatmapCounter { get; set; }
 
-        public BuildingBlock(int x, int y, Rectangle visual) : this(x, y, visual, ElevationTypes.Free)
-        {
-        }
+        private Rectangle Visual { get; }
+        private ElevationTypes _elevation;
 
-        public BuildingBlock(int x, int y, Rectangle visual, ElevationTypes elevation)
+        public BuildingBlock(int x, int y, Rectangle visual, ElevationTypes elevation = ElevationTypes.Free)
         {
             X = x;
             Y = y;
@@ -46,10 +47,6 @@ namespace Evacuation_Master_3000
             Visual.MouseLeftButtonDown += OnClick;
             Elevation = elevation;
         }
-
-        public int X { get; }
-        public int Y { get; }
-        public int HeatmapCounter { get; set; }
 
         public ElevationTypes Elevation
         {
@@ -61,35 +58,17 @@ namespace Evacuation_Master_3000
             }
         }
 
-        public Rectangle Visual { get; }
-        public double LengthFromSource { get; set; } = 100000;
-        public BuildingBlock Parent { get; set; }
-        public List<BuildingBlock> Neighbours { get; } = new List<BuildingBlock>();
-
-        public static BuildingBlock SelectedPoint { get; private set; }
-
         public int CompareTo(BuildingBlock other)
         {
-            if (LengthFromSource + LengthToDestination < other.LengthFromSource + other.LengthToDestination)
-            {
+            if (other.LengthFromSource + other.LengthToDestination > LengthFromSource + LengthToDestination)
                 return -1;
-            }
-            if (LengthFromSource + LengthToDestination > other.LengthFromSource + other.LengthToDestination)
-            {
-                return 1;
-            }
-            return 0;
+            return other.LengthFromSource + other.LengthToDestination < LengthFromSource + LengthToDestination ? 1 : 0;
         }
 
-        public void ColorizePoint()
+        private void ColorizePoint()
         {
             SolidColorBrush newColor = new SolidColorBrush();
 
-            if (SelectedPoint == this)
-            {
-                Visual.Fill = new SolidColorBrush(Colors.Red);
-                return;
-            }
             switch (Elevation)
             {
                 case ElevationTypes.Free:
@@ -150,21 +129,7 @@ namespace Evacuation_Master_3000
             return new SolidColorBrush(Color.FromRgb((byte) red, (byte) green, (byte) blue));
         }
 
-        private void RemoveNeighbours()
-        {
-            foreach (BuildingBlock neighbour in Neighbours)
-            {
-                neighbour.RemovePointFromNeighbours(this);
-            }
-        }
-
-        public void RemovePointFromNeighbours(BuildingBlock point)
-        {
-            if (Neighbours.Contains(point))
-                Neighbours.Remove(point);
-        }
-
-        public void AddPointToNeighbours(BuildingBlock point)
+        private void AddPointToNeighbours(BuildingBlock point)
         {
             //if(GridSettings.MaxPointDistance <= DistanceToPoint(point) && !this.Neighbours.Contains(point))
             Neighbours.Add(point);
@@ -180,7 +145,6 @@ namespace Evacuation_Master_3000
             int topLeftNeighbourX = X - 1;
             int topLeftNeighbourY = Y - 1;
 
-            BuildingBlock currentPoint;
             for (int currentY = topLeftNeighbourY; currentY <= topLeftNeighbourY + 2; currentY++)
             {
                 for (int currentX = topLeftNeighbourX; currentX <= topLeftNeighbourX + 2; currentX++)
@@ -189,7 +153,7 @@ namespace Evacuation_Master_3000
                     if (allPoints.ContainsKey(coordinate) == false || allPoints[coordinate] == this)
                         continue;
 
-                    currentPoint = allPoints[coordinate];
+                    var currentPoint = allPoints[coordinate];
 
                     if (currentPoint.Elevation != ElevationTypes.Wall &&
                         currentPoint.Elevation != ElevationTypes.Furniture
@@ -224,17 +188,6 @@ namespace Evacuation_Master_3000
             else
                 Elevation = ElevationTypes.Free;
 
-            ColorizePoint();
-            /*if (SelectedPoint != null)
-                SelectedPoint.ColorizePoint();
-
-            SelectedPoint = this;
-            this.ColorizePoint();
-
-            foreach (BuildingBlock neighbour in Neighbours) {
-                neighbour.Elevation = ElevationTypes.Exit;
-                neighbour.ColorizePoint();
-            }*/
         }
     }
 }

@@ -47,5 +47,10 @@ namespace Evacuation_Master_3000
             _vertices.Add(vertex);
             return vertex;
         }
+
+        public void Remove(Vertex vertex)
+        {
+            _vertices.Remove(vertex);
+        }
     }
 }

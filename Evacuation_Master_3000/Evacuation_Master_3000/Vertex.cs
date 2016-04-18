@@ -35,8 +35,8 @@ namespace Evacuation_Master_3000
             if (vertex.Neighbours.Contains(this))
                 return false;
             BuildingBlock a, b;
-            _grid.AllPoints.TryGetValue(Coordinate((int) X, (int) Y), out a);
-            _grid.AllPoints.TryGetValue(Coordinate((int) vertex.X, (int) vertex.Y), out b);
+            _grid.AllPoints.TryGetValue(Coordinate((int)X, (int)Y), out a);
+            _grid.AllPoints.TryGetValue(Coordinate((int)vertex.X, (int)vertex.Y), out b);
             if (_grid.CheckConnection(a, b))
             {
                 Neighbours.Add(vertex);
@@ -57,25 +57,25 @@ namespace Evacuation_Master_3000
                     y1 = vertex.Y,
                     deltaX = x1 - x0,
                     deltaY = y1 - y0,
-                    dist = Math.Sqrt(Math.Abs(deltaX*deltaX - deltaY*deltaY)),
-                    a = dist*dist/(2*dist),
-                    h = Math.Sqrt(dist*dist - a*a),
-                    x2 = x0 + a*deltaX/dist,
-                    y2 = y0 + a*deltaY/dist,
-                    x3 = x2 + h*deltaY/dist,
-                    y3 = y2 - h*deltaX/dist,
-                    x4 = x2 - h*deltaY/dist,
-                    y4 = y2 + h*deltaX/dist;
+                    dist = Math.Sqrt(Math.Abs(deltaX * deltaX - deltaY * deltaY)),
+                    a = dist * dist / (2 * dist),
+                    h = Math.Sqrt(dist * dist - a * a),
+                    x2 = x0 + a * deltaX / dist,
+                    y2 = y0 + a * deltaY / dist,
+                    x3 = x2 + h * deltaY / dist,
+                    y3 = y2 - h * deltaX / dist,
+                    x4 = x2 - h * deltaY / dist,
+                    y4 = y2 + h * deltaX / dist;
 
                 Vertex vertexOne = null;
                 Vertex vertexTwo = null;
-                if (0 < (int) x3 && (int) x3 < _grid.PointsPerRow && 0 < (int) y3 && (int) y3 < _grid.PointsPerColumn)
+                if (0 < (int)x3 && (int)x3 < _grid.PointsPerRow && 0 < (int)y3 && (int)y3 < _grid.PointsPerColumn)
                 {
                     vertexOne = new Vertex(_grid, x3, y3);
                     vertexOne = database.Add(vertexOne);
                     vertexOne.FillVertexGrid(this, ref database);
                 }
-                if (0 < (int) x4 && (int) x4 < _grid.PointsPerRow && 0 < (int) y4 && (int) y4 < _grid.PointsPerColumn)
+                if (0 < (int)x4 && (int)x4 < _grid.PointsPerRow && 0 < (int)y4 && (int)y4 < _grid.PointsPerColumn)
                 {
                     vertexTwo = new Vertex(_grid, x4, y4);
                     vertexTwo = database.Add(vertexTwo);
@@ -92,7 +92,7 @@ namespace Evacuation_Master_3000
         {
             Label label = new Label();
             label.Content = "x";
-            label.Margin = new Thickness(X*_grid.GridSpacing, Y*_grid.GridSpacing, 0, 0);
+            label.Margin = new Thickness(X * _grid.GridSpacing, Y * _grid.GridSpacing, 0, 0);
             return label;
         }
     }

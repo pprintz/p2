@@ -134,6 +134,7 @@ namespace Evacuation_Master_3000
                         return false;
                     }
                 }
+                return true;
             }
             result = true;
             AllPoints.TryGetValue(Coordinate(b.X, a.Y), out p);
@@ -164,17 +165,23 @@ namespace Evacuation_Master_3000
             {
                 if (a.Y < b.Y)
                 {
-                    return ReturnLineX(a, b);
-                }
-                return ReturnLineX(b, a);
-            }
-            if (a.Y == b.Y)
-            {
-                if (a.Y < b.Y)
-                {
                     return ReturnLineY(a, b);
                 }
-                return ReturnLineY(b, a);
+                else
+                {
+                    return ReturnLineY(b, a);
+                }
+            }
+            else if (a.Y == b.Y)
+            {
+                if (a.X < b.X)
+                {
+                    return ReturnLineX(a, b);
+                }
+                else
+                {
+                    return ReturnLineX(b, a);
+                }
             }
             throw new ArgumentException("De to punkter er ikke på linje.");
         }

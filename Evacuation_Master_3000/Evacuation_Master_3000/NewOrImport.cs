@@ -15,7 +15,21 @@ namespace Evacuation_Master_3000
     class NewOrImport
     {
         private readonly List<string> _importedRows = new List<string>();
+        private GridNewOrLoadWindow NewOrImportWindow { get; }
+        private Canvas CurrentCanvas { get; }
+        private Grid NewGrid { get; }
+        private bool ImportedGrid { get; set; }
+        private int ImportedGridWidth { get; set; }
+        private int ImportedGridHeight { get; set; }
+        private string ImportedGridHeader { get; set; }
+        private string ImportedGridDescription { get; set; }
 
+        /// <summary>
+        /// Creates a new grid on a given canvas. It can load previously created grids or simply create a new blank one.
+        /// </summary>
+        /// <param name="canvas">Takes a WPF Canvas to draw on.</param>
+        /// <param name="grid">Special Grid class which contains elements to be drawn.</param>
+        /// <param name="window">Opens a new window with options concerning the creation of a new grid.</param>
         public NewOrImport(Canvas canvas, Grid grid, GridNewOrLoadWindow.NewOrImport window)
         {
             CurrentCanvas = canvas;
@@ -28,49 +42,11 @@ namespace Evacuation_Master_3000
             NewOrImportWindow.ShowDialog();
         }
 
-        public GridNewOrLoadWindow NewOrImportWindow { get; }
-        public Canvas CurrentCanvas { get; }
-        private Grid NewGrid { get; }
-        private bool ImportedGrid { get; set; }
-        private int ImportedGridWidth { get; set; }
-        private int ImportedGridHeight { get; set; }
-        private string ImportedGridHeader { get; set; }
-        private string ImportedGridDescription { get; set; }
-
-        private bool ValidateInputs()
-        {
-            string message, caption;
-            /* First check: Are either or both width and/or height <= 0? */
-            if (NewOrImportWindow.GridWidth <= 0 || NewOrImportWindow.GridHeight <= 0)
-            {
-                caption = "Fix grid width/height";
-                message =
-                    "Error! Could not create a grid with the specified width/height. Please resolve the following:\n";
-                message += NewOrImportWindow.GridWidth <= 0 ? "\t - Width should be a positive integer\n" : string.Empty;
-                message += NewOrImportWindow.GridHeight <= 0
-                    ? "\t - Height should be a positive integer\n"
-                    : string.Empty;
-                MessageBox.Show(message, caption);
-                return false;
-            }
-
-            /* Second check: ? */
-
-            /* Third check: Profit! */
-
-            return true;
-        }
-
         private void ImportGrid(object sender, RoutedEventArgs e)
         {
         }
 
-        private void CreateGrid()
-        {
-            CreateGrid(null, null);
-        }
-
-        private void CreateGrid(object sender, RoutedEventArgs e)
+        private void CreateGrid(object sender = null, RoutedEventArgs e = null)
         {
             /* Was this method called through the press of a button ? */
             if (sender != null)
@@ -94,8 +70,7 @@ namespace Evacuation_Master_3000
 
         private void Browse(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "Grid files|*" + Extension;
+            OpenFileDialog open = new OpenFileDialog {Filter = "Grid files|*" + Extension};
             if (open.ShowDialog() == true)
             {
                 ReadGridFile(open.FileName);
@@ -150,8 +125,6 @@ namespace Evacuation_Master_3000
                 case FileSettings.Row:
                     _importedRows.Add(value);
                     break;
-                default:
-                    break;
             }
         }
 
@@ -162,7 +135,6 @@ namespace Evacuation_Master_3000
             TransformGridMatrix(ref gridMatrix);
 
             const int freeAsInt = (int) BuildingBlock.ElevationTypes.Free;
-            BuildingBlock.ElevationTypes newType;
 
             for (int x = 0; x < ImportedGridWidth; x++)
             {
@@ -173,7 +145,7 @@ namespace Evacuation_Master_3000
                     if (type == freeAsInt)
                         continue;
 
-                    newType = (BuildingBlock.ElevationTypes) type;
+                    BuildingBlock.ElevationTypes newType = (BuildingBlock.ElevationTypes) type;
 
                     NewGrid.AllPoints[Coordinate(x, y)].Elevation = newType;
                 }
@@ -197,5 +169,27 @@ namespace Evacuation_Master_3000
         {
             NewOrImportWindow.Close();
         }
+
+        //private bool ValidateInputs()
+        //{
+        //    /* First check: Are either or both width and/or height <= 0? */
+        //    if (NewOrImportWindow.GridWidth <= 0 || NewOrImportWindow.GridHeight <= 0)
+        //    {
+        //        string caption = "Fix grid width/height";
+        //        string message = "Error! Could not create a grid with the specified width/height. Please resolve the following:\n";
+        //        message += NewOrImportWindow.GridWidth <= 0 ? "\t - Width should be a positive integer\n" : string.Empty;
+        //        message += NewOrImportWindow.GridHeight <= 0
+        //            ? "\t - Height should be a positive integer\n"
+        //            : string.Empty;
+        //        MessageBox.Show(message, caption);
+        //        return false;
+        //    }
+
+        //    /* Second check: ? */
+
+        //    /* Third check: Profit! */
+
+        //    return true;
+        //}
     }
 }

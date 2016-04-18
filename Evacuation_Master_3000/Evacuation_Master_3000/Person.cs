@@ -23,11 +23,9 @@ namespace Evacuation_Master_3000
             if (PathList.Count > 0)
             {
                 Position.Elevation = BuildingBlock.ElevationTypes.Free;
-                Position.ColorizePoint();
                 Position = PathList[0];
                 Position.Elevation = BuildingBlock.ElevationTypes.Person;
                 Position.HeatmapCounter++;
-                Position.ColorizePoint();
                 PathList.Remove(Position);
             }
         }

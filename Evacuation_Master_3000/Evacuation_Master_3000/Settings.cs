@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Evacuation_Master_3000
 {
-    static class Settings
+    internal static class Settings
     {
         public static bool ShowHeatMap { get; set; }
 

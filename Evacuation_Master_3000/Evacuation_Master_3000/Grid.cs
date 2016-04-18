@@ -14,10 +14,11 @@ namespace Evacuation_Master_3000
 {
     class Grid
     {
-        private VertexDatabase _vertexDatabase;
-        public int GridSpacing { get; } = 10;
+        //private VertexDatabase _vertexDatabase;
         private int PointSize { get; } = 10;
         private Canvas TheCanvas { get; set; }
+
+        public int GridSpacing { get; } = 10;
         public int PointsPerRow { get; private set; }
         public int PointsPerColumn { get; private set; }
 
@@ -32,9 +33,9 @@ namespace Evacuation_Master_3000
             TheCanvas = canvas;
             PointsPerRow = pointsPerRow;
             PointsPerColumn = pointsPerColumn;
-            for (int y = 1; y <= PointsPerColumn; y++)
+            for (int y = 0; y < PointsPerColumn; y++)
             {
-                for (int x = 1; x <= PointsPerRow; x++)
+                for (int x = 0; x < PointsPerRow; x++)
                 {
                     //Ellipse figure = new Ellipse();
                     Rectangle figure = new Rectangle
@@ -50,7 +51,7 @@ namespace Evacuation_Master_3000
                     TheCanvas.Children.Add(figure);
                 }
             }
-            _vertexDatabase = new VertexDatabase();
+            //_vertexDatabase = new VertexDatabase();
         }
 
         public void CalculateAllNeighbours()
@@ -107,11 +108,7 @@ namespace Evacuation_Master_3000
             bool result = ReturnLine(a, p).All(point => point.Elevation != BuildingBlock.ElevationTypes.Wall);
             if (result)
             {
-                if (ReturnLine(p, b).Any(point => point.Elevation == BuildingBlock.ElevationTypes.Wall))
-                {
-                    return false;
-                }
-                return true;
+                return ReturnLine(p, b).All(point => point.Elevation != BuildingBlock.ElevationTypes.Wall);
             }
             AllPoints.TryGetValue(Coordinate(b.X, a.Y), out p);
             result = ReturnLine(a, p).All(point => point.Elevation != BuildingBlock.ElevationTypes.Wall);
@@ -133,21 +130,15 @@ namespace Evacuation_Master_3000
                 {
                     return ReturnLineY(a, b);
                 }
-                else
-                {
                     return ReturnLineY(b, a);
-                }
             }
-            else if (a.Y == b.Y)
+            if (a.Y == b.Y)
             {
                 if (a.X < b.X)
                 {
                     return ReturnLineX(a, b);
                 }
-                else
-                {
-                    return ReturnLineX(b, a);
-                }
+                return ReturnLineX(b, a);
             }
             throw new ArgumentException("De to punkter er ikke på linje.");
         }

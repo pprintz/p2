@@ -1,15 +1,11 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Windows.Data;
-
-#endregion
 
 namespace Evacuation_Master_3000
 {
     public class IntStringConverter : IValueConverter
     {
-        public int EmptyStringValue { get; set; }
+        public int EmptyStringValue { private get; set; }
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -25,9 +21,10 @@ namespace Evacuation_Master_3000
         public object ConvertBack(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            if (value is string)
+            string s1 = value as string;
+            if (s1 != null)
             {
-                string s = (string) value;
+                string s = s1;
                 int number;
                 if (int.TryParse(s, out number))
                     return number;

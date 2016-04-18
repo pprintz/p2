@@ -1,15 +1,11 @@
-﻿#region
-
-using System.Collections.Generic;
-
-#endregion
+﻿using System.Collections.Generic;
 
 namespace Evacuation_Master_3000
 {
     public class Person
     {
         public int AmountOfMoves = 0;
-        public List<BuildingBlock> PathList = new List<BuildingBlock>();
+        public readonly List<BuildingBlock> PathList = new List<BuildingBlock>();
 
         public Person(BuildingBlock position)
         {

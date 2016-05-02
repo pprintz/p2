@@ -49,6 +49,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Evacuation_Master_3000.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.2.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.2.0\lib\net45\nunit.framework.dll</HintPath>
@@ -78,18 +81,94 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Person.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="UI\ImportExport\ExportWindow.xaml.cs">
+      <DependentUpon>ExportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Visual\SwitchBetweenFloorsControl.xaml.cs">
+      <DependentUpon>SwitchBetweenFloorsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ImportExport\NewImportWindow.xaml.cs">
+      <DependentUpon>NewImportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ControlPanelUI\CP_ImportExport.xaml.cs">
+      <DependentUpon>CP_ImportExport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ControlPanelUI\CP_SimulationStats.xaml.cs">
+      <DependentUpon>CP_SimulationStats.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SingleControls\SimulationControls.xaml.cs">
+      <DependentUpon>SimulationControls.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ControlPanelUI\CP_SimulationControls.xaml.cs">
+      <DependentUpon>CP_SimulationControls.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Pathfinding\AStar.cs" />
+    <Compile Include="Data\Data.cs" />
+    <Compile Include="Data\DataSimulationStatistics\DataSimulationStatistics.cs" />
+    <Compile Include="Data\FloorPlan\FloorPlan.cs" />
+    <Compile Include="Data\IData.cs" />
+    <Compile Include="Data\FloorPlan\IFloorPlan.cs" />
+    <Compile Include="Data\Pathfinding\IPathfinding.cs" />
+    <Compile Include="Data\IEvacuateable.cs" />
+    <Compile Include="Exceptions\PersonException.cs" />
+    <Compile Include="GlobalFiles\InternalStructures.cs" />
+    <Compile Include="UI\ControlPanelUI\ControlPanel.xaml.cs">
+      <DependentUpon>ControlPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ControlPanelUI\CP_FloorPlanControls.xaml.cs">
+      <DependentUpon>CP_FloorPlanControls.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Visual\FloorPlanVisualiser.xaml.cs">
+      <DependentUpon>FloorPlanVisualiser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\IUserInterface.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Data\Person.cs" />
+    <Compile Include="GlobalFiles\Settings.cs" />
+    <Compile Include="Data\FloorPlan\Tile.cs" />
     <Compile Include="ToDoList.cs" />
-    <Compile Include="Vertex.cs" />
-    <Compile Include="VertexDatabase.cs" />
-    <Compile Include="VertexGrid.cs" />
+    <Compile Include="UI\TheRealMainWindow.xaml.cs">
+      <DependentUpon>TheRealMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\UserInterface.cs" />
+    <Compile Include="UI\SingleControls\Zoom.xaml.cs">
+      <DependentUpon>Zoom.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ZoomDrag.cs" />
-    <Page Include="ExportWindow.xaml">
+    <Page Include="UI\ImportExport\ExportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Visual\SwitchBetweenFloorsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ImportExport\NewImportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ControlPanelUI\CP_ImportExport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ControlPanelUI\CP_SimulationStats.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SingleControls\SimulationControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ControlPanelUI\CP_SimulationControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="GridNewOrLoadWindow.xaml">
+    <Page Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\GridNewOrLoadWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -102,24 +181,44 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Export.cs" />
-    <Compile Include="ExportWindow.xaml.cs">
-      <DependentUpon>ExportWindow.xaml</DependentUpon>
+    <Compile Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml.cs">
+      <DependentUpon>old_ExportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Graph.cs" />
-    <Compile Include="Grid.cs" />
-    <Compile Include="GridNewOrLoadWindow.xaml.cs">
+    <Compile Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\Grid.cs" />
+    <Compile Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\GridNewOrLoadWindow.xaml.cs">
       <DependentUpon>GridNewOrLoadWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImportExportSettings.cs" />
-    <Compile Include="IntStringConverter.cs" />
+    <Compile Include="GlobalFiles\ImportExportSettings.cs" />
+    <Compile Include="GlobalFiles\IntStringConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\ControlPanelUI\ControlPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ControlPanelUI\CP_FloorPlanControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Visual\FloorPlanVisualiser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\TheRealMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SingleControls\Zoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NewOrImport.cs" />
-    <Compile Include="BuildingBlock.cs" />
+    <Compile Include="Data\FloorPlan\BuildingBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -158,6 +257,20 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\ImportExport\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Visual\floor_switcher_arrow.png" />
+    <Resource Include="UI\Visual\floor_switcher_bar_off.png" />
+    <Resource Include="UI\Visual\floor_switcher_bar_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Visual\floor_switcher_arrow_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Visual\floor_switcher_bar_off_2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

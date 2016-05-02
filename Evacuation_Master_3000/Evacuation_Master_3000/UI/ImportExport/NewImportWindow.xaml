@@ -1,0 +1,86 @@
+﻿<Window x:Class="Evacuation_Master_3000.NewImportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Evacuation_Master_3000"
+        mc:Ignorable="d"
+        Title="NewImportWindow" Height="340" Width="300"
+        ResizeMode="NoResize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Window.Resources>
+        <local:IntStringConverter x:Key="IntToString" EmptyStringValue="0" />
+    </Window.Resources>
+    <Grid>
+        <TabControl Name="NewImportTabControl">
+            <TabItem Header="New file">
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type GroupBox}">
+                            <Setter Property="Margin" Value="0,0,0,5"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <GroupBox Name="DimensionsGroupBox" Header="Dimensions">
+                        <GroupItem Name="DimensionsGroup">
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type DockPanel}">
+                                        <Setter Property="Margin" Value="0,5,0,5"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <DockPanel>
+                                    <TextBlock Name="BuildingWidthLabel" Text="Building width*: " />
+                                    <TextBox Name="BuildingWidthTextBox" Width="125" HorizontalAlignment="Right"
+                                                 Text="{Binding Path=BuildingWidth, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToString}}"/>
+                                </DockPanel>
+                                <DockPanel>
+                                    <TextBlock Name="BuildingHeightLabel" Text="Building height*: " />
+                                    <TextBox Name="BuildingHeightTextBox" Width="125" HorizontalAlignment="Right"
+                                                 Text="{Binding Path=BuildingHeight, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToString}}"/>
+                                </DockPanel>
+                                <DockPanel>
+                                    <TextBlock Name="BuildingFloorsLabel" Text="Amount of floors*: " />
+                                    <TextBox Name="BuildingFloorAmountTextBox" Width="125" HorizontalAlignment="Right"
+                                                 Text="{Binding Path=BuildingFloorAmount, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToString}}"/>
+                                </DockPanel>
+                            </StackPanel>
+                        </GroupItem>
+                    </GroupBox>
+                    <GroupBox Name="DescriptorsGroupBox" Header="Descriptors">
+                        <GroupItem Name="DescriptorsGroup">
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type DockPanel}">
+                                        <Setter Property="Margin" Value="0,5,0,5"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <DockPanel>
+                                    <TextBlock Name="DescriptionLabel" Text="Building description: " />
+                                    <TextBox Name="DecriptionsTextBox" Width="155" HorizontalAlignment="Right"
+                                             Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DockPanel>
+                            </StackPanel>
+                        </GroupItem>
+                    </GroupBox>
+                    <GroupBox Name="CreateNewGroupBox" Header="Create new building">
+                        <GroupItem Name="CreateNewGroup">
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Margin" Value="0,5,0,5"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <Button Name="CreateNewButtun" Content="Create building" HorizontalAlignment="Center" Width="175"/>
+                                <Button Name="ResetToDefaultButton" Content="Reset to default" HorizontalAlignment="Center" Width="175"/>
+                            </StackPanel>
+                        </GroupItem>
+                    </GroupBox>
+                    <TextBlock Text="Fields marked with * are required"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Import existing file">
+                <Button Name="BrowseButton" HorizontalAlignment="Center" VerticalAlignment="Center" Width="175" Height="40" Content="Browse"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

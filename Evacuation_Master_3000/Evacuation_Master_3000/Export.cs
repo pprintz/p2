@@ -14,8 +14,8 @@ namespace Evacuation_Master_3000
     internal class Export
     {
         private readonly Dictionary<FileSettings, object> _settings = new Dictionary<FileSettings, object>();
-        private ExportWindow ExportWindow { get; }
-        private Grid CurrentGrid { get; }
+        private old_ExportWindow ExportWindow { get; }
+        private Grid_new CurrentGrid { get; }
         private string FullGridPath => ExportWindow.Path + "\\" + FullFileName;
         private string FullFileName => ExportWindow.FileName + Extension;
         private Dictionary<FileSettings, object> Settings
@@ -37,11 +37,11 @@ namespace Evacuation_Master_3000
         /// Exports/saves the grid from the canvas provided.
         /// <para>Speaking of saving, isn't it funny how Jesus and a floppy disc both are a symbol of saving?</para>
         /// </summary>
-        public Export(Grid grid) // , Dictionary<FileSettings, object> gridMatrix
+        public Export(Grid_new grid) // , Dictionary<FileSettings, object> gridMatrix
         {
             CurrentGrid = grid;
             //GridMatrix = gridMatrix;
-            ExportWindow = new ExportWindow();
+            ExportWindow = new old_ExportWindow();
             ExportWindow.SaveGridButton.Click += ExportGrid;
             ExportWindow.GridWidth = CurrentGrid.PointsPerRow;
             ExportWindow.GridHeight = CurrentGrid.PointsPerColumn;
@@ -72,7 +72,7 @@ namespace Evacuation_Master_3000
                 var rowString = string.Empty;
                 for (int y = 0; y < CurrentGrid.PointsPerColumn; y++)
                 {
-                    rowString += (int) CurrentGrid.AllPoints[Coordinate(x, y)].Elevation;
+                    ////////////////////rowString += (int) CurrentGrid.AllPoints[Coordinate(x, y)].Type;
                 }
                 rows.Add(rowString);
             }

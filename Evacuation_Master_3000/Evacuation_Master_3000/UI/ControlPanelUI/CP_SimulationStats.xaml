@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="Evacuation_Master_3000.CP_SimulationStats"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Evacuation_Master_3000"
+             mc:Ignorable="d">
+    <StackPanel>
+        <GroupBox Header="Simulation stats" Name="SimulationStatsGroupBox">
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type StackPanel}">
+                        <Setter Property="Margin" Value="0,0,0,10"/>
+                    </Style>
+                </StackPanel.Resources>
+                <GroupItem Name="PersonsEvacuatedGroup">
+                    <StackPanel>
+                        <GroupItem Name="PersonsEvacuatedTextComponents">
+                            <DockPanel>
+                                <TextBlock Name="PersonsEvacuatedText" HorizontalAlignment="Left" Text="Persons evacuated: "/>
+                                <DockPanel HorizontalAlignment="Right">
+                                    <TextBlock Name="CurrentNumberOfEvacuatedPersons" Text="0"/>
+                                    <!-- Skal opdateres ved hver OnPersonEvacuated -->
+                                    <TextBlock Name="PersonsEvacuatedSeperator" Text="/"/>
+                                    <TextBlock Name="TotalPersonCount" Text="200"/>
+                                    <!-- Skal være binding, der bliver sat ved OnSimulationStart -->
+                                </DockPanel>
+                            </DockPanel>
+                            
+                        </GroupItem>
+                        <GroupItem Name="PersonsEvacuatedProgressBarGroup">
+                            <Grid>
+                                <Rectangle Name="PersonsEvacuatedProgressBarBackground" Height="14" Fill="DimGray"/>
+                                <Rectangle Name="PersonsEvacuatedProgressBarFill" HorizontalAlignment="Left" VerticalAlignment="Center" Height="12" Width="20" Fill="Red"/>
+                                <!-- Bindings: Width er procentdel af evakuerede personer. Fill skifter farve efter samme udregning som HeatMap. Text er procentdel evakuerede personer -->
+                                <TextBlock Name="PersonsEvacuatedProgressBarText" Text="20" HorizontalAlignment="Center"/>
+                            </Grid>
+                        </GroupItem>
+                    </StackPanel>
+                </GroupItem>
+                <GroupItem Name="TimeElapsedInEvacuationGroup">
+                    <DockPanel>
+                        <TextBlock Name="TimeElapsedText" Text="Time elapsed: "/>
+                        <TextBlock Name="TimeElapsedInDateTimeFormat" HorizontalAlignment="Right" Text="00:00:05"/>
+                        <!--TimeSpan time = TimeSpan.FromSeconds(seconds);
+
+//here backslash is must to tell that colon is
+//not the part of format, it just a character that we want in output
+string str = time .ToString(@"hh\:mm\:ss\:fff");-->
+                    </DockPanel>
+                </GroupItem>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Debug information" Name="DebugInformationGroupBox">
+        </GroupBox>
+    </StackPanel>
+</UserControl>

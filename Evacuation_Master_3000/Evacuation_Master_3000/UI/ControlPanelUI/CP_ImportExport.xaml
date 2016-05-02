@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="Evacuation_Master_3000.CP_ImportExport"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Evacuation_Master_3000"
+             mc:Ignorable="d" >
+    <StackPanel>
+        <StackPanel.Resources>
+            <Style TargetType="{x:Type DockPanel}">
+                <Setter Property="Margin" Value="0,5,0,5"/>
+            </Style>
+        </StackPanel.Resources>
+        <GroupBox Header="File information" Name="FileInformationGroup">
+            <StackPanel>
+                <DockPanel>
+                    <TextBlock Name="FileNameLabel" Text="File name: "/>
+                    <TextBlock Name="FileNameText" HorizontalAlignment="Right" Text="Grid001.grid"/>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock Name="DescriptionLabel" Text="Description: "/>
+                    <TextBox Name="DescriptionTextBox" HorizontalAlignment="Right" Text="Grid description"/>
+                </DockPanel>
+                <DockPanel>
+                    <GroupItem>
+                        <StackPanel>
+                            <ComboBox Name="HeaderComboBox" Text="Header">
+                                <ComboBoxItem Content="Floor 1"/>
+                                <!-- Skal dynamisk indsættes ved import/new -->
+                            </ComboBox>
+                            <DockPanel>
+                                <TextBlock Name="HeaderDescription" Text="Header: "/>
+                                <TextBox Name="HeaderTextBox" HorizontalAlignment="Right" Text="Header for floor"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupItem>
+                </DockPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Dimensions" Name="DimensionsGroup">
+            <StackPanel>
+                <DockPanel>
+                    <TextBlock Name="WidthLabel" Text="Width: "/>
+                    <TextBlock Name="WidthText" HorizontalAlignment="Right" Text="100"/>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock Name="HeightLabel" Text="Height: "/>
+                    <TextBlock Name="HeightText" HorizontalAlignment="Right" Text="100"/>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock Name="FloorsLabel" Text="Floors: "/>
+                    <TextBlock Name="FloorsText" HorizontalAlignment="Right" Text="1"/>
+                </DockPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Import/Export" Name="ImportExportNewGroupBox">
+            <StackPanel>
+                <GroupItem Name="ButtonsGroup">
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Margin" Value="0,5,0,5"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Name="ExportButton" Content="Export building" HorizontalAlignment="Center" Width="175"/>
+                        <Button Name="ImportButton" Content="Import another building" HorizontalAlignment="Center" Width="175"/>
+                        <Button Name="NewButton" Content="New building" HorizontalAlignment="Center" Width="175"/>
+                    </StackPanel>
+                </GroupItem>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>

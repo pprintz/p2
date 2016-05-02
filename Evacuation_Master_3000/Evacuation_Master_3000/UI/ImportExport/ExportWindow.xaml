@@ -1,0 +1,75 @@
+﻿<Window x:Class="Evacuation_Master_3000.ExportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Evacuation_Master_3000"
+        mc:Ignorable="d"
+        Title="ExportWindow" Height="295" Width="300"
+        ResizeMode="NoResize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <StackPanel>
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type GroupBox}">
+                    <Setter Property="Margin" Value="0,0,0,5"/>
+                </Style>
+            </StackPanel.Resources>
+            <GroupBox Header="Destination" Name="DestinationGroupBox">
+                <GroupItem Name="PathGroup">
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type DockPanel}">
+                                <Setter Property="Margin" Value="0,5,0,5"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock Text="Path: "/>
+                        <DockPanel>
+                            <TextBox Width="220" Name="FilePathTextBox" Text="{Binding Path=Path, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button HorizontalAlignment="Right" Width="60" Name="BrowseButton" Content="Browse"/>
+                        </DockPanel>
+                        <TextBlock Text="File name: "/>
+                        <DockPanel>
+                            <TextBox Width="220" Name="FileNameTextBox" Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Name="FileExtensionLabel" HorizontalAlignment="Right" Width="58.5"  Text="{Binding Path=Extension, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DockPanel>
+                    </StackPanel>
+                </GroupItem>
+            </GroupBox>
+            <GroupBox Name="DescriptorsGroupBox" Header="Descriptors">
+                <GroupItem>
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type DockPanel}">
+                                <Setter Property="Margin" Value="0,5,0,5"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <DockPanel>
+                            <TextBlock Text="Description: "/>
+                            <TextBox Name="DescriptionTextBox" HorizontalAlignment="Right" Width="200" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DockPanel>
+                        <StackPanel Name="HeaderContainer">
+                            <DockPanel Name="HeaderTemplate" Visibility="Collapsed">
+                                <TextBlock Name="HeaderXLabel" Text="HeaderX"/>
+                                <TextBox Name="HeaderXTextBox" HorizontalAlignment="Right" Width="200"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupItem>                
+            </GroupBox>
+            <GroupBox Name="ExportGroupBox" Header="Export building">
+                <GroupItem Name="ExportGroup">
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Margin" Value="0,5,0,5"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Name="ExportButton" Content="Export building" HorizontalAlignment="Center" Width="175"/>
+                        <Button Name="ResetToDefaultButton" Content="Reset fields" HorizontalAlignment="Center" Width="175"/>
+                    </StackPanel>
+                </GroupItem>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</Window>

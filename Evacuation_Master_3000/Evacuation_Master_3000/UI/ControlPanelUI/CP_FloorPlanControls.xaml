@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Evacuation_Master_3000.CP_FloorPlanControls"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Evacuation_Master_3000"
+             mc:Ignorable="d" >
+    <StackPanel>
+        <GroupBox Header="Change block">
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type RadioButton}">
+                        <Setter Property="Margin" Value="0,10,0,0"/>
+                    </Style>
+                </StackPanel.Resources>
+                <RadioButton x:Name="MakeFree" Tag="Free" GroupName="RadioElevation" Content="Fri"/>
+                <GroupBox Header="Inventar">
+                    <StackPanel>
+                        <RadioButton x:Name="MakeWall" Tag="Wall" GroupName="RadioElevation" Content="Væg" IsChecked="True" />
+                        <RadioButton x:Name="MakeDoor" Tag="Door" GroupName="RadioElevation" Content="Dør"/>
+                        <RadioButton x:Name="MakeStair" Tag="Stair" GroupName="RadioElevation" Content="Trappe"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Miljø">
+                    <StackPanel>
+                        <RadioButton x:Name="MakePerson" Tag="Person" GroupName="RadioElevation" Content="Person"/>
+                        <RadioButton x:Name="MakePath" Tag="Exit" GroupName="RadioElevation" Content="Udgang"/>
+                    </StackPanel>
+                </GroupBox>
+                
+                
+                
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>

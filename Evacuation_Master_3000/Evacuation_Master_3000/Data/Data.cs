@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Forms.VisualStyles;
 using NUnit.Framework.Compatibility;
 
+[assembly: InternalsVisibleTo("P2TestEnvironment")]
 namespace Evacuation_Master_3000
 {
     internal class Data : IData

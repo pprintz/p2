@@ -8,7 +8,7 @@ using static Evacuation_Master_3000.ImportExportSettings;
 
 namespace Evacuation_Master_3000
 {
-    class Graph
+    internal class Graph
     {
         private static bool _firstRun = true;
         private readonly List<BuildingBlock> _vertices;

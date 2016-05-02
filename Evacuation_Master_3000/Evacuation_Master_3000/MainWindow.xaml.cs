@@ -24,7 +24,7 @@ namespace Evacuation_Master_3000
         public static bool makeFree;
         public static bool makePerson;
         public static bool lineTool;
-        public static BuildingBlock _previousPoint;
+        private static BuildingBlock _previousPoint;
         private ZoomDrag _zoomDrag;
 
         public MainWindow() {
@@ -78,7 +78,7 @@ namespace Evacuation_Master_3000
         }
 
 
-        public static List<Person> PList = new List<Person>();
+        public static readonly List<Person> PList = new List<Person>();
         private void StartPath(object sender, RoutedEventArgs e)
         {
             _grid.CalculateAllNeighbours();

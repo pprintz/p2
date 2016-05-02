@@ -12,7 +12,7 @@ using static Evacuation_Master_3000.ImportExportSettings;
 
 namespace Evacuation_Master_3000
 {
-    class NewOrImport
+    internal class NewOrImport
     {
         private readonly List<string> _importedRows = new List<string>();
         private GridNewOrLoadWindow NewOrImportWindow { get; }
@@ -44,6 +44,7 @@ namespace Evacuation_Master_3000
 
         private void ImportGrid(object sender, RoutedEventArgs e)
         {
+            // The purpose of this is to show some information about the grid before actually loading it.
         }
 
         private void CreateGrid(object sender = null, RoutedEventArgs e = null)
@@ -97,7 +98,7 @@ namespace Evacuation_Master_3000
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                MessageBox.Show(e.Message);
             }
         }
 

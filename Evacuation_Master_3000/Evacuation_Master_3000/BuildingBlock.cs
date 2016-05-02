@@ -1,14 +1,10 @@
-﻿#region
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using static Evacuation_Master_3000.ImportExportSettings;
 using static Evacuation_Master_3000.Settings;
-
-#endregion
 
 namespace Evacuation_Master_3000
 {
@@ -155,14 +151,19 @@ namespace Evacuation_Master_3000
 
                     var currentPoint = allPoints[coordinate];
 
-                    if (currentPoint.Elevation != ElevationTypes.Wall &&
-                        currentPoint.Elevation != ElevationTypes.Furniture
+                    if (Elevation == ElevationTypes.Wall && currentPoint.Elevation == ElevationTypes.Wall ||
+                        // Walls connects to walls
+                        Elevation == ElevationTypes.Furniture && currentPoint.Elevation == ElevationTypes.Furniture ||
+                        // Furniture connects to furniture
+
+                        Elevation != ElevationTypes.Wall && Elevation != ElevationTypes.Furniture &&
                         // Everything else connects to everything else
-                        || currentPoint.Elevation == ElevationTypes.Wall && currentPoint.Elevation == Elevation
-                        // Wall connects to walls
-                        || currentPoint.Elevation == ElevationTypes.Furniture && currentPoint.Elevation == Elevation)
-                        // furniture connects to furniture
+                        currentPoint.Elevation != ElevationTypes.Wall &&
+                        currentPoint.Elevation != ElevationTypes.Furniture)
+                    {
                         AddPointToNeighbours(currentPoint);
+                    }
+                        
                 }
             }
         }

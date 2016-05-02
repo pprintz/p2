@@ -47,15 +47,15 @@ namespace Evacuation_Master_3000
         public static string DefaultDescriptionMessage => "This grid has no description.";
 
         /* Grid write file settings */
-        public static string Prefix => "<";
-        public static string Suffix => ">";
-        public static string EndModifier => "/";
-        public static string Newline => Environment.NewLine;
+        private static string Prefix => "<";
+        private static string Suffix => ">";
+        private static string EndModifier => "/";
+        private static string Newline => Environment.NewLine;
 
         private static FileSettings Setting { get; set; }
         private static string Pre => Prefix + Setting + Suffix;
         private static string Post => Prefix + EndModifier + Setting + Suffix + Newline;
-        public static string GridKeyFormat => "({0}, {1})";
+        private static string GridKeyFormat => "({0}, {1})";
 
         /* Grid methods */
 
@@ -65,7 +65,7 @@ namespace Evacuation_Master_3000
         /// <param name="type">The Settings type that wraps the input</param>
         /// <param name="input">The value to save. Input is cast to string.</param>
         /// <returns>A single entry string containing the value stringed and wrapped in the corresponding Settings type.</returns>
-        public static string WriteSingleItem(FileSettings type, object input)
+        private static string WriteSingleItem(FileSettings type, object input)
         {
             Setting = type;
             return Pre + input + Post;

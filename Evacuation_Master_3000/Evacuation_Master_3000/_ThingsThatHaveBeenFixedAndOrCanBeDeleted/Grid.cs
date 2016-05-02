@@ -67,7 +67,7 @@ namespace Evacuation_Master_3000
             //}
             foreach (BuildingBlock item in AllPoints.Values)
             {
-                item.CalculateNeighbours(AllPoints);
+                //item.CalculateNeighbours(AllPoints);
             }
             CheckForConnectionsThroughDiagonalUnwalkableElements();
         }

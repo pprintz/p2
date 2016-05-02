@@ -60,6 +60,8 @@ namespace Evacuation_Master_3000 {
                     Width = 20,
                     Height = 10
                 };
+                //img.Click +=                                                                      <---!!
+                //img.Tooltip = Header                                                              <---!!
                 FloorBars[floor-1] = img;
                 FloorBarContainer.Children.Add(img);
             }

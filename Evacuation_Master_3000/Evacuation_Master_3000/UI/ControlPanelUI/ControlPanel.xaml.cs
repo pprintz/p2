@@ -34,26 +34,22 @@ namespace Evacuation_Master_3000
                 Header = "Floorplan controls",
                 Content = new CP_FloorPlanControls(parentWindow)
             };
-            //UserControlTabPanel.Items.Add(floorPlanControls);
 
             TabItem simulationControls = new TabItem()
             {
                 Header = "Simulation controls",
                 Content = new CP_SimulationControls()
             };
-            //UserControlTabPanel.Items.Add(simulationControls);
 
             TabItem simulationStats = new TabItem() {
                 Header = "Simulation informaion",
                 Content = new CP_SimulationStats()
             };
-            //UserControlTabPanel.Items.Add(simulationStats);
 
             TabItem importExport = new TabItem() {
                 Header = "Import/Export",
                 Content = new CP_ImportExport(parentWindow)
             };
-            //UserControlTabPanel.Items.Add(importExport);
 
             UserControlTabPanel.Items.Insert(0, floorPlanControls);
             UserControlTabPanel.Items.Insert(1, simulationControls);

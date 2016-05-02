@@ -15,6 +15,7 @@ namespace Evacuation_Master_3000
         private int stepsTaken;
         private bool firstRun = true;
         public Tile Position { get; private set; }
+        private Tile _target;
         public event PersonEvacuated OnPersonEvacuated;
         public event PersonMoved OnPersonMoved;
         private bool _evacuated;
@@ -31,7 +32,7 @@ namespace Evacuation_Master_3000
             }
         }
 
-        private Tile _target;
+        
         public int ID { get; }
         private double TickLength { get; }
         public event ExtendedPathRequest OnExtendedPathRequest;
@@ -82,7 +83,7 @@ namespace Evacuation_Master_3000
             try
             {
                 // Clear old Tile and increment heatMapCounter
-                Position.Type = Tile.Types.Free;
+                Position.Type = Tile.Types.Free;                //<--- Skal være default type for den individuelle buildingBlock
                 ((BuildingBlock)Position).HeatmapCounter++;
 
                 // Move to new tile and check if evacuated. If not, keep going.

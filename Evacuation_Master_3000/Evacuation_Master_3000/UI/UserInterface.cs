@@ -18,7 +18,7 @@ namespace Evacuation_Master_3000
         public event ExportFloorPlan OnExportFloorPlan;
         public event NewFloorPlan OnNewFloorPlan;
         public IFloorPlan LocalFloorPlan { get; private set; }
-        private Dictionary<int, Person> people { get; set; } = new Dictionary<int, Person>();
+        private Dictionary<int, Person> People { get; set; } = new Dictionary<int, Person>();
 
         public void Display() {
             TheMainWindow.Show();
@@ -34,16 +34,15 @@ namespace Evacuation_Master_3000
 
         public void CreateFloorplan(int width, int height, int floorAmount, string description) {
             LocalFloorPlan = OnNewFloorPlan?.Invoke(width, height, floorAmount, description);
-            TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, people);
+            TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
         }
 
         public void ImportFloorPlan(string filePath) {
             LocalFloorPlan = OnImportFloorPlan?.Invoke(filePath);
-            
         }
 
         public void SimulationStart(bool showHeatMap, bool stepByStep) {
-            people = OnSimulationStart?.Invoke(LocalFloorPlan, showHeatMap, stepByStep);
+            People = OnSimulationStart?.Invoke(LocalFloorPlan, showHeatMap, stepByStep);
         }
 
         private void VisualizeFloorPlan() {

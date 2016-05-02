@@ -164,11 +164,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml">
+    <Page Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\GridNewOrLoadWindow.xaml">
+    <Page Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\GridNewOrLoadWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -181,12 +181,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Export.cs" />
-    <Compile Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml.cs">
+    <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml.cs">
       <DependentUpon>old_ExportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Graph.cs" />
-    <Compile Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\Grid.cs" />
-    <Compile Include="ThingsThatHaveBeenFixedAndOrCanBeDeleted\GridNewOrLoadWindow.xaml.cs">
+    <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\Grid.cs" />
+    <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\GridNewOrLoadWindow.xaml.cs">
       <DependentUpon>GridNewOrLoadWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GlobalFiles\ImportExportSettings.cs" />

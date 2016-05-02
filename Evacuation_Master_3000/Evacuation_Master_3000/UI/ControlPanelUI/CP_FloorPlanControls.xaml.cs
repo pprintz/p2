@@ -34,27 +34,11 @@ namespace Evacuation_Master_3000
 
         private TheRealMainWindow ParentWindow { get; }
 
-        //enum RadioButtonTypes { MakeWall, MakeDoor, MakeFree, MakePath, MakePerson }
-        //RadioButtonTypes RadioButtonType;
-
         private Tile.Types TileType { get; set; }
 
         private void OnRadioButtonClicked(object sender, RoutedEventArgs e) {
             RadioButton radioButton = sender as RadioButton;
-            //RadioButtonTypes.TryParse(radioButton.Name, out RadioButtonType);
 
-            //switch (RadioButtonType) {
-            //    case RadioButtonTypes.MakeWall:
-            //        break;
-            //    case RadioButtonTypes.MakeDoor:
-            //        break;
-            //    case RadioButtonTypes.MakeFree:
-            //        break;
-            //    case RadioButtonTypes.MakePath:
-            //        break;
-            //    case RadioButtonTypes.MakePerson:
-            //        break;
-            //}
             Tile.Types type;
             Enum.TryParse(radioButton.Tag.ToString(), out type);
             TileType = type;

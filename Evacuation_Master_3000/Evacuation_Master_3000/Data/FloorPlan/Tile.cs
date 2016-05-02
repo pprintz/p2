@@ -34,6 +34,7 @@ namespace Evacuation_Master_3000
         public double DistanceTo(Tile other)
         {
             return Math.Abs(Math.Sqrt(Math.Pow(other.X - X, 2) + Math.Pow(other.Y - Y, 2)));
+            //Diagonaldistance!
         }
 
         public override string ToString()

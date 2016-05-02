@@ -28,7 +28,7 @@ namespace Evacuation_Master_3000
         private IFloorPlan localFloorPlan { get; set; }
         private Dictionary<string, Person> localPeople { get; set; }
         private Dictionary<string, Tile> tilesWithChanges { get; set; }
-        private UniformGrid[] FloorContainers;
+        private UniformGrid[] FloorContainer;
         private SwitchBetweenFloorsControl floorSwitcherControls { get; set; }              //<<------ OBS er det nødvendigt med property til at gemme floorswitchcontrols i???
 
         public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people) {
@@ -44,7 +44,7 @@ namespace Evacuation_Master_3000
             /* Ideen er vel, at man skal kalde ImplementFloorPlan() for hver ændring, d.v.s. ifm alle simuleringer osv. 
             I så fald skal der tages højde for, at der ikke genereres en ny visualRepresentation hver gang
             - det er nemmere at iterate gennem alle ændringer og ændre elevation types tilsvarende */
-            if (FloorContainers == null)
+            if (FloorContainer == null)
                 CreateVisualRepresentation();
 
             //Update the visual representation of the floorplan
@@ -60,7 +60,7 @@ namespace Evacuation_Master_3000
             int width = localFloorPlan.Width;
             int height = localFloorPlan.Height;
             int floorAmount = localFloorPlan.FloorAmount;
-            FloorContainers = new UniformGrid[floorAmount];
+            FloorContainer = new UniformGrid[floorAmount];
 
             for (int z = 0; z < floorAmount; z++) {
                 UniformGrid container = new UniformGrid() {
@@ -79,7 +79,7 @@ namespace Evacuation_Master_3000
                         container.Children.Add(figure);
                     }
                 }
-                FloorContainers[z] = container;
+                FloorContainer[z] = container;
             }
         }
 
@@ -96,7 +96,7 @@ namespace Evacuation_Master_3000
         }
 
         private void UpdateVisualRepresentation() {
-            VisualContainer.Children.Add(FloorContainers[0]);
+            VisualContainer.Children.Add(FloorContainer[0]);
         }
 
         public void UpdateTile(IEnumerable<Tile> tilesToChange) {
@@ -105,7 +105,7 @@ namespace Evacuation_Master_3000
 
         public void ChangeFloor(int currentFloor) {
             VisualContainer.Children.Clear();
-            VisualContainer.Children.Add(FloorContainers[currentFloor]);
+            VisualContainer.Children.Add(FloorContainer[currentFloor]);
             /* Logik der sørger for at det er den korrekte floor der vises */
 
             //Obs kan problemet løses lettere i stil af dette: ??
@@ -118,7 +118,7 @@ namespace Evacuation_Master_3000
         private void OnBuildingBlockClick(object sender, MouseButtonEventArgs e) {
             Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
             Rectangle senderBuildingBlock = sender as Rectangle;                    //Get a reference to the sender rectangle
-
+            
             localFloorPlan.Tiles[senderBuildingBlock.Tag.ToString()].Type = type;   //Change the type of the BuildingBlock
 
             ColorizeBuildingBlock(senderBuildingBlock, type);                       //Colorize the visual representation of the BuildingBlock

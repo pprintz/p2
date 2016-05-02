@@ -73,7 +73,7 @@ namespace Evacuation_Master_3000
         {
             return CreateFloorPlan(width, height, floorAmount, description, null);
         }
-        protected IFloorPlan CreateFloorPlan(int width, int height, int floorAmount, string description, string[] headers) {
+        private IFloorPlan CreateFloorPlan(int width, int height, int floorAmount, string description, string[] headers) {
             TheFloorPlan.CreateFloorPlan(width, height, floorAmount, description, headers);
             return TheFloorPlan;
         }

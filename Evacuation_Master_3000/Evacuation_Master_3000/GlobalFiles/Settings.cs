@@ -12,8 +12,8 @@ namespace Evacuation_Master_3000
         public static bool ShowHeatMap { get; set; } //Skal evt videregives som parameter i stedet for at være en public static bool ??
 
         public static Key ZoomKey { get; set; } = Key.LeftCtrl;
-        public static Key HorizontalScrollKey { get; set; } = Key.LeftAlt;
-        public static Key LineToolKey { get; set; } = Key.LeftShift;
+        public static Key HorizontalScrollKey { get; set; } = Key.LeftShift;
+        public static Key LineToolKey { get; set; } = Key.LeftAlt;
 
         ////////////public static int PersonCount => MainWindow.PList.Count;
 

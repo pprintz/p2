@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Evacuation_Master_3000"
              mc:Ignorable="d" >
-    <Grid Name="OverlayContainer" Background="White">
-        <ScrollViewer Name="VisualContainerScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Grid Name="OverlayContainer">
+        <ScrollViewer Name="VisualContainerScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="White">
             <UniformGrid Name="VisualContainer" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <UniformGrid.LayoutTransform>
                     <TransformGroup>

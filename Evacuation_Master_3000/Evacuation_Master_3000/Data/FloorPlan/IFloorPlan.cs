@@ -2,8 +2,7 @@ using System.Collections.Generic;
 
 namespace Evacuation_Master_3000
 {
-    public interface IFloorPlan
-    {
+    public interface IFloorPlan {
         int Width { get; }
         int Height { get; }
         int FloorAmount { get; }

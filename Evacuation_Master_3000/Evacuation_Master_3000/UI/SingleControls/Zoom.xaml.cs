@@ -21,11 +21,13 @@ namespace Evacuation_Master_3000 {
     public partial class Zoom : UserControl {
         public Zoom(TheRealMainWindow parentWindow) {
             InitializeComponent();
-            FloorPlanVisualRepresentation = parentWindow.floorPlanVisualiserControl;
+
+            ParentWindow = parentWindow;
+            FloorPlanVisualRepresentation = ParentWindow.floorPlanVisualiserControl;
 
             SetupZoom();
         }
-
+        private TheRealMainWindow ParentWindow { get; }
         private FloorPlanVisualiser FloorPlanVisualRepresentation { get; }
         private bool IsMouseHoveringVisual { get; set; }
         private bool _isAbleToZoom;
@@ -40,14 +42,17 @@ namespace Evacuation_Master_3000 {
         private void SetupZoom() {
             FloorPlanVisualRepresentation.MouseEnter += MouseInVisual;
             FloorPlanVisualRepresentation.MouseLeave += MouseNotInVisual;
-            FloorPlanVisualRepresentation.VisualContainer.MouseWheel += OnMouseWheelActivity;
-            FloorPlanVisualRepresentation.KeyDown += OnKeyHandler;
-            FloorPlanVisualRepresentation.KeyUp += OnKeyHandler;
+            FloorPlanVisualRepresentation.PreviewMouseWheel += OnMouseWheelActivity;
+            ParentWindow.PreviewKeyDown += OnKeyHandler;
+            ParentWindow.PreviewKeyUp += OnKeyHandler;
             ZoomSlider.ValueChanged += OnSliderValueChanged;
+            ZoomSliderText.MouseLeftButtonDown += ResetZoom;
+            OnSliderValueChanged(null, null);
         }
 
         private void MouseInVisual(object sender, MouseEventArgs e) => IsMouseHoveringVisual = true;
         private void MouseNotInVisual(object sender, MouseEventArgs e) => IsMouseHoveringVisual = false;
+        private void ResetZoom(object sender, MouseButtonEventArgs e) => ZoomSlider.Value = 1;
 
         private void OnMouseWheelActivity(object sender, MouseWheelEventArgs e) {
             e.Handled = IsAbleToZoom || HorizontalScrollEnabled;            //Handle the MouseWheelEventArgs if any custom made criteria is met
@@ -69,7 +74,7 @@ namespace Evacuation_Master_3000 {
         private void OnKeyHandler(object sender, KeyEventArgs e) {
             bool value = e.IsDown;
             /* Key-values are found in the Settings.cs-file (public static properties) */
-            if (e.Key == ZoomKey)
+            if (e.Key == ZoomKey) 
                 IsAbleToZoom = value;
             else if (e.Key == HorizontalScrollKey)
                 HorizontalScrollEnabled = value; 
@@ -82,6 +87,7 @@ namespace Evacuation_Master_3000 {
             FloorPlanVisualRepresentation.VisualContainerScaleTransform.ScaleX = ZoomSlider.Value;
             FloorPlanVisualRepresentation.VisualContainerScaleTransform.ScaleY = ZoomSlider.Value;
             //_lastCenterPositionOnTarget = ScrollViewer.TranslatePoint(centerOfViewport, Container);
+            ZoomSliderText.Text = (Math.Round(ZoomSlider.Value, 2, MidpointRounding.AwayFromZero)*100).ToString() + "%";
         }
     }
 }

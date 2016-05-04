@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Evacuation_Master_3000.UI.ControlPanelUI.CP_ImageScanControls"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Evacuation_Master_3000.UI.ControlPanelUI"
+             mc:Ignorable="d" >
+    
+    <GroupBox Header="Change block">
+        <StackPanel>
+
+            <RadioButton x:Name="MakeFree" Tag="Free" GroupName="RadioElevation" Content="Detect edges" Margin="0,10"/>
+            <TextBox x:Name="FilePathTextbox"/>
+            <GroupBox Header="Contrast">
+                <Slider Value="100" Minimum="0" Maximum="255" x:Name="ContrastSlider" Width="140" Margin="0, 10"/>
+            </GroupBox>
+            <Button Name="DoneButtom" Content="Done" Margin="0,10" Click="DoneButtom_OnClick"/>
+
+
+        </StackPanel>
+    </GroupBox>
+
+
+
+</UserControl>

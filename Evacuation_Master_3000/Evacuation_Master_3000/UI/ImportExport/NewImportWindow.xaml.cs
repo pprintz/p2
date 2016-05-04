@@ -39,7 +39,8 @@ namespace Evacuation_Master_3000 {
             BuildingHeightTextBox.PreviewTextInput += NumberValidationTextBox;
             BuildingFloorAmountTextBox.PreviewTextInput += NumberValidationTextBox;
 
-            BrowseButton.Click += Browse;
+            BrowseButton.Click += BrowseFiles;
+            BrowsePngFiles.Click += BrowseImages;
             CreateNewButtun.Click += CreateNewBuilding;
 
             Closing += OnWindowClosing;
@@ -83,13 +84,28 @@ namespace Evacuation_Master_3000 {
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void Browse(object sender, RoutedEventArgs e) {
+        private void BrowseFiles(object sender, RoutedEventArgs e) {
             OpenFileDialog open = new OpenFileDialog { Filter = "Grid files|*" + Extension };
             if (open.ShowDialog() == true) {
                 ParentWindow.TheUserInterface.ImportFloorPlan(open.FileName);
                 OnSucces();
             }
         }
+
+        private void BrowseImages(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog { Filter = "PNG files|*.png"  };
+            if (open.ShowDialog() == true)
+            {
+                ImageScanWindow Imagescanner = new ImageScanWindow(open.FileName);
+
+                
+                ParentWindow.TheUserInterface.ImportFloorPlan(open.FileName);
+                OnSucces();
+            }
+        }
+
+        
 
         private void CreateNewBuilding(object sender, RoutedEventArgs e) {
             ParentWindow.TheUserInterface.CreateFloorplan(BuildingWidth, BuildingHeight, BuildingFloorAmount, Description);

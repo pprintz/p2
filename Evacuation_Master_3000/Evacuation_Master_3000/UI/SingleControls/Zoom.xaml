@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Evacuation_Master_3000"
              mc:Ignorable="d" >
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
-        <Slider Value="1" Minimum="0.25" Maximum="5" Name="ZoomSlider" Width="350" Margin="0, 0, 10, 0"/>
-        <TextBlock Name="ZoomSliderText"/>
+        <Slider Value="1" Minimum="0.25" Maximum="5" x:Name="ZoomSlider" Width="350" Margin="0, 0, 10, 0"/>
+        <TextBlock x:Name="ZoomSliderText"/>
     </StackPanel>
 </UserControl>

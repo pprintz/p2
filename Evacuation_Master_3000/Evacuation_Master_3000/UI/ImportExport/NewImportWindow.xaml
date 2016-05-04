@@ -79,7 +79,16 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Import existing file">
-                <Button Name="BrowseButton" HorizontalAlignment="Center" VerticalAlignment="Center" Width="175" Height="40" Content="Browse"/>
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Margin" Value="0,5,0,5"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Name="BrowseButton" Width="175" Height="40" Content="Browse Buildings"/>
+                    <Button Name="BrowsePngFiles" Width="175" Height="40" Content="Browse Images" />
+                </StackPanel>
+                
             </TabItem>
         </TabControl>
     </Grid>

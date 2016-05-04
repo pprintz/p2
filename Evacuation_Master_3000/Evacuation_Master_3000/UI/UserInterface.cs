@@ -13,7 +13,7 @@ namespace Evacuation_Master_3000
         }
 
         private TheRealMainWindow TheMainWindow { get; }
-        public event SimulationStart OnSimulationStart;
+        public event UISimulationStart OnUISimulationStart;
         public event ImportFloorPlan OnImportFloorPlan;
         public event ExportFloorPlan OnExportFloorPlan;
         public event NewFloorPlan OnNewFloorPlan;
@@ -41,8 +41,9 @@ namespace Evacuation_Master_3000
             LocalFloorPlan = OnImportFloorPlan?.Invoke(filePath);
         }
 
-        public void SimulationStart(bool showHeatMap, bool stepByStep) {
-            People = OnSimulationStart?.Invoke(LocalFloorPlan, showHeatMap, stepByStep);
+        public void SimulationStart(bool showHeatMap, bool stepByStep, IPathfinding pathfinding, int milliseconds)
+        {
+            People = OnUISimulationStart?.Invoke(LocalFloorPlan, showHeatMap, stepByStep, pathfinding, milliseconds);
         }
 
         private void VisualizeFloorPlan() {

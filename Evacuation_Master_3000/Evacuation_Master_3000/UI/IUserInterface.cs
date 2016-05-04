@@ -8,7 +8,7 @@ namespace Evacuation_Master_3000
         void Display();
         void DisplayGeneralErrorMessage(string errorMessage);
         void DisplayStatistics(DataSimulationStatistics dataSimulationStatistics);
-        event SimulationStart OnSimulationStart;
+        event UISimulationStart OnUISimulationStart;
         event ImportFloorPlan OnImportFloorPlan;
         event ExportFloorPlan OnExportFloorPlan;
         event NewFloorPlan OnNewFloorPlan;

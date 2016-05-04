@@ -10,6 +10,6 @@ namespace Evacuation_Master_3000
         Dictionary<string, Tile> Tiles { get; }
         string[] Headers { get; set; }
         void CreateFloorPlan(int width, int height, int floorAmount, string description, string[] headers);
-        void CalculateNeighbours(); 
+        void Initiate();
     }
 }

@@ -15,14 +15,22 @@ using System.Windows.Shapes;
 
 namespace Evacuation_Master_3000
 {
-    /// <summary>
-    /// Interaction logic for SimulationControls.xaml
-    /// </summary>
     public partial class SimulationControls : UserControl
     {
-        public SimulationControls()
+        public SimulationControls(TheRealMainWindow parentWindow)
         {
             InitializeComponent();
+            _parentWindow = parentWindow;
+            StartSimulationButton.Click += OnSimulationStartClick;
         }
+
+        private void OnSimulationStartClick(object sender, RoutedEventArgs e)
+        {
+            _parentWindow.TheUserInterface.SimulationStart(
+                (bool)_parentWindow.controlPanelControl.SimulationControls.HeatmapToggle.IsChecked,
+                (bool)_parentWindow.controlPanelControl.SimulationControls.StepByStepToggle.IsChecked, new AStar(_parentWindow.TheUserInterface.LocalFloorPlan), 100);
+        }
+        TheRealMainWindow _parentWindow;
     }
 }
+

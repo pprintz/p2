@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 namespace Evacuation_Master_3000
 {
     /// <summary>
@@ -23,32 +22,45 @@ namespace Evacuation_Master_3000
         public ControlPanel(TheRealMainWindow parentWindow)
         {
             InitializeComponent();
-
+            ParentWindow = parentWindow;
+            FloorPlanControls = new CP_FloorPlanControls(ParentWindow);
+            SimulationControls = new CP_SimulationControls();
+            SimulationStats = new CP_SimulationStats();
+            ImportExport = new CP_ImportExport(ParentWindow);
             SetupUserControlTabs(parentWindow);
         }
+
+        public TheRealMainWindow ParentWindow { get; set; }
+
+        public CP_FloorPlanControls FloorPlanControls { get; set; }
+        public CP_SimulationControls SimulationControls { get; set; }
+        public CP_SimulationStats SimulationStats { get; set; }
+        public CP_ImportExport ImportExport { get; set; }
 
         private void SetupUserControlTabs(TheRealMainWindow parentWindow)
         {
             TabItem floorPlanControls = new TabItem
             {
                 Header = "Floorplan controls",
-                Content = new CP_FloorPlanControls(parentWindow)
+                Content = FloorPlanControls
             };
 
             TabItem simulationControls = new TabItem()
             {
                 Header = "Simulation controls",
-                Content = new CP_SimulationControls()
+                Content = SimulationControls
             };
 
-            TabItem simulationStats = new TabItem() {
+            TabItem simulationStats = new TabItem()
+            {
                 Header = "Simulation informaion",
-                Content = new CP_SimulationStats()
+                Content = SimulationStats
             };
 
-            TabItem importExport = new TabItem() {
+            TabItem importExport = new TabItem()
+            {
                 Header = "Import/Export",
-                Content = new CP_ImportExport(parentWindow)
+                Content = ImportExport
             };
 
             UserControlTabPanel.Items.Insert(0, floorPlanControls);

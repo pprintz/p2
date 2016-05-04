@@ -9,7 +9,7 @@ namespace Evacuation_Master_3000
     public delegate void PersonEvacuated(Person person);
     public delegate IEnumerable<BuildingBlock> ExtendedPathRequest(Person person);
     public delegate void PersonMoved(Person person);
-    public delegate Dictionary<int, Person> SimulationStart(IFloorPlan floorPlan, bool heatMapActive, bool stepByStep);
+    public delegate Dictionary<int, Person> UISimulationStart(IFloorPlan floorPlan, bool heatMapActive, bool stepByStep, IPathfinding pathfinding, int milliseconds);
     public delegate IFloorPlan ImportFloorPlan(string fileName);
     public delegate IFloorPlan ExportFloorPlan(IFloorPlan floorPlan, string[] headers, string description, string fileName);
     public delegate IFloorPlan NewFloorPlan(int width, int height, int floorAmount, string description);

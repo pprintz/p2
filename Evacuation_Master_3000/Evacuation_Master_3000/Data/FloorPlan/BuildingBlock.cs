@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using static Evacuation_Master_3000.ImportExportSettings;
-
 namespace Evacuation_Master_3000
 {
     public class BuildingBlock : Tile, IComparable<BuildingBlock>
     {
-        public BuildingBlock(int x, int y, int z = 0, Types type = Types.Free) : base(x, y, z, type) {}
+        public BuildingBlock(int x, int y, int z = 0, Types type = Types.Free) : base(x, y, z, type) { }
         public bool IsChecked { get; set; }
         public double LengthToDestination { get; set; }
+        public int Room { get; set; }
+        public int Priority { get; set; } = 100;
         public double LengthFromSource { get; set; } = double.MaxValue;
         public BuildingBlock Parent { get; set; }
+        public HashSet<BuildingBlock> BNeighbours = new HashSet<BuildingBlock>();
         public int HeatmapCounter { get; set; }
         //Room info prop
 
@@ -20,11 +22,9 @@ namespace Evacuation_Master_3000
                 return -1;
             return other.LengthFromSource + other.LengthToDestination < LengthFromSource + LengthToDestination ? 1 : 0;
         }
-        
+
     }
 }
-
-
 //public void CalculateNeighbours(Dictionary<string, BuildingBlock> tiles)
 //{
 //    int topLeftNeighbourX = X - 1;

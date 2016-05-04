@@ -7,8 +7,9 @@ namespace Evacuation_Master_3000
     {
         IFloorPlan TheFloorPlan { get; }
         IEnumerable<Person> GetPeople(Predicate<Person> predicate);
-        void StartSimulation(IPathfinding pathfindingAlgorithm, int millisecondsPerTick);
-        void ResetData(); 
+        Dictionary<int, Person> StartSimulation(IFloorPlan floorPlan, bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength);
+        void ResetData();
+        event PersonMoved OnSendPersonMoved;
         DataSimulationStatistics GetSimulationStatistics();
         IFloorPlan ImportFloorPlan(string fileName);
         IFloorPlan CreateFloorPlan(int width, int height, int floorAmount, string description);

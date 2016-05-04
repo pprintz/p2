@@ -37,20 +37,17 @@ namespace Evacuation_Master_3000
             {
                 for (int x = 0; x < PointsPerRow; x++)
                 {
-<<<<<<< HEAD
                     Rectangle figure = new Rectangle();
                     figure.Height = PointSize;
                     figure.Width = PointSize;
-                    figure.Margin = new Thickness(x*GridSpacing, y*GridSpacing, 0, 0);
-=======
+                    figure.Margin = new Thickness(x * GridSpacing, y * GridSpacing, 0, 0);
                     //Ellipse figure = new Ellipse();
                     Rectangle figure = new Rectangle
                     {
                         Height = PointSize,
                         Width = PointSize,
-                        Margin = new Thickness(x*GridSpacing, y*GridSpacing, 0, 0)
+                        Margin = new Thickness(x * GridSpacing, y * GridSpacing, 0, 0)
                     };
->>>>>>> 6578597366ae7133e78525500c2ea43c8b8dd8f1
 
                     string coordinate = Coordinate(x, y);
                     AllPoints.Add(coordinate, new BuildingBlock(x, y, figure));
@@ -137,7 +134,7 @@ namespace Evacuation_Master_3000
                 {
                     return ReturnLineY(a, b);
                 }
-                    return ReturnLineY(b, a);
+                return ReturnLineY(b, a);
             }
             if (a.Y == b.Y)
             {

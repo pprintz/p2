@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 namespace Evacuation_Master_3000
 {
     public class Person : IEvacuateable
@@ -12,17 +11,19 @@ namespace Evacuation_Master_3000
         private double MovementSpeed { get; }
         private int ticksToWaitBeforeNextMove;
         private int ticksSpentWaiting;
-        private int stepsTaken;
+        public int stepsTaken;
         private bool firstRun = true;
-        public Tile Position { get; private set; }
+        public Tile Position { get; set; }
+        public int CurrentRoom { get; set; }
         private Tile _target;
         public event PersonEvacuated OnPersonEvacuated;
-        public event PersonMoved OnPersonMoved;
+        public static event PersonMoved OnPersonMoved;
         private bool _evacuated;
+
         public bool Evacuated
-        { 
+        {
             get { return _evacuated; }
-            private set
+            set
             {
                 _evacuated = value;
                 if (value)
@@ -32,28 +33,27 @@ namespace Evacuation_Master_3000
             }
         }
 
-        
+
         public int ID { get; }
         private double TickLength { get; }
         public event ExtendedPathRequest OnExtendedPathRequest;
-        public Person(BuildingBlock position, double tickLength)
+        public Person(BuildingBlock position, int tickLength)
         {
             ID = _idCounter++;
             Random rand = new Random();
-            MovementSpeed = 5 + rand.NextDouble() * 10;
+            MovementSpeed = 5 + rand.NextDouble() * 10 / 100;
             Position = position;
             TickLength = tickLength;
         }
 
-       
+
         public void ConditionalMove()
         { // Person should be removed from event thingy when evacuated
             if (firstRun)
             {
-                _target = PathList[stepsTaken];
+                _target = PathList[stepsTaken + 1];
                 ResetTickConditions();
                 firstRun = false;
-
             }
             if (ticksSpentWaiting == ticksToWaitBeforeNextMove)
             {
@@ -65,7 +65,6 @@ namespace Evacuation_Master_3000
                 ticksSpentWaiting++;
             }
         }
-
         private void Move()
         {
             if (PathList.Count == stepsTaken)
@@ -78,41 +77,52 @@ namespace Evacuation_Master_3000
                 {
                     throw new PersonException($"Could not get a path or extended path for person {ID}.");
                 }
-                      
+
             }
             try
             {
                 // Clear old Tile and increment heatMapCounter
-                Position.Type = Tile.Types.Free;                //<--- Skal være default type for den individuelle buildingBlock
+                //Position.Type = Tile.Types.Free;                //<--- Skal være default type for den individuelle buildingBlock
                 ((BuildingBlock)Position).HeatmapCounter++;
-
-                // Move to new tile and check if evacuated. If not, keep going.
-                Position = _target;
-                stepsTaken++;
-                OnPersonMoved?.Invoke(this);
-                if (Position.Type == Tile.Types.Exit)
+                if (stepsTaken + 1 < PathList.Count)
                 {
-                    Evacuated = true;
+                    _target = PathList[stepsTaken + 1];
+                }
+                if (_target.Type != Tile.Types.Person)
+                {
+
+                    // Move to new tile and check if evacuated. If not, keep going.
+                    if (stepsTaken + 1 < PathList.Count)
+                    {
+                        stepsTaken++;
+                    }
+                    Position = _target;
+                    OnPersonMoved?.Invoke(this);
+                    if (Position.Type == Tile.Types.Exit)
+                    {
+                        Evacuated = true;
+                    }
                 }
                 else
                 {
-                    Position.Type = Tile.Types.Person;
-
-                    // Set new target
-                    _target = PathList[stepsTaken];
+                    Console.WriteLine(_target + " " + Position);
                 }
-                
+
             }
             catch (ArgumentOutOfRangeException)
             {
-                throw new PersonException($"Person with id: {ID} could not find a path out."); // Check if this can ever happen due to catch above ^
+                throw new PersonException($"Person with id: {ID} could not find a path out.    {stepsTaken} {PathList.Count}"); // Check if this can ever happen due to catch above ^
             }
         }
 
         private void ResetTickConditions()
         {
             ticksSpentWaiting = 0;
-            ticksToWaitBeforeNextMove = (int)Math.Round(Position.DistanceTo(_target) / MovementSpeed / TickLength);
+            ticksToWaitBeforeNextMove = (int)Math.Round(Position.DistanceTo(_target) * 10000 / MovementSpeed / TickLength);
+            if (stepsTaken > 0 && stepsTaken != PathList.Count - 1)
+            {
+                ticksToWaitBeforeNextMove = (int)Math.Round(Position.DistanceTo(PathList[stepsTaken + 1]) * 100000 / MovementSpeed / TickLength);
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Evacuation_Master_3000
             _ui = ui;
             _ui.OnImportFloorPlan += _data.ImportFloorPlan;
             _ui.OnNewFloorPlan += _data.CreateFloorPlan;
+            _ui.OnUISimulationStart += data.StartSimulation;
             // _ui.OnSimulationStart += _data.StartSimulation;
         }
 

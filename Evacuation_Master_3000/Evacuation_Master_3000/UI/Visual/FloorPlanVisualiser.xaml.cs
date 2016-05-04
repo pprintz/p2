@@ -20,9 +20,12 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for FloorPlanVisualiser.xaml
     /// </summary>
-    public partial class FloorPlanVisualiser : UserControl {
-        public FloorPlanVisualiser() {
+    public partial class FloorPlanVisualiser : UserControl
+    {
+        public FloorPlanVisualiser()
+        {
             InitializeComponent();
+            Person.OnPersonMoved += UpdateVisualsOnEvacutableMoved;
         }
 
         private IFloorPlan localFloorPlan { get; set; }
@@ -31,13 +34,14 @@ namespace Evacuation_Master_3000
         private UniformGrid[] FloorContainer;
         private SwitchBetweenFloorsControl floorSwitcherControls { get; set; }              //<<------ OBS er det nødvendigt med property til at gemme floorswitchcontrols i???
 
-        public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people) {
-            
+        public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
+        {
+
             localPeople = people.ToDictionary(k => Coordinate(k.Value.Position), v => v.Value);
             //localPeople = people.Where(p => !localPeople.Values.Contains(p as Person)).ToDictionary(k => Coordinate(k.Position.X, k.Position.Y, k.Position.Z), v => v as Person);
             //First find all tiles with changes - this is done with clever use of lambda expressions
             //tilesWithChanges = floorPlan.Tiles.Values.Where(t => !t.Equals(localFloorPlan.Tiles[Coordinate(t.X, t.Y, t.Z)])).ToDictionary(k => Coordinate(k.X, k.Y, k.Z), v => v);
-            
+
             //Override the local floorplan to correspond to the new floorplan
             localFloorPlan = floorPlan;
 
@@ -55,26 +59,34 @@ namespace Evacuation_Master_3000
                 AddFloorPlanSwitcherControls(localFloorPlan.FloorAmount);
         }
 
-        private void CreateVisualRepresentation() {
+        private void CreateVisualRepresentation()
+        {
             int tileSize = 10;
             int width = localFloorPlan.Width;
             int height = localFloorPlan.Height;
             int floorAmount = localFloorPlan.FloorAmount;
             FloorContainer = new UniformGrid[floorAmount];
 
-            for (int z = 0; z < floorAmount; z++) {
-                UniformGrid container = new UniformGrid() {
+            for (int z = 0; z < floorAmount; z++)
+            {
+                UniformGrid container = new UniformGrid()
+                {
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top
-                };                
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        Rectangle figure = new Rectangle {
+                };
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        Rectangle figure = new Rectangle
+                        {
                             Height = tileSize,
                             Width = tileSize,
                             Fill = z % 2 == 0 ? new SolidColorBrush(Colors.Aqua) : new SolidColorBrush(Colors.Bisque),
                             Tag = Coordinate(x, y, z) /* Makes binding rectangles to buildingblocks easier */
                         };
+                        BuildingBlock current = (localFloorPlan.Tiles[Coordinate(x, y, z)] as BuildingBlock);
+                        figure.ToolTip = current.Priority + " , " + current.Room;
                         figure.MouseLeftButtonDown += OnBuildingBlockClick;
                         container.Children.Add(figure);
                     }
@@ -83,11 +95,12 @@ namespace Evacuation_Master_3000
             }
         }
 
-        private void AddFloorPlanSwitcherControls(int floorAmount) {
+        private void AddFloorPlanSwitcherControls(int floorAmount)
+        {
             /* Setup and insert floor switcher controls */
             floorSwitcherControls = new SwitchBetweenFloorsControl();
             floorSwitcherControls.OnChangeVisualFloorChange += ChangeFloor; /* Callback når der er trykket op/ned mellem floors */
-            floorSwitcherControls.HorizontalAlignment = HorizontalAlignment.Right; 
+            floorSwitcherControls.HorizontalAlignment = HorizontalAlignment.Right;
             floorSwitcherControls.VerticalAlignment = VerticalAlignment.Bottom;
             floorSwitcherControls.Margin = new Thickness(0, 0, 25, 25);
             floorSwitcherControls.SetupFloorSwitcherVisuals(localFloorPlan.FloorAmount);
@@ -95,15 +108,18 @@ namespace Evacuation_Master_3000
             OverlayContainer.Children.Add(floorSwitcherControls);
         }
 
-        private void UpdateVisualRepresentation() {
+        private void UpdateVisualRepresentation()
+        {
             VisualContainer.Children.Add(FloorContainer[0]);
         }
 
-        public void UpdateTile(IEnumerable<Tile> tilesToChange) {
+        public void UpdateTile(IEnumerable<Tile> tilesToChange)
+        {
 
         }
 
-        public void ChangeFloor(int currentFloor) {
+        public void ChangeFloor(int currentFloor)
+        {
             VisualContainer.Children.Clear();
             VisualContainer.Children.Add(FloorContainer[currentFloor]);
             /* Logik der sørger for at det er den korrekte floor der vises */
@@ -115,19 +131,71 @@ namespace Evacuation_Master_3000
         public delegate Tile.Types BuildingBlockTypeFetch();
         public BuildingBlockTypeFetch OnBuildingBlockTypeFetch;
 
-        private void OnBuildingBlockClick(object sender, MouseButtonEventArgs e) {
+        private void OnBuildingBlockClick(object sender, MouseButtonEventArgs e)
+        {
             Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
             Rectangle senderBuildingBlock = sender as Rectangle;                    //Get a reference to the sender rectangle
-            
+
             localFloorPlan.Tiles[senderBuildingBlock.Tag.ToString()].Type = type;   //Change the type of the BuildingBlock
 
             ColorizeBuildingBlock(senderBuildingBlock, type);                       //Colorize the visual representation of the BuildingBlock
         }
 
+
+        private static bool firstTime = true;
+        private void UpdateVisualsOnEvacutableMoved(Person person)
+        {
+            if (firstTime)
+            {
+                foreach (UniformGrid uniformGrid in FloorContainer)
+                {
+                    foreach (var VARIABLE in uniformGrid.Children.Cast<Rectangle>())
+                    {
+                        BuildingBlock current = localFloorPlan.Tiles[VARIABLE.Tag.ToString()] as BuildingBlock;
+                        VARIABLE.ToolTip = current.Priority + " ," + current.Room;
+                    }
+                }
+            }
+            BuildingBlock prev = person.PathList[person.stepsTaken - 1];
+            BuildingBlock next = person.PathList[person.stepsTaken];
+            foreach (Rectangle child in FloorContainer[prev.Z].Children.Cast<Rectangle>())
+            {
+                if (child.Tag.ToString() == ImportExportSettings.Coordinate(prev))
+                {
+                    if (prev.OriginalType == Tile.Types.Person)
+                    {
+                        prev.Type = Tile.Types.Free;
+                        ColorizeBuildingBlock(child, Tile.Types.Free);
+                    }
+                    else
+                    {
+                        prev.Type = prev.OriginalType;
+                        ColorizeBuildingBlock(child, prev.OriginalType);
+                    }
+                }
+                else if (child.Tag.ToString() == ImportExportSettings.Coordinate(next))
+                {
+                    if (next.OriginalType == Tile.Types.Exit)
+                    {
+                        next.Type = Tile.Types.Exit;
+                        ColorizeBuildingBlock(child, Tile.Types.Exit);
+                    }
+                    else
+                    {
+                        next.Type = Tile.Types.Person;
+                        ColorizeBuildingBlock(child, next.Type);
+                    }
+                }
+            }
+
+        }
+
         /* Might need re-work - lavet QnD! */
-        private void ColorizeBuildingBlock(Rectangle buildingBlockRepresentation, Tile.Types type) {
+        private void ColorizeBuildingBlock(Rectangle buildingBlockRepresentation, Tile.Types type)
+        {
             SolidColorBrush newColor;
-            switch (type) {
+            switch (type)
+            {
                 case Tile.Types.Free:
                     newColor = new SolidColorBrush(Colors.White);
                     break;

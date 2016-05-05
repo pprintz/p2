@@ -22,18 +22,23 @@
                                     <TextBlock Name="CurrentNumberOfEvacuatedPersons" Text="0"/>
                                     <!-- Skal opdateres ved hver OnPersonEvacuated -->
                                     <TextBlock Name="PersonsEvacuatedSeperator" Text="/"/>
-                                    <TextBlock Name="TotalPersonCount" Text="200"/>
+                                    <TextBlock Name="TotalPersonCount" Text="0"/>
                                     <!-- Skal være binding, der bliver sat ved OnSimulationStart -->
                                 </DockPanel>
                             </DockPanel>
-                            
+
                         </GroupItem>
                         <GroupItem Name="PersonsEvacuatedProgressBarGroup">
                             <Grid>
-                                <Rectangle Name="PersonsEvacuatedProgressBarBackground" Height="14" Fill="DimGray"/>
-                                <Rectangle Name="PersonsEvacuatedProgressBarFill" HorizontalAlignment="Left" VerticalAlignment="Center" Height="12" Width="20" Fill="Red"/>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="0*"/>
+                                    <ColumnDefinition Width="0*"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Name="PersonsEvacuatedProgressBarBackground" Fill="DimGray" Margin="0,1"/>
+                                <Rectangle Name="PersonsEvacuatedProgressBarFill" HorizontalAlignment="Left" VerticalAlignment="Center" Height="12" Width="0" Fill="Red" Margin="0,1"/>
                                 <!-- Bindings: Width er procentdel af evakuerede personer. Fill skifter farve efter samme udregning som HeatMap. Text er procentdel evakuerede personer -->
-                                <TextBlock Name="PersonsEvacuatedProgressBarText" Text="20" HorizontalAlignment="Center"/>
+                                <TextBlock Name="PersonsEvacuatedProgressBarText" Text="0%" HorizontalAlignment="Center" Margin="62,-1,14,1" Width="60"/>
                             </Grid>
                         </GroupItem>
                     </StackPanel>

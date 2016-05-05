@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Evacuation_Master_3000.ImportExportSettings;
@@ -57,6 +58,7 @@ namespace Evacuation_Master_3000
         {
             foreach (var buildingBlock in BuildingBlocks.Values.Where(t => t.Type != Tile.Types.Wall))
             {
+                CheckForStairConnection(buildingBlock);
                 int topLeftNeighbourX = buildingBlock.X - 1;
                 int topLeftNeighbourY = buildingBlock.Y - 1;
                 int currentZ = buildingBlock.Z;
@@ -75,6 +77,26 @@ namespace Evacuation_Master_3000
                                 buildingBlock.BNeighbours.Add(currentBuildingBlock);
                         }
                     }
+                }
+            }
+        }
+        private void CheckForStairConnection(BuildingBlock buildingBlock)
+        {
+            if (buildingBlock.Type == Tile.Types.Stair && FloorAmount > 1)
+            {
+                string coordinatesOfFloorAbove = Coordinate(buildingBlock.X, buildingBlock.Y, buildingBlock.Z + 1);
+                string coordinatesOfFloorBelow = Coordinate(buildingBlock.X, buildingBlock.Y, buildingBlock.Z - 1);
+                if (Tiles.ContainsKey(coordinatesOfFloorAbove))
+                {
+                    BuildingBlock neighbourAbove = Tiles[coordinatesOfFloorAbove] as BuildingBlock;
+                    if (neighbourAbove?.Type == Tile.Types.Stair)
+                        buildingBlock.BNeighbours.Add(neighbourAbove);
+                }
+                if (Tiles.ContainsKey(coordinatesOfFloorBelow))
+                {
+                    BuildingBlock neighbourBelow = Tiles[coordinatesOfFloorBelow] as BuildingBlock;
+                    if (neighbourBelow?.Type == Tile.Types.Stair)
+                        buildingBlock.BNeighbours.Add(neighbourBelow);
                 }
             }
         }
@@ -101,47 +123,69 @@ namespace Evacuation_Master_3000
             //    }
             //}
         }
+
+
         private void CalculatePriorities()
         {
             IEnumerable<BuildingBlock> doorlist =
                 BuildingBlocks.Values.Where(d => d.Type == BuildingBlock.Types.Door);
             IEnumerable<BuildingBlock> exitList =
                 BuildingBlocks.Values.Where(p => p.Type == BuildingBlock.Types.Exit);
+            IEnumerable<BuildingBlock> connectedStairList =
+                BuildingBlocks.Values.Where(p => p.Type == BuildingBlock.Types.Stair && p.BNeighbours.Any(n => n.Z + 1 == p.Z || n.Z - 1 == p.Z));
+
             foreach (BuildingBlock exitBuildingBlock in exitList)
             {
                 exitBuildingBlock.Priority = 0;
-                InitializeRoomPriority(exitBuildingBlock, exitBuildingBlock.Priority);
-                do
-                {
-                    foreach (BuildingBlock door in doorlist)
-                    {
-                        //Checks for each door, if the doors priority is larger than the surrounding buildingblocks
-                        if (door.Priority >
-                            (BuildingBlocks.Values.Where(
-                                b => b.BNeighbours.Contains(door) && b.Type == BuildingBlock.Types.Free || b.Type == BuildingBlock.Types.Person)
-                                .Min(n => n.Priority)))
-                        {
-                            door.Priority =
-                                (BuildingBlocks.Values.Where(b => (b.Type == BuildingBlock.Types.Free || b.Type == Tile.Types.Person) &&
-                                                                   b.BNeighbours.Contains(door)).Min(n => n.Priority));
-                            door.Priority++;
-                            InitializeRoomPriority(door, door.Priority);
-                        }
-                    }
-                } while (doorlist.Any(d => d.Priority - d.BNeighbours.Min(n => n.Priority) > 2));
+                SetExitAndStairPriority(exitBuildingBlock, doorlist);
+            }
+            foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == 100))
+            {
+                Console.WriteLine("HELLO ITS ME ");
+                connectedStair.Priority = 42;
+                SetExitAndStairPriority(connectedStair, doorlist);
             }
 
         }
+        private void SetExitAndStairPriority(BuildingBlock exitOrStair, IEnumerable<BuildingBlock> doorlist)
+        {
+            InitializeRoomPriority(exitOrStair, exitOrStair.Priority);
+            do
+            {
+                foreach (BuildingBlock door in doorlist)
+                {
+                    //Checks for each door, if the doors priority is larger than the surrounding buildingblocks
+                    if (door.Priority >
+                        (BuildingBlocks.Values.Where(
+                            b => b.BNeighbours.Contains(door) && b.Type == BuildingBlock.Types.Free || b.Type == BuildingBlock.Types.Person)
+                            .Min(n => n.Priority)))
+                    {
+                        door.Priority =
+                            (BuildingBlocks.Values.Where(b => (b.Type == BuildingBlock.Types.Free || b.Type == Tile.Types.Person) &&
+                                                               b.BNeighbours.Contains(door)).Min(n => n.Priority));
+                        door.Priority++;
+                        InitializeRoomPriority(door, door.Priority);
+                    }
+                }
+            } while (doorlist.Any(d => d.Priority - d.BNeighbours.Min(n => n.Priority) > 2));
+        }
+
+
         public static int GlobalRoomCounter;
         private void InitializeRoomPriority(BuildingBlock door, int priorityCounter)
         {
             GlobalRoomCounter++;
             bool done = false;
             List<BuildingBlock> tileList = BuildingBlocks.Values.Where(t => t.Type == Tile.Types.Free ||
-                                                                   t.Type == Tile.Types.Person).ToList();
+                                                                            t.Type == Tile.Types.Person ||
+                                                                            t.Type == Tile.Types.Stair).ToList();
             priorityCounter++;
             BuildingBlock current = null;
-            var currentList = door.BNeighbours.Where(n => (n.Type == BuildingBlock.Types.Free || n.Type == Tile.Types.Person) && n.Priority > priorityCounter).ToList();
+            var currentList =
+                door.BNeighbours.Where(
+                    n =>
+                        (n.Type == BuildingBlock.Types.Free || n.Type == Tile.Types.Person) &&
+                        n.Priority > priorityCounter).ToList();
             do
             {
                 if (currentList.Count == 0)
@@ -162,9 +206,10 @@ namespace Evacuation_Master_3000
                         b.Priority > priorityCounter &&
                         (b.Type == Tile.Types.Free || b.Type == Tile.Types.Person)))
                     {
-                        foreach (BuildingBlock block in tileList.Where(b => b.BNeighbours.Any(n => n.Priority == priorityCounter) &&
-                            b.Priority > priorityCounter &&
-                            (b.Type == Tile.Types.Free || b.Type == Tile.Types.Person)))
+                        foreach (
+                            BuildingBlock block in
+                                tileList.Where(b => b.BNeighbours.Any(n => n.Priority == priorityCounter && n.Z == b.Z) &&
+                                                    b.Priority > priorityCounter ))
                         {
                             block.Priority = priorityCounter;
                             if (block.Room == 0)

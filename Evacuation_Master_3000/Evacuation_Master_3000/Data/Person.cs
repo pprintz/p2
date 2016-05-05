@@ -6,7 +6,7 @@ namespace Evacuation_Master_3000
     {
         // Remember old path unless changes has been made <-- needs to be implemented
         private static int _idCounter = 1;
-        public int AmountOfMoves = 0;
+        public int AmountOfTicks = 0;
         public readonly List<BuildingBlock> PathList = new List<BuildingBlock>();
         private double MovementSpeed { get; }
         private int ticksToWaitBeforeNextMove;
@@ -37,11 +37,12 @@ namespace Evacuation_Master_3000
         public int ID { get; }
         private double TickLength { get; }
         public event ExtendedPathRequest OnExtendedPathRequest;
+        private static Random rand = new Random();
         public Person(BuildingBlock position, int tickLength)
         {
             ID = _idCounter++;
-            Random rand = new Random();
-            MovementSpeed = 5 + rand.NextDouble() * 10 / 100;
+            
+            MovementSpeed = 5 + rand.NextDouble() * 10;
             Position = position;
             TickLength = tickLength;
         }
@@ -49,6 +50,7 @@ namespace Evacuation_Master_3000
 
         public void ConditionalMove()
         { // Person should be removed from event thingy when evacuated
+                AmountOfTicks++;
             if (firstRun)
             {
                 _target = PathList[stepsTaken + 1];
@@ -97,15 +99,11 @@ namespace Evacuation_Master_3000
                         stepsTaken++;
                     }
                     Position = _target;
-                    OnPersonMoved?.Invoke(this);
                     if (Position.Type == Tile.Types.Exit)
                     {
                         Evacuated = true;
                     }
-                }
-                else
-                {
-                    Console.WriteLine(_target + " " + Position);
+                    OnPersonMoved?.Invoke(this);
                 }
 
             }
@@ -118,7 +116,7 @@ namespace Evacuation_Master_3000
         private void ResetTickConditions()
         {
             ticksSpentWaiting = 0;
-            ticksToWaitBeforeNextMove = (int)Math.Round(Position.DistanceTo(_target) * 10000 / MovementSpeed / TickLength);
+            ticksToWaitBeforeNextMove = (int)Math.Round(Position.DistanceTo(_target) * 100000 / MovementSpeed / TickLength);
             if (stepsTaken > 0 && stepsTaken != PathList.Count - 1)
             {
                 ticksToWaitBeforeNextMove = (int)Math.Round(Position.DistanceTo(PathList[stepsTaken + 1]) * 100000 / MovementSpeed / TickLength);

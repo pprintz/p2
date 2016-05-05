@@ -217,6 +217,9 @@ namespace Evacuation_Master_3000
                 case Tile.Types.Person:
                     newColor = new SolidColorBrush(Colors.Red);
                     break;
+                case Tile.Types.Stair:
+                    newColor = new SolidColorBrush(Colors.BlueViolet);
+                    break;
                 default:
                     newColor = new SolidColorBrush(Colors.BlanchedAlmond);
                     break;

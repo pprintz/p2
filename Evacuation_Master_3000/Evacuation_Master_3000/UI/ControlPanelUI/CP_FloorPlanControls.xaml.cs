@@ -29,6 +29,7 @@ namespace Evacuation_Master_3000
             MakeFree.Click += OnRadioButtonClicked;
             MakePath.Click += OnRadioButtonClicked;
             MakePerson.Click += OnRadioButtonClicked;
+            MakeStair.Click += OnRadioButtonClicked;
             parentWindow.floorPlanVisualiserControl.OnBuildingBlockTypeFetch += OnFetchType;
         }
 

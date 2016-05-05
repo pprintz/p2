@@ -28,7 +28,7 @@ namespace Evacuation_Master_3000
 
             return ListOfBuildingBlocks.Where(
                  b =>
-                    b.Priority == targetPriority &&
+                    b.Priority == targetPriority && b.Z == person.Position.Z &&
                     b.BNeighbours.Any(n => n.Room == person.CurrentRoom)).OrderBy(b => b.DistanceTo(person.Position)).First();
         }
         public IEnumerable<Tile> CalculatePath(IEvacuateable person)
@@ -39,7 +39,7 @@ namespace Evacuation_Master_3000
                     .OrderBy(b => b.DistanceTo(person.Position)).ToList();
             person.CurrentRoom = (person.Position as BuildingBlock).Room;
             List<Tile> pathList = new List<Tile>();
-            while ((person.Position as BuildingBlock).Priority != 0)
+            while ((person.Position as BuildingBlock).Type != Tile.Types.Exit)
             {
                 if ((person.Position as BuildingBlock).Priority == 100)
                 {
@@ -47,12 +47,20 @@ namespace Evacuation_Master_3000
                 }
                 BuildingBlock dest = FindNextPathTarget(person);
                 pathList.AddRange(GetPathFromSourceToDestinationAStar(person, dest));
-                if (dest.Priority == 0)
+                if (dest.Type == Tile.Types.Stair)
+                {
+                    dest = dest.BNeighbours.First(n => n.Z != dest.Z);
+                    person.Position = dest;
+                    person.CurrentRoom = dest.Room;
+                    dest = FindNextPathTarget(person);
+                    pathList.AddRange(GetPathFromSourceToDestinationAStar(person, dest));
+                }
+                if (dest.Type == Tile.Types.Exit)
                 {
                     break;
                 }
                 BuildingBlock closestExit = exitList.OrderBy(e => e.DistanceTo(person.Position)).First();
-                if (dest.Priority % 2 == 0)
+                if (dest.Priority % 2 == 0 && dest.Type == Tile.Types.Door)
                 {
                     person.Position =
                         dest.BNeighbours.Where(

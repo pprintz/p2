@@ -19,13 +19,6 @@ namespace Evacuation_Master_3000
             AllPeople = new Dictionary<int, Person>();
             //Person.OnPersonMoved += Statistics?
         }
-
-        private void DoTicks()
-        {
-
-        }
-        internal delegate void PeopleNotEvacuated();
-        private event PeopleNotEvacuated OnPeopleNotEvacuated;
         public IFloorPlan TheFloorPlan { get; private set; }
         public Dictionary<int, Person> AllPeople { get; set; }
         public event PersonMoved OnSendPersonMoved;
@@ -67,7 +60,7 @@ namespace Evacuation_Master_3000
                 bool done = false;
                 Stopwatch stopWatch = Stopwatch.StartNew();
                 OnTick?.Invoke();
-                Yield(100000);
+                Yield(1);
                 stopWatch.Stop();
                 // unchecked throws an OverflowException if we've spent more than 600+ hours on one tick.
                 int elapsedMilliseconds = unchecked((int)stopWatch.ElapsedMilliseconds);
@@ -85,15 +78,13 @@ namespace Evacuation_Master_3000
                 Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate (object unused) { return null; }, null);
             }
         }
-
-
         private void RemoveEvacuatedPerson(Person person)
         {
             _unevacuatedPeople.Remove(person);
             OnTick -= person.ConditionalMove;
         }
 
-        public event Tick OnTick;
+        public static event Tick OnTick;
 
         public DataSimulationStatistics GetSimulationStatistics()
         {

@@ -13,7 +13,8 @@ namespace Evacuation_Master_3000
             Wall,
             Door,
             Exit,
-            Person
+            Person,
+            Stair
         }
 
         public Types Type { get; set; }
@@ -43,7 +44,7 @@ namespace Evacuation_Master_3000
         }
         public double DistanceTo(Tile other)
         {
-            return Math.Abs(Math.Sqrt(Math.Pow(other.X - X, 2) + Math.Pow(other.Y - Y, 2)));
+            return Math.Abs(Math.Sqrt(Math.Pow(other.X - X, 2) + Math.Pow(other.Y - Y, 2)) + Math.Abs(Z-other.Z)*15); // 15 steps on the staircase.
             //Diagonaldistance!
         }
 

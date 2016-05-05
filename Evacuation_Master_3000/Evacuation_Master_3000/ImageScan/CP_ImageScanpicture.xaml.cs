@@ -29,10 +29,21 @@ namespace Evacuation_Master_3000.ImageScan
     {
 
         private static Bitmap _theImage;
-        private static double[,] _pixels;
+        public double[,] _pixels;
         private int maxWidth = 1000;
         private int maxHeight = 1000;
-        private bool applySobelFilter = false;
+        private bool _applySobelFilter = false;
+        public bool applySobelFilter
+        {
+            get { return _applySobelFilter; }
+            set
+            {
+                _applySobelFilter = value;
+                ApplySobelFilter();
+            }
+        }
+        public double threshold;
+      
 
 
 
@@ -42,6 +53,7 @@ namespace Evacuation_Master_3000.ImageScan
             ParentWindow = parentWindow;
             ImageToGridMethod( imageFilePath, maxWidth, maxHeight, applySobelFilter);
             Console.WriteLine(imageFilePath);
+            threshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
         }
 
         private ImageScanWindow ParentWindow { get; }
@@ -53,29 +65,33 @@ namespace Evacuation_Master_3000.ImageScan
             }
             _theImage = ResizeIfNecessary(new Bitmap(imageFilePath), maxWidth, maxHeight);
 
+            width = _theImage.Width;
+            height = _theImage.Height;
+
             _pixels = ConvertImageToGrayscale(_theImage);
 
-            if (applySobelFilter)
-            {
-                 ApplySobelFilter(ref _pixels, _theImage.Width, _theImage.Height);
-            }
-            CreateVisualRepresentation(_pixels, _theImage.Width, _theImage.Height);
+            CreateVisualRepresentation();
             // CreateGridFile(gridFilePath, header, description, contrastTurnOver, _pixels, _theImage.Width, _theImage.Height);
         }
 
-        private void CreateVisualRepresentation(double[,] pixels, int width, int height)
+        public int width { get; set; }
+        public int height { get; set; }
+
+        private void CreateVisualRepresentation()
         {
             double threshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
+                    int[] coords = { x, y };
                     System.Windows.Shapes.Rectangle rect = new System.Windows.Shapes.Rectangle()
                     {
                         Height = 10,
                         Width = 10,
+                        Tag = coords,
                         Fill =
-                            pixels[y, x] >= threshold
+                            _pixels[y, x] >= threshold
                                 ? new SolidColorBrush(Colors.Yellow)
                                 : new SolidColorBrush(Colors.Black)
                     };
@@ -149,24 +165,79 @@ namespace Evacuation_Master_3000.ImageScan
             return (double)(pixel.R + pixel.G + pixel.B) / 3;
         }
 
-        private static void ApplySobelFilter(ref double[,] pixels, int width, int height)
+        private void ApplySobelFilter()
         {
             double[,] localPixelSet = new double[height, width];
             for (int y = 1; y < height - 1; y++)
             {
                 for (int x = 1; x < width - 1; x++)
                 {
-                    double edgeVertical = pixels[y + 1, x - 1] + 2 * pixels[y + 1, x] + pixels[y + 1, x + 1] -
-                        (pixels[y - 1, x - 1] + 2 * pixels[y - 1, x] + pixels[y - 1, x + 1]);
+                    double edgeVertical = _pixels[y + 1, x - 1] + 2 * _pixels[y + 1, x] + _pixels[y + 1, x + 1] -
+                        (_pixels[y - 1, x - 1] + 2 * _pixels[y - 1, x] + _pixels[y - 1, x + 1]);
 
-                    double edgeHorizontal = pixels[y - 1, x + 1] + 2 * pixels[y, x + 1] + pixels[y + 1, x + 1] -
-                        (pixels[y - 1, x - 1] + pixels[y, x - 1] + pixels[y + 1, x - 1]);
+                    double edgeHorizontal = _pixels[y - 1, x + 1] + 2 * _pixels[y, x + 1] + _pixels[y + 1, x + 1] -
+                        (_pixels[y - 1, x - 1] + _pixels[y, x - 1] + _pixels[y + 1, x - 1]);
 
                     localPixelSet[y, x] = Math.Sqrt(Math.Pow(edgeVertical, 2) + Math.Pow(edgeHorizontal, 2));
                 }
             }
-            pixels = localPixelSet;
+            _pixels = localPixelSet;
+
+            foreach (var rect in BuildingBlockContainer.Children)
+            {
+                if (rect is System.Windows.Shapes.Rectangle)
+                {
+                    System.Windows.Shapes.Rectangle rectangle = rect as System.Windows.Shapes.Rectangle;
+                    int[] coords = rectangle.Tag as int[];
+                    bool recolour = ParentWindow.CpImageScanPicture._pixels[coords[1], coords[0]] >=
+                                    ParentWindow.CpImageScanPicture.threshold;
+                    rectangle.Fill = recolour == true
+                        ? new SolidColorBrush(Colors.Green)
+                        : new SolidColorBrush(Colors.Red);
+                }
+                ;
+            }
+
         }
+        private void CalculateContrast_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+            foreach (var rect in BuildingBlockContainer.Children)
+            {
+                if (rect is System.Windows.Shapes.Rectangle)
+                {
+                    System.Windows.Shapes.Rectangle rectangle = rect as System.Windows.Shapes.Rectangle;
+                    int[] coords = rectangle.Tag as int[];
+                    bool recolour = ParentWindow.CpImageScanPicture._pixels[coords[1], coords[0]] >=
+                                    ParentWindow.CpImageScanPicture.threshold;
+                    rectangle.Fill = recolour == true
+                        ? new SolidColorBrush(Colors.Green)
+                        : new SolidColorBrush(Colors.Red);
+                }
+                ;
+            }
+        }
+
+
+
+        //private void asjdkdfjk()
+        //{
+        //    double[,] localPixelSet = new double[height, width];
+        //    for (int y = 1; y < height - 1; y++)
+        //    {
+        //        for (int x = 1; x < width - 1; x++)
+        //        {
+        //            double edgeVertical = _pixels[y + 1, x - 1] + 2 * _pixels[y + 1, x] + _pixels[y + 1, x + 1] -
+        //                (_pixels[y - 1, x - 1] + 2 * _pixels[y - 1, x] + _pixels[y - 1, x + 1]);
+
+        //            double edgeHorizontal = _pixels[y - 1, x + 1] + 2 * _pixels[y, x + 1] + _pixels[y + 1, x + 1] -
+        //                (_pixels[y - 1, x - 1] + _pixels[y, x - 1] + _pixels[y + 1, x - 1]);
+
+        //            localPixelSet[y, x] = Math.Sqrt(Math.Pow(edgeVertical, 2) + Math.Pow(edgeHorizontal, 2));
+        //        }
+        //    }
+        //    _pixels = localPixelSet;
+        //}
 
         /// <summary>
         /// Creates a new .grid file based on the given input image.

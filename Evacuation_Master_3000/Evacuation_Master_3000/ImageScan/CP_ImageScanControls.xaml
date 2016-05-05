@@ -9,10 +9,13 @@
     <GroupBox Header="Change block">
         <StackPanel>
 
-            <RadioButton x:Name="MakeFree" Tag="Free" GroupName="RadioElevation" Content="Detect edges" Margin="0,10"/>
+            <CheckBox x:Name="MakeFree" Tag="Free" Content="Detect edges" Margin="0,10" Click="MakeFree_OnClick"/>
             <TextBox x:Name="FilePathTextbox"/>
             <GroupBox Header="Contrast">
-                <Slider Value="100" Minimum="0" Maximum="255" x:Name="ContrastSlider" Width="140" Margin="0, 10"/>
+                <StackPanel>
+                    <Slider Minimum="0" Maximum="255" ValueChanged="ContrastSlider_OnValueChanged" x:Name="ContrastSlider" Margin="0, 10" />
+                    <Button Name="calculateContrast" Tag="Free" Content="Calcalute contrast" Click="CalculateContrast_OnClick"/>
+                </StackPanel>
             </GroupBox>
             <Button Name="DoneButtom" Content="Done" Margin="0,10" Click="DoneButtom_OnClick"/>
 

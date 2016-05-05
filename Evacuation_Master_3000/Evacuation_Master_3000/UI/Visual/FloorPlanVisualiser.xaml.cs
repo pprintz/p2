@@ -158,6 +158,7 @@ namespace Evacuation_Master_3000
             }
             BuildingBlock prev = person.PathList[person.stepsTaken - 1];
             BuildingBlock next = person.PathList[person.stepsTaken];
+            person.PersonInteractionStats.DistanceTraveled += (prev.DistanceTo(next))*0.40;
             foreach (Rectangle child in FloorContainer[prev.Z].Children.Cast<Rectangle>())
             {
                 if (child.Tag.ToString() == ImportExportSettings.Coordinate(prev))

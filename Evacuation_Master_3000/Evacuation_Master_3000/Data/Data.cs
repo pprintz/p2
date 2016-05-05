@@ -42,6 +42,7 @@ namespace Evacuation_Master_3000
                     AllPeople.Add(current.ID, current);
                 }
             }
+            List<IEvacuateable> list = new List<IEvacuateable>(AllPeople.Values.ToList());
             if (AllPeople != null)
             {
                 _unevacuatedPeople.AddRange(AllPeople.Values);

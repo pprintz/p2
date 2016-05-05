@@ -38,13 +38,13 @@ namespace Evacuation_Master_3000
         private int ticks;
         private double fillWidthPerPerson;
         int red, green, blue;
+
         private void UpdateTicks()
         {
             ticks++;
-            TimeElapsedInDateTimeFormat.Text = ticks + " Ticks";
-
+            TimeElapsedInDateTimeFormat.Text = ticks / 100 + " Seconds";
+            TicksElapsed.Text = ticks + " Ticks";
         }
-
         private void UpdateSimulationStats(Person person)
         {
             if (!PeopleList.Contains(person))
@@ -57,6 +57,8 @@ namespace Evacuation_Master_3000
             {
                 if (!EvacuatedPeopleList.Contains(person))
                 {
+                    Console.WriteLine(person.PathList.First().DistanceTo(person.PathList.Last()) * 0.4);
+                    Console.WriteLine(person.PersonInteractionStats.DistanceTraveled / person.MovementSpeedInMetersPerSecond);
                     AmountOfEvacuatedPeople++;
                     EvacuatedPeopleList.Add(person);
                     int multiplier = (int)Math.Round(255f / PeopleList.Count);
@@ -64,7 +66,7 @@ namespace Evacuation_Master_3000
                     PersonsEvacuatedProgressBarFill.Fill = BarColor(count);
                     PersonsEvacuatedProgressBarFill.Width += fillWidthPerPerson;
                     CurrentNumberOfEvacuatedPersons.Text = EvacuatedPeopleList.Count + "";
-                    double percentageEvacuated = ((double)EvacuatedPeopleList.Count) / ((double)PeopleList.Count) * 100;
+                    double percentageEvacuated = ((double)EvacuatedPeopleList.Count) / PeopleList.Count * 100;
                     PersonsEvacuatedProgressBarText.Text = Math.Round(percentageEvacuated, 2) + "%";
                 }
             }

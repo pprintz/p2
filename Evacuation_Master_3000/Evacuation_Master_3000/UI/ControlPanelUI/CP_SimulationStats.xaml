@@ -43,20 +43,21 @@
                         </GroupItem>
                     </StackPanel>
                 </GroupItem>
-                <GroupItem Name="TimeElapsedInEvacuationGroup">
+                <GroupItem x:Name="TimeElapsedInEvacuationGroup" Height="19">
                     <DockPanel>
-                        <TextBlock Name="TimeElapsedText" Text="Time elapsed: "/>
-                        <TextBlock Name="TimeElapsedInDateTimeFormat" HorizontalAlignment="Right" Text="00:00:05"/>
+                        <TextBlock x:Name="TimeElapsedText" Text="Time elapsed: "/>
+                        <TextBlock x:Name="TimeElapsedInDateTimeFormat" HorizontalAlignment="Right" Text="00:00:05"/>
                         <!--TimeSpan time = TimeSpan.FromSeconds(seconds);
-
 //here backslash is must to tell that colon is
 //not the part of format, it just a character that we want in output
 string str = time .ToString(@"hh\:mm\:ss\:fff");-->
                     </DockPanel>
                 </GroupItem>
+                <TextBlock x:Name="TicksElapsed" HorizontalAlignment="Right" Text="0"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Debug information" Name="DebugInformationGroupBox">
+        <GroupBox Header="Statistics" Name="StatisticsGroupBox" Height="74">
+            <TextBlock Name="StatisticsTextbox" HorizontalAlignment="Right" Text="##" Margin="0,0,0.2,0.2" Width="134"/>
         </GroupBox>
     </StackPanel>
 </UserControl>

@@ -7,5 +7,6 @@
         Tile Position { get; set; } // Should be private set
         bool Evacuated { get; set; } // Should be private set
         int CurrentRoom { get; set; }
+        int AmountOfTicksSpent { get; set; }
         }
 }

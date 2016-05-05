@@ -83,6 +83,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controller.cs" />
+    <Compile Include="Data\DataSimulationStatistics\MovementStep.cs" />
     <Compile Include="ImageScan\CP_ImageScanpicture.xaml.cs">
       <DependentUpon>CP_ImageScanpicture.xaml</DependentUpon>
     </Compile>

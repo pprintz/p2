@@ -41,7 +41,7 @@ namespace Evacuation_Master_3000
             RadioButton radioButton = sender as RadioButton;
 
             Tile.Types type;
-            Enum.TryParse(radioButton.Tag.ToString(), out type);
+            Enum.TryParse(radioButton?.Tag.ToString(), out type);
             TileType = type;
         }
 

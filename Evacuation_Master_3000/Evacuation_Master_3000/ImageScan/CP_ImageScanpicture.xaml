@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Evacuation_Master_3000.ImageScan.CP_ImageScanpicture"
+﻿<UserControl x:Class="Evacuation_Master_3000.ImageScan.CP_ImageScanPicture"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

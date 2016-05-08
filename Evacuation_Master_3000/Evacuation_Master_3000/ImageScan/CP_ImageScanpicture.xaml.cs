@@ -1,81 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Evacuation_Master_3000.UI.ControlPanelUI;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Runtime.Remoting.Channels;
-using System.Windows.Shapes;
 
 namespace Evacuation_Master_3000.ImageScan
 {
     /// <summary>
-    /// Interaction logic for CP_ImageScanpicture.xaml
+    /// Interaction logic for CP_ImageScanPicture.xaml
     /// </summary>
-    public partial class CP_ImageScanpicture : UserControl
+    public partial class CP_ImageScanPicture
     {
 
         private static Bitmap _theImage;
-        public double[,] _pixels;
-        private int maxWidth = 1000;
-        private int maxHeight = 1000;
-        private bool _applySobelFilter = false;
-        public bool applySobelFilter
+        public double[,] Pixels;
+        private readonly int _maxWidth = 300;
+        private readonly int _maxHeight = 300;
+        public bool _sobelFilterActivated;
+        public bool SobelFilterActivated
         {
-            get { return _applySobelFilter; }
+            get { return _sobelFilterActivated; }
             set
             {
-                _applySobelFilter = value;
-                ApplySobelFilter();
+                _sobelFilterActivated = value;
+                if(value)
+                    ApplySobelFilter();
             }
         }
-        public double threshold;
+        public double Threshold;
       
-
-
-
-        public CP_ImageScanpicture(ImageScanWindow parentWindow, string imageFilePath)
+        public CP_ImageScanPicture(ImageScanWindow parentWindow, string imageFilePath)
         {
             InitializeComponent();
             ParentWindow = parentWindow;
-            ImageToGridMethod( imageFilePath, maxWidth, maxHeight, applySobelFilter);
+            ImageToGridMethod(imageFilePath);
             Console.WriteLine(imageFilePath);
-            threshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
+            Threshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
         }
 
         private ImageScanWindow ParentWindow { get; }
-        public void ImageToGridMethod(string imageFilePath, int maxWidth, int maxHeight, bool applySobelFilter)
+
+        private void ImageToGridMethod(string imageFilePath)
         {
             if (!File.Exists(imageFilePath))
             {
                 throw new FileNotFoundException();
             }
-            _theImage = ResizeIfNecessary(new Bitmap(imageFilePath), maxWidth, maxHeight);
+            _theImage = ResizeIfNecessary(new Bitmap(imageFilePath), _maxWidth, _maxHeight);
 
             width = _theImage.Width;
             height = _theImage.Height;
 
-            _pixels = ConvertImageToGrayscale(_theImage);
+            Pixels = ConvertImageToGrayscale(_theImage);
 
             CreateVisualRepresentation();
-            // CreateGridFile(gridFilePath, header, description, contrastTurnOver, _pixels, _theImage.Width, _theImage.Height);
+            //CreateGridFile(, Pixels, _theImage.Width, _theImage.Height);
+            //CreateGridFile("lolo123.grid", "header1", "desc", 100, Pixels, width, height);
         }
 
-        public int width { get; set; }
-        public int height { get; set; }
+        private int width { get; set; }
+        private int height { get; set; }
 
         private void CreateVisualRepresentation()
         {
@@ -91,7 +78,7 @@ namespace Evacuation_Master_3000.ImageScan
                         Width = 10,
                         Tag = coords,
                         Fill =
-                            _pixels[y, x] >= threshold
+                            Pixels[y, x] >= threshold
                                 ? new SolidColorBrush(Colors.Yellow)
                                 : new SolidColorBrush(Colors.Black)
                     };
@@ -103,11 +90,11 @@ namespace Evacuation_Master_3000.ImageScan
 
         public void ContrastChanger(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            //_pixels += ParentWindow.CpImageScanControls.ContrastSlider
+            //Pixels += ParentWindow.CpImageScanControls.ContrastSlider
         }
 
 
-        private Bitmap ResizeIfNecessary(Bitmap theImage, double maxWidth, double maxHeight)
+        private static Bitmap ResizeIfNecessary(Bitmap theImage, double maxWidth, double maxHeight)
         {
             double imageWidth = theImage.Width;
             double imageHeight = theImage.Height;
@@ -123,9 +110,9 @@ namespace Evacuation_Master_3000.ImageScan
             return theImage;
         }
 
-        private Bitmap ResizeImage(System.Drawing.Image image, int width, int height)
+        private static Bitmap ResizeImage(System.Drawing.Image image, int width, int height)
         {
-            var destRect = new System.Drawing.Rectangle(0, 0, width, height);
+            var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 
             destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
@@ -147,7 +134,7 @@ namespace Evacuation_Master_3000.ImageScan
             return destImage;
         }
 
-        private double[,] ConvertImageToGrayscale(Bitmap image)
+        private static double[,] ConvertImageToGrayscale(Bitmap image)
         {
             double[,] pixels = new double[image.Height, image.Width];
             for (int y = 0; y < image.Height; y++)
@@ -172,16 +159,24 @@ namespace Evacuation_Master_3000.ImageScan
             {
                 for (int x = 1; x < width - 1; x++)
                 {
-                    double edgeVertical = _pixels[y + 1, x - 1] + 2 * _pixels[y + 1, x] + _pixels[y + 1, x + 1] -
-                        (_pixels[y - 1, x - 1] + 2 * _pixels[y - 1, x] + _pixels[y - 1, x + 1]);
+                    double a = Pixels[y - 1, x - 1],
+                        b = Pixels[y - 1, x],
+                        c = Pixels[y - 1, x + 1],
+                        d = Pixels[y, x - 1],
+                        e = Pixels[y, x + 1],
+                        f = Pixels[y + 1, x - 1],
+                        g = Pixels[y + 1, x],
+                        h = Pixels[y + 1, x + 1];
 
-                    double edgeHorizontal = _pixels[y - 1, x + 1] + 2 * _pixels[y, x + 1] + _pixels[y + 1, x + 1] -
-                        (_pixels[y - 1, x - 1] + _pixels[y, x - 1] + _pixels[y + 1, x - 1]);
+
+                    double edgeVertical = (f + 2 * g + h) -(a + 2*b + c);
+
+                    double edgeHorizontal = (a + 2*d + f) - (c + 2 * e + h);
 
                     localPixelSet[y, x] = Math.Sqrt(Math.Pow(edgeVertical, 2) + Math.Pow(edgeHorizontal, 2));
                 }
             }
-            _pixels = localPixelSet;
+            Pixels = localPixelSet;
 
             foreach (var rect in BuildingBlockContainer.Children)
             {
@@ -189,13 +184,15 @@ namespace Evacuation_Master_3000.ImageScan
                 {
                     System.Windows.Shapes.Rectangle rectangle = rect as System.Windows.Shapes.Rectangle;
                     int[] coords = rectangle.Tag as int[];
-                    bool recolour = ParentWindow.CpImageScanPicture._pixels[coords[1], coords[0]] >=
-                                    ParentWindow.CpImageScanPicture.threshold;
-                    rectangle.Fill = recolour == true
-                        ? new SolidColorBrush(Colors.Green)
-                        : new SolidColorBrush(Colors.Red);
+                    bool recolour = ParentWindow.CpImageScanPicture.Pixels[coords[1], coords[0]] >=
+                                    ParentWindow.CpImageScanPicture.Threshold;
+                    if(SobelFilterActivated)
+                        rectangle.Fill = recolour ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red);
+                    else
+                    {
+                        rectangle.Fill = recolour ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Green);
+                    }
                 }
-                ;
             }
 
         }
@@ -208,36 +205,17 @@ namespace Evacuation_Master_3000.ImageScan
                 {
                     System.Windows.Shapes.Rectangle rectangle = rect as System.Windows.Shapes.Rectangle;
                     int[] coords = rectangle.Tag as int[];
-                    bool recolour = ParentWindow.CpImageScanPicture._pixels[coords[1], coords[0]] >=
-                                    ParentWindow.CpImageScanPicture.threshold;
-                    rectangle.Fill = recolour == true
-                        ? new SolidColorBrush(Colors.Green)
-                        : new SolidColorBrush(Colors.Red);
+                    if (coords != null)
+                    {
+                        bool recolour = ParentWindow.CpImageScanPicture.Pixels[coords[1], coords[0]] >=
+                                   ParentWindow.CpImageScanPicture.Threshold;
+                        rectangle.Fill = recolour ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red);
+                    }
+                   
                 }
-                ;
             }
         }
-
-
-
-        //private void asjdkdfjk()
-        //{
-        //    double[,] localPixelSet = new double[height, width];
-        //    for (int y = 1; y < height - 1; y++)
-        //    {
-        //        for (int x = 1; x < width - 1; x++)
-        //        {
-        //            double edgeVertical = _pixels[y + 1, x - 1] + 2 * _pixels[y + 1, x] + _pixels[y + 1, x + 1] -
-        //                (_pixels[y - 1, x - 1] + 2 * _pixels[y - 1, x] + _pixels[y - 1, x + 1]);
-
-        //            double edgeHorizontal = _pixels[y - 1, x + 1] + 2 * _pixels[y, x + 1] + _pixels[y + 1, x + 1] -
-        //                (_pixels[y - 1, x - 1] + _pixels[y, x - 1] + _pixels[y + 1, x - 1]);
-
-        //            localPixelSet[y, x] = Math.Sqrt(Math.Pow(edgeVertical, 2) + Math.Pow(edgeHorizontal, 2));
-        //        }
-        //    }
-        //    _pixels = localPixelSet;
-        //}
+            
 
         /// <summary>
         /// Creates a new .grid file based on the given input image.
@@ -246,16 +224,16 @@ namespace Evacuation_Master_3000.ImageScan
         /// <param name="header">Header / title</param>
         /// <param name="description"></param>
         /// <param name="contrastTurnOver">The RGB value (0 - 255) where it differentiates between a wall or free. 100 seems to do the trick.</param>
-        private void CreateGridFile(string filePath, string header, string description, int contrastTurnOver, double[,] pixels, int imageWidth, int imageHeight)
+        public void CreateGridFile(string filePath, string header, string description, int contrastTurnOver)
         {
             StringBuilder gridFileText = new StringBuilder();
-            gridFileText.Append($"<Settings>{Environment.NewLine}<Width>{imageWidth}</Width>{Environment.NewLine}<Height>{imageHeight}</Height>{Environment.NewLine}<Header>{header}</Header>{Environment.NewLine}<Description>{description}</Description>{Environment.NewLine}</Settings>{Environment.NewLine}<Grid>{Environment.NewLine}");
-            for (int x = 1; x < imageWidth; x++)
+            gridFileText.Append($"<Settings>{Environment.NewLine}<Width>{width}</Width>{Environment.NewLine}<Height>{height}</Height>{Environment.NewLine}<Header>{header}</Header>{Environment.NewLine}<Description>{description}</Description>{Environment.NewLine}</Settings>{Environment.NewLine}<Grid>{Environment.NewLine}");
+            for (int x = 1; x < width; x++)
             {
                 gridFileText.Append("<Row>");
-                for (int y = 1; y < imageHeight; y++)
+                for (int y = 1; y < height; y++)
                 {
-                    gridFileText.Append(pixels[y, x] < contrastTurnOver ? "3" : "0");
+                    gridFileText.Append(Pixels[y, x] < contrastTurnOver ? "3" : "0");
                 }
                 gridFileText.Append($"</Row>{Environment.NewLine}");
             }
@@ -271,14 +249,5 @@ namespace Evacuation_Master_3000.ImageScan
             }
         }
 
-
-
-        /// <summary>
-        /// Resize the image to the specified width and height.
-        /// </summary>
-        /// <param name="image">The image to resize.</param>
-        /// <param name="width">The width to resize to.</param>
-        /// <param name="height">The height to resize to.</param>
-        /// <returns>The resized image.</returns>
     }
 }

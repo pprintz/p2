@@ -17,7 +17,7 @@
                     <Button Name="calculateContrast" Tag="Free" Content="Calcalute contrast" Click="CalculateContrast_OnClick"/>
                 </StackPanel>
             </GroupBox>
-            <Button Name="DoneButtom" Content="Done" Margin="0,10" Click="DoneButtom_OnClick"/>
+            <Button Name="DoneButton" Content="Done" Margin="0,10" Click="DoneButton_OnClick"/>
 
 
         </StackPanel>

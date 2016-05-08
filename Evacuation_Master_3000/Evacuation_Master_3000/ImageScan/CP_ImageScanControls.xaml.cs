@@ -1,26 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Evacuation_Master_3000.ImageScan;
 
 namespace Evacuation_Master_3000.UI.ControlPanelUI
 {
     /// <summary>
     /// Interaction logic for CP_ImageScanControls.xaml
     /// </summary>
-    public partial class CP_ImageScanControls : UserControl
+    public partial class CP_ImageScanControls
     {
         public CP_ImageScanControls(ImageScanWindow parentWindow, string filepath)
         {
@@ -35,15 +24,15 @@ namespace Evacuation_Master_3000.UI.ControlPanelUI
 
         private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ParentWindow.CpImageScanPicture.threshold = ContrastSlider.Value;
+            ParentWindow.CpImageScanPicture.Threshold = ContrastSlider.Value;
             foreach (var rect in ParentWindow.CpImageScanPicture.BuildingBlockContainer.Children)
             {
                 if (rect is Rectangle)
                 {
                     Rectangle rectangle = rect as Rectangle;
                     int[] coords = rectangle.Tag as int[];
-                    bool recolour = ParentWindow.CpImageScanPicture._pixels[coords[1], coords[0]] >= ParentWindow.CpImageScanPicture.threshold;
-                    rectangle.Fill = recolour == true
+                    bool recolour = ParentWindow.CpImageScanPicture.Pixels[coords[1], coords[0]] >= ParentWindow.CpImageScanPicture.Threshold;
+                    rectangle.Fill = recolour
                         ? new SolidColorBrush(Colors.Blue)
                         : new SolidColorBrush(Colors.Green);
                 };
@@ -53,9 +42,9 @@ namespace Evacuation_Master_3000.UI.ControlPanelUI
 
 
 
-        private void DoneButtom_OnClick(object sender, RoutedEventArgs e)
+        private void DoneButton_OnClick(object sender, RoutedEventArgs e)
         {
-           // ParentWindow.CpImageScanPicture.CreateGridFile();
+           ParentWindow.CpImageScanPicture.CreateGridFile("fifi.grid", "head1", "desc", 100);
         }
 
         private void ContrastSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -67,7 +56,7 @@ namespace Evacuation_Master_3000.UI.ControlPanelUI
             //    {
             //        Rectangle rectangle = rect as Rectangle;
             //        int[] coords = rectangle.Tag as int[];
-            //        bool recolour = ParentWindow.CpImageScanPicture._pixels[coords[1], coords[0]] >=
+            //        bool recolour = ParentWindow.CpImageScanPicture.Pixels[coords[1], coords[0]] >=
             //                        ParentWindow.CpImageScanPicture.threshold;
             //        rectangle.Fill = recolour == true
             //            ? new SolidColorBrush(Colors.Blue)
@@ -80,27 +69,35 @@ namespace Evacuation_Master_3000.UI.ControlPanelUI
 
         private void CalculateContrast_OnClick(object sender, RoutedEventArgs e)
         {
-            ParentWindow.CpImageScanPicture.threshold = ContrastSlider.Value;
+            ParentWindow.CpImageScanPicture.Threshold = ContrastSlider.Value;
             foreach (var rect in ParentWindow.CpImageScanPicture.BuildingBlockContainer.Children)
             {
                 if (rect is Rectangle)
                 {
                     Rectangle rectangle = rect as Rectangle;
                     int[] coords = rectangle.Tag as int[];
-                    bool recolour = ParentWindow.CpImageScanPicture._pixels[coords[1], coords[0]] >=
-                                    ParentWindow.CpImageScanPicture.threshold;
-                    rectangle.Fill = recolour == true
-                        ? new SolidColorBrush(Colors.White)
-                        : new SolidColorBrush(Colors.Black);
+                    bool recolour = ParentWindow.CpImageScanPicture.Pixels[coords[1], coords[0]] >=
+                                    ParentWindow.CpImageScanPicture.Threshold;
+                    if (ParentWindow.CpImageScanPicture.SobelFilterActivated)
+                        rectangle.Fill = recolour
+                            ? new SolidColorBrush(Colors.Black)
+                            : new SolidColorBrush(Colors.White);
+                    else
+                    {
+                        rectangle.Fill = recolour ? new SolidColorBrush(Colors.White) : new SolidColorBrush(Colors.Black);
+                    }
                 }
-                ;
+                
             }
         }
 
         private void MakeFree_OnClick(object sender, RoutedEventArgs e)
         {
             CheckBox chbox = sender as CheckBox;
-            ParentWindow.CpImageScanPicture.applySobelFilter = (bool) chbox.IsChecked;
+            if(chbox?.IsChecked != null)
+                ParentWindow.CpImageScanPicture.SobelFilterActivated = (bool) chbox.IsChecked;
+            // else
+                // throw some exception?
         }
     }
 }

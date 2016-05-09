@@ -2,24 +2,30 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Evacuation_Master_3000.UI.ControlPanelUI"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" >
-    
+
     <GroupBox Header="Change block">
         <StackPanel>
-
-            <CheckBox x:Name="MakeFree" Tag="Free" Content="Detect edges" Margin="0,10" Click="MakeFree_OnClick"/>
-            <TextBox x:Name="FilePathTextbox"/>
-            <GroupBox Header="Contrast">
+            
+            <GroupBox Header="Options">
                 <StackPanel>
-                    <Slider Minimum="0" Maximum="255" ValueChanged="ContrastSlider_OnValueChanged" x:Name="ContrastSlider" Margin="0, 10" />
-                    <Button Name="calculateContrast" Tag="Free" Content="Calcalute contrast" Click="CalculateContrast_OnClick"/>
+                    <TextBlock>Contrast:</TextBlock>
+                    <Slider Minimum="0" Maximum="255" Value="100" x:Name="ContrastSlider" Margin="0, 10" />
+                    <CheckBox x:Name="EdgeDetection" Tag="Edge" Content="Detect edges" Margin="0,10" Click="OnSobelFilterCheckboxChange"/>
+                    <Button Name="btnVisualize" Tag="Visualize" Margin="0, 10, 0, 0" Content="Visualize" Click="OnChangeInVisualsRequested"/>
+
                 </StackPanel>
             </GroupBox>
-            <Button Name="DoneButton" Content="Done" Margin="0,10" Click="DoneButton_OnClick"/>
-
-
+            
+           
+            <GroupBox Header="Saving">
+                <StackPanel>
+                    <TextBlock>FilePath</TextBlock>
+                    <TextBox x:Name="FilePathTextbox"/>
+                    <Button Name="BtnSave" Content="Save" Margin="0, 10" Click="OnSaveButtonClicked"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </GroupBox>
 

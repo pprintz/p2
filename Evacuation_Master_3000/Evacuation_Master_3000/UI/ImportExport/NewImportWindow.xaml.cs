@@ -94,11 +94,10 @@ namespace Evacuation_Master_3000 {
 
         private void BrowseImages(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog open = new OpenFileDialog { Filter = "PNG files|*.png"  };
+            OpenFileDialog open = new OpenFileDialog();
             if (open.ShowDialog() == true)
             {
-                ImageScanWindow Imagescanner = new ImageScanWindow(open.FileName);
-
+                new ImageScanWindow(open.FileName);
                 
                 ParentWindow.TheUserInterface.ImportFloorPlan(open.FileName);
                 OnSucces();

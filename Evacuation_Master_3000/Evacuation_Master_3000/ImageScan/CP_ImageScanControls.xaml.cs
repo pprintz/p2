@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -16,88 +17,31 @@ namespace Evacuation_Master_3000.UI.ControlPanelUI
             InitializeComponent();
             FilePathTextbox.Text = System.IO.Path.GetFileNameWithoutExtension(filepath) + ImportExportSettings.Extension;
             ParentWindow = parentWindow;
-            ContrastSlider.MouseLeftButtonUp += OnMouseLeftButtonUp;
-            ContrastSlider.ValueChanged += ContrastSlider_OnValueChanged;
+            ContrastSlider.MouseLeftButtonUp += OnChangeInVisualsRequested;
         }
 
         private ImageScanWindow ParentWindow { get; }
 
-        private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void OnChangeInVisualsRequested(object sender, EventArgs e)
         {
-            ParentWindow.CpImageScanPicture.Threshold = ContrastSlider.Value;
-            foreach (var rect in ParentWindow.CpImageScanPicture.BuildingBlockContainer.Children)
-            {
-                if (rect is Rectangle)
-                {
-                    Rectangle rectangle = rect as Rectangle;
-                    int[] coords = rectangle.Tag as int[];
-                    bool recolour = ParentWindow.CpImageScanPicture.Pixels[coords[1], coords[0]] >= ParentWindow.CpImageScanPicture.Threshold;
-                    rectangle.Fill = recolour
-                        ? new SolidColorBrush(Colors.Blue)
-                        : new SolidColorBrush(Colors.Green);
-                };
-            }
+            ParentWindow.CpImageScanPicture.CreateOrUpdateVisualRepresentation();
         }
 
 
-
-
-        private void DoneButton_OnClick(object sender, RoutedEventArgs e)
+        private void OnSaveButtonClicked(object sender, RoutedEventArgs e)
         {
-           ParentWindow.CpImageScanPicture.CreateGridFile("fifi.grid", "head1", "desc", 100);
+           ParentWindow.CpImageScanPicture.CreateGridFile(ParentWindow.CpImageScanControls.FilePathTextbox.Text, "", "", (int)Math.Round(ParentWindow.CpImageScanControls.ContrastSlider.Value));
         }
 
-        private void ContrastSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            //ParentWindow.CpImageScanPicture.threshold = ContrastSlider.Value;
-            //foreach (var rect in ParentWindow.CpImageScanPicture.BuildingBlockContainer.Children)
-            //{
-            //    if (rect is Rectangle)
-            //    {
-            //        Rectangle rectangle = rect as Rectangle;
-            //        int[] coords = rectangle.Tag as int[];
-            //        bool recolour = ParentWindow.CpImageScanPicture.Pixels[coords[1], coords[0]] >=
-            //                        ParentWindow.CpImageScanPicture.threshold;
-            //        rectangle.Fill = recolour == true
-            //            ? new SolidColorBrush(Colors.Blue)
-            //            : new SolidColorBrush(Colors.Green);
-            //    }
-            //    ;
-            //}
-        }
-
-
-        private void CalculateContrast_OnClick(object sender, RoutedEventArgs e)
-        {
-            ParentWindow.CpImageScanPicture.Threshold = ContrastSlider.Value;
-            foreach (var rect in ParentWindow.CpImageScanPicture.BuildingBlockContainer.Children)
-            {
-                if (rect is Rectangle)
-                {
-                    Rectangle rectangle = rect as Rectangle;
-                    int[] coords = rectangle.Tag as int[];
-                    bool recolour = ParentWindow.CpImageScanPicture.Pixels[coords[1], coords[0]] >=
-                                    ParentWindow.CpImageScanPicture.Threshold;
-                    if (ParentWindow.CpImageScanPicture.SobelFilterActivated)
-                        rectangle.Fill = recolour
-                            ? new SolidColorBrush(Colors.Black)
-                            : new SolidColorBrush(Colors.White);
-                    else
-                    {
-                        rectangle.Fill = recolour ? new SolidColorBrush(Colors.White) : new SolidColorBrush(Colors.Black);
-                    }
-                }
-                
-            }
-        }
-
-        private void MakeFree_OnClick(object sender, RoutedEventArgs e)
+        private void OnSobelFilterCheckboxChange(object sender, RoutedEventArgs e)
         {
             CheckBox chbox = sender as CheckBox;
-            if(chbox?.IsChecked != null)
+            if (chbox?.IsChecked != null)
                 ParentWindow.CpImageScanPicture.SobelFilterActivated = (bool) chbox.IsChecked;
-            // else
-                // throw some exception?
+            else
+            {
+                throw new GeneralInternalException($"{sender} can not be connected to this function. Only checkboxes are allowed.");
+            }
         }
     }
 }

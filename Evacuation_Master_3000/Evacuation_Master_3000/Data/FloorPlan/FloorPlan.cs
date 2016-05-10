@@ -141,8 +141,11 @@ namespace Evacuation_Master_3000
             }
             foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == 100))
             {
-                Console.WriteLine("HELLO ITS ME ");
-                connectedStair.Priority = 42;
+                connectedStair.Priority = connectedStair.Z * 1000;
+                if (connectedStair.Z == 0)
+                {
+                    connectedStair.Priority = 0;
+                }
                 SetExitAndStairPriority(connectedStair, doorlist);
             }
 
@@ -180,7 +183,6 @@ namespace Evacuation_Master_3000
                                                                             t.Type == Tile.Types.Person ||
                                                                             t.Type == Tile.Types.Stair).ToList();
             priorityCounter++;
-            BuildingBlock current = null;
             var currentList =
                 door.BNeighbours.Where(
                     n =>

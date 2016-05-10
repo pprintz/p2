@@ -18,6 +18,7 @@ namespace Evacuation_Master_3000
         }
 
         public Types Type { get; set; }
+
         public Types OriginalType { get; set; }
         public int X { get; }
         public int Y { get; }

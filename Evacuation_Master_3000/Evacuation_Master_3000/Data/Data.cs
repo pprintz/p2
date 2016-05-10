@@ -19,6 +19,8 @@ namespace Evacuation_Master_3000
             AllPeople = new Dictionary<int, Person>();
             //Person.OnPersonMoved += Statistics?
         }
+
+
         public IFloorPlan TheFloorPlan { get; private set; }
         public Dictionary<int, Person> AllPeople { get; set; }
         public event PersonMoved OnSendPersonMoved;
@@ -27,49 +29,54 @@ namespace Evacuation_Master_3000
         {
             return AllPeople.Values.Where(predicate.Invoke);
         }
+
+        public static bool SimulationStart = true;
         public Dictionary<int, Person> StartSimulation(IFloorPlan floorPlan, bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)
         {
-            TheFloorPlan.Initiate();
-            foreach (Tile tile in floorPlan.Tiles.Values)
+            if (SimulationStart)
             {
-                tile.OriginalType = tile.Type;
-            }
-            foreach (BuildingBlock tile in TheFloorPlan.Tiles.Values.Where(t => t.Type == Tile.Types.Person).Cast<BuildingBlock>())
-            {
-                Person current = new Person(tile, tickLength);
-                if (!AllPeople.ContainsKey(current.ID))
+                TheFloorPlan.Initiate();
+                foreach (Tile tile in floorPlan.Tiles.Values)
                 {
-                    AllPeople.Add(current.ID, current);
+                    tile.OriginalType = tile.Type;
                 }
-            }
-            List<IEvacuateable> list = new List<IEvacuateable>(AllPeople.Values.ToList());
-            if (AllPeople != null)
-            {
-                _unevacuatedPeople.AddRange(AllPeople.Values);
-
-                foreach (Person person in AllPeople.Values)
+                foreach (BuildingBlock tile in TheFloorPlan.Tiles.Values.Where(t => t.Type == Tile.Types.Person).Cast<BuildingBlock>())
                 {
-                    person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                    //person.OnExtendedPathRequest += IPathfinding.
-                    person.PathList.AddRange(pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
-                    OnTick += person.ConditionalMove;
+                    Person current = new Person(tile, tickLength);
+                    if (!AllPeople.ContainsKey(current.ID))
+                    {
+                        AllPeople.Add(current.ID, current);
+                    }
                 }
-            }
+                if (AllPeople != null)
+                {
+                    _unevacuatedPeople.AddRange(AllPeople.Values);
 
-            while (_unevacuatedPeople.Count > 0)
+                    foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0))
+                    {
+                        person.OnPersonEvacuated += RemoveEvacuatedPerson;
+                        //person.OnExtendedPathRequest += IPathfinding.
+                        person.PathList.AddRange(pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
+                        OnTick += person.ConditionalMove;
+                    }
+                }
+                SimulationStart = false;
+            }
+            StartTicks();
+            return null;
+        }
+
+        public void StartTicks()
+        {
+            while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused)
             {
-                bool done = false;
                 Stopwatch stopWatch = Stopwatch.StartNew();
                 OnTick?.Invoke();
                 Yield(1);
                 stopWatch.Stop();
                 // unchecked throws an OverflowException if we've spent more than 600+ hours on one tick.
-                int elapsedMilliseconds = unchecked((int)stopWatch.ElapsedMilliseconds);
-                int millisecondsToWait = elapsedMilliseconds < tickLength
-                    ? tickLength - elapsedMilliseconds
-                    : 0;
             }
-            return null;
+
         }
         private void Yield(long ticks)
         {
@@ -81,7 +88,6 @@ namespace Evacuation_Master_3000
         }
         private void RemoveEvacuatedPerson(Person person)
         {
-            _unevacuatedPeople.Remove(person);
             OnTick -= person.ConditionalMove;
         }
 

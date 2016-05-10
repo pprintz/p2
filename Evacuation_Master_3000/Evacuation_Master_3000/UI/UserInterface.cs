@@ -12,6 +12,31 @@ namespace Evacuation_Master_3000
             TheMainWindow = new TheRealMainWindow(this);
         }
 
+        public static bool IsSimulationPaused = false;
+        public static bool HasSimulationEnded
+        {
+            set
+            {
+                if (value == true)
+                {
+                    OnSimulationEnd?.Invoke();
+                } 
+            }
+        }
+
+        public static bool ResetButtonClicked
+        {
+            set
+            {
+                if (value)
+                {
+                    OnReset?.Invoke();
+                }
+            }
+        }
+
+        public static event ResetClicked OnReset;
+        public static event SimulationEnd OnSimulationEnd;
         private TheRealMainWindow TheMainWindow { get; }
         public event UISimulationStart OnUISimulationStart;
         public event ImportFloorPlan OnImportFloorPlan;

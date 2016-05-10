@@ -30,9 +30,7 @@ namespace Evacuation_Master_3000
             controlPanelControl = new ControlPanel(this);
             simulationControlsControl = new SimulationControls(this);
             zoomControl = new Zoom(this);
-
             Closed += OnCloseWindow;
-
             SetupWindow();
         }
 

@@ -25,7 +25,18 @@ namespace Evacuation_Master_3000
         public FloorPlanVisualiser()
         {
             InitializeComponent();
-            Person.OnPersonMoved += UpdateVisualsOnEvacutableMoved;
+            Person.OnPersonMoved += UpdateVisualsOnEvacuatableMoved;
+            UserInterface.OnReset += UpdateVisualOnReset;
+        }
+
+        private void UpdateVisualOnReset()
+        {
+            foreach (Tile tile in localFloorPlan.Tiles.Values.Where(t => t.OriginalType != t.Type))
+            {
+                var rectangle = FloorContainer[tile.Z].Children.Cast<Rectangle>()
+                    .Single(c => Coordinate(tile) == c.Tag.ToString());
+                ColorizeBuildingBlock(rectangle, tile.OriginalType);
+            }
         }
 
         private IFloorPlan localFloorPlan { get; set; }
@@ -143,7 +154,8 @@ namespace Evacuation_Master_3000
 
 
         private static bool firstTime = true;
-        private void UpdateVisualsOnEvacutableMoved(Person person)
+
+        private void UpdateVisualsOnEvacuatableMoved(Person person)
         {
             if (firstTime)
             {
@@ -158,7 +170,6 @@ namespace Evacuation_Master_3000
             }
             BuildingBlock prev = person.PathList[person.stepsTaken - 1];
             BuildingBlock next = person.PathList[person.stepsTaken];
-            person.PersonInteractionStats.DistanceTraveled += (prev.DistanceTo(next))*0.40;
             foreach (Rectangle child in FloorContainer[prev.Z].Children.Cast<Rectangle>())
             {
                 if (child.Tag.ToString() == ImportExportSettings.Coordinate(prev))
@@ -176,10 +187,10 @@ namespace Evacuation_Master_3000
                 }
                 else if (child.Tag.ToString() == ImportExportSettings.Coordinate(next))
                 {
-                    if (next.OriginalType == Tile.Types.Exit)
+                    if (next.OriginalType == Tile.Types.Exit || next.OriginalType == Tile.Types.Stair)
                     {
-                        next.Type = Tile.Types.Exit;
-                        ColorizeBuildingBlock(child, Tile.Types.Exit);
+                        next.Type = next.OriginalType;
+                        ColorizeBuildingBlock(child, next.OriginalType);
                     }
                     else
                     {

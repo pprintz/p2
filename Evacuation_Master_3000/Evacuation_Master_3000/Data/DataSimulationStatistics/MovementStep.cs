@@ -8,14 +8,21 @@ namespace Evacuation_Master_3000
 {
     public class MovementStep
     {
-        public MovementStep(Tile sourceTile, Tile destinationTile)
+        public MovementStep(Person person, Tile sourceTile, Tile destinationTile)
         {
+            Person = person;
             SourceTile = sourceTile;
             DestinationTile = destinationTile;
             Distance = sourceTile.DistanceTo(destinationTile);
+            DistanceInMeters = Distance*0.40;
+            Person.PersonInteractionStats.DistanceTraveled += DistanceInMeters;
         }
+
+        public int TicksAtArrival { get; set; }
+        public Person Person { get; set; }
         public Tile SourceTile { get; set; }
         public Tile DestinationTile { get; set; }
         public double Distance { get; set; }
+        public double DistanceInMeters { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Evacuation_Master_3000.ImageScan;
 
 namespace Evacuation_Master_3000.UI.ControlPanelUI
 {

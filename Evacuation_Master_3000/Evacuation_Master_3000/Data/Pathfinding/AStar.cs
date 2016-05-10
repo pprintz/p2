@@ -37,6 +37,7 @@ namespace Evacuation_Master_3000
             List<BuildingBlock> exitList =
                 ListOfBuildingBlocks.Where(b => b.Type == BuildingBlock.Types.Exit)
                     .OrderBy(b => b.DistanceTo(person.Position)).ToList();
+
             person.CurrentRoom = (person.Position as BuildingBlock).Room;
             List<Tile> pathList = new List<Tile>();
             while ((person.Position as BuildingBlock).Type != Tile.Types.Exit)
@@ -49,7 +50,7 @@ namespace Evacuation_Master_3000
                 pathList.AddRange(GetPathFromSourceToDestinationAStar(person, dest));
                 if (dest.Type == Tile.Types.Stair)
                 {
-                    dest = dest.BNeighbours.First(n => n.Z != dest.Z);
+                    dest = dest.BNeighbours.First(n => n.Z < dest.Z);
                     person.Position = dest;
                     person.CurrentRoom = dest.Room;
                     dest = FindNextPathTarget(person);
@@ -59,7 +60,6 @@ namespace Evacuation_Master_3000
                 {
                     break;
                 }
-                BuildingBlock closestExit = exitList.OrderBy(e => e.DistanceTo(person.Position)).First();
                 if (dest.Priority % 2 == 0 && dest.Type == Tile.Types.Door)
                 {
                     person.Position =
@@ -72,6 +72,7 @@ namespace Evacuation_Master_3000
                     person.CurrentRoom = ((person.Position as BuildingBlock).Room);
                 }
             }
+            person.Position = pathList.First();
             return pathList.Distinct();
         }
 

@@ -6,7 +6,7 @@ namespace Evacuation_Master_3000
     {
         public DataSimulationStatistics(Person person)
         {
-            this._person = person;
+            MovementSteps = new List<MovementStep>();
         }
 
         public List<MovementStep> MovementSteps { get; set; }
@@ -14,7 +14,6 @@ namespace Evacuation_Master_3000
         {
             TicksWaited += ticksSpentTryingToMove;
         }
-        private Person _person;
         public double DistanceTraveled { get; set; }
         public int TicksWaited { get; set; }
     }

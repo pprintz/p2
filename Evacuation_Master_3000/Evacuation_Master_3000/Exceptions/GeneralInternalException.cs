@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Evacuation_Master_3000.UI.ControlPanelUI
+namespace Evacuation_Master_3000.ImageScan
 {
     public class GeneralInternalException : Exception
     {

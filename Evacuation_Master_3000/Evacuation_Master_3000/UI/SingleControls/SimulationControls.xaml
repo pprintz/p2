@@ -13,13 +13,13 @@
         </StackPanel.Resources>
         <GroupItem Name ="PreSimulationControls" Visibility="Visible">
             <StackPanel>
-                <Button Name="StartSimulationButton" Content="Start simulation"/>
+                <Button Name="StartSimulationButton" Content="Start simulation" Click="OnSimulationStartClick"/>
             </StackPanel>
         </GroupItem>
         <GroupItem Name="PostSimulationControls" Visibility="Collapsed">
             <StackPanel>
                 <DockPanel>
-                    <Button Name="AbortSimulationButton" Content="    Abort    "/>
+                    <Button Name="ResetSimulationButton" Content="    Reset    "/>
                     <Button Name="PauseSimulationButton" Content="Pause"/>
                 </DockPanel>
                 <GroupItem Name="StepByStepControls" Visibility="Collapsed">

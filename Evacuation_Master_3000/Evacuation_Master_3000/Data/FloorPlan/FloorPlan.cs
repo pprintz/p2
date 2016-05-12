@@ -132,20 +132,16 @@ namespace Evacuation_Master_3000
             IEnumerable<BuildingBlock> exitList =
                 BuildingBlocks.Values.Where(p => p.Type == BuildingBlock.Types.Exit);
             IEnumerable<BuildingBlock> connectedStairList =
-                BuildingBlocks.Values.Where(p => p.Type == BuildingBlock.Types.Stair && p.BNeighbours.Any(n => n.Z + 1 == p.Z || n.Z - 1 == p.Z));
+                BuildingBlocks.Values.Where(p => p.Type == BuildingBlock.Types.Stair && p.BNeighbours.Any(n => n.Z + 1 == p.Z));
 
             foreach (BuildingBlock exitBuildingBlock in exitList)
             {
                 exitBuildingBlock.Priority = 0;
                 SetExitAndStairPriority(exitBuildingBlock, doorlist);
             }
-            foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == 100))
+            foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == Int32.MaxValue).OrderBy(cs => cs.Z))
             {
-                connectedStair.Priority = connectedStair.Z * 1000;
-                if (connectedStair.Z == 0)
-                {
-                    connectedStair.Priority = 0;
-                }
+                connectedStair.Priority = 1000 * connectedStair.Z;
                 SetExitAndStairPriority(connectedStair, doorlist);
             }
 
@@ -211,7 +207,7 @@ namespace Evacuation_Master_3000
                         foreach (
                             BuildingBlock block in
                                 tileList.Where(b => b.BNeighbours.Any(n => n.Priority == priorityCounter && n.Z == b.Z) &&
-                                                    b.Priority > priorityCounter ))
+                                                    b.Priority > priorityCounter))
                         {
                             block.Priority = priorityCounter;
                             if (block.Room == 0)

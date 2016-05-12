@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,7 +26,10 @@ namespace Evacuation_Master_3000
             {
                 targetPriority = ((person.Position as BuildingBlock).Priority - 1);
             }
-
+            if (person.Position.Type == Tile.Types.Stair && targetPriority != 0)
+            {
+                targetPriority += 2;
+            }
             return ListOfBuildingBlocks.Where(
                  b =>
                     b.Priority == targetPriority && b.Z == person.Position.Z &&
@@ -42,7 +46,7 @@ namespace Evacuation_Master_3000
             List<Tile> pathList = new List<Tile>();
             while ((person.Position as BuildingBlock).Type != Tile.Types.Exit)
             {
-                if ((person.Position as BuildingBlock).Priority == 100)
+                if ((person.Position as BuildingBlock).Priority == Int32.MaxValue)
                 {
                     throw new PersonException();
                 }

@@ -14,7 +14,7 @@ namespace Evacuation_Master_3000
             SourceTile = sourceTile;
             DestinationTile = destinationTile;
             Distance = sourceTile.DistanceTo(destinationTile);
-            DistanceInMeters = Distance*0.40;
+            DistanceInMeters = Distance * 0.40;
             Person.PersonInteractionStats.DistanceTraveled += DistanceInMeters;
         }
 
@@ -23,6 +23,12 @@ namespace Evacuation_Master_3000
         public Tile SourceTile { get; set; }
         public Tile DestinationTile { get; set; }
         public double Distance { get; set; }
-        public double DistanceInMeters { get; set; }
+
+        private double _distanceMeters;
+        public double DistanceInMeters
+        {
+            get { return Math.Round(_distanceMeters, 2); }
+            set { _distanceMeters = value; }
+        }
     }
 }

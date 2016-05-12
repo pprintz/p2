@@ -29,7 +29,14 @@ namespace Evacuation_Master_3000 {
             Path = ImportExportSettings.GridDirectoryPath;
             WindowBaseHeight = Height;
             BrowseButton.Click += BrowseDirectory;
-            //ExportButton.Click += 
+            ExportButton.Click += ExportBuilding;
+
+            Export.OnExportFeedBack += OnExportFeedBack;
+            Closing += OnWindowClosing;
+        }
+
+        private void ExportBuilding(object sender, RoutedEventArgs e) {
+            ParentWindow.TheUserInterface.ExportFloorPlan(Path + "\\" + FileName + Extension);
         }
 
         private TheRealMainWindow ParentWindow { get; }
@@ -72,8 +79,20 @@ namespace Evacuation_Master_3000 {
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
             /* If the user pressed OK, change the path */
-            if (result == System.Windows.Forms.DialogResult.OK)
+            if (result == System.Windows.Forms.DialogResult.OK) 
                 Path = dialog.SelectedPath.ToString();
+        }
+
+        private void OnExportFeedBack(string message) {
+            Hide();
+        }
+
+        /* Cancels the Close-event when the window is closed. 
+        Instead of closing (and disposing) of the window we instead make it invisible.
+        This makes for faster loads of the window for future uses */
+        private void OnWindowClosing(object sender, CancelEventArgs e) {
+            e.Cancel = true;
+            Visibility = Visibility.Hidden;
         }
 
         public void OnShowWindow() {

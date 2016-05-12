@@ -7,8 +7,9 @@ namespace Evacuation_Master_3000
     {
         // Remember old path unless changes has been made <-- needs to be implemented
         private static int _idCounter = 1;
+        private static List<int> _idsInUse { get; } = new List<int>();
         public readonly List<BuildingBlock> PathList = new List<BuildingBlock>();
-        private double MovementSpeed { get; }
+        public double MovementSpeed { get; }
         public double MovementSpeedInMetersPerSecond { get; set; }
         private int ticksToWaitBeforeNextMove;
         private int ticksSpentWaiting;
@@ -42,18 +43,29 @@ namespace Evacuation_Master_3000
             }
         }
         public int ID { get; }
-        private double TickLength { get; }
+        public double TickLength { get; set; }
         public event ExtendedPathRequest OnExtendedPathRequest;
         private static Random rand = new Random();
-        public Person(BuildingBlock position, int tickLength)
-        {
-            ID = _idCounter++;
+        public Person(BuildingBlock position) : this(0, 0, position) { }
+        internal Person(int id, double movementSpeed, BuildingBlock position) {
+            if(id <= 0) { /* Negative or zero-valued id means this is a totally new person */ 
+                int newID;
+                do {
+                    newID = _idCounter++;
+                } while (_idsInUse.Contains(newID));
+                ID = newID;
+            } else { /* non-zeroed, positive value means this is an existing person */
+                if (_idsInUse.Contains(id))
+                    throw new PersonException($"A user with ID {id} already exists!");
+                else
+                    ID = id;
+            }
+
             PersonInteractionStats = new DataSimulationStatistics(this);
-            MovementSpeed = 5 + rand.NextDouble() * 10;
+            MovementSpeed = movementSpeed == 0 ? 5 + rand.NextDouble() * 10 : movementSpeed;
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;
             OriginalPosition = position;
-            TickLength = tickLength;
         }
 
 

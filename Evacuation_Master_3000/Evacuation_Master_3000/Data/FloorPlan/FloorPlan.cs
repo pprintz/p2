@@ -32,7 +32,7 @@ namespace Evacuation_Master_3000
             Height = height;
             FloorAmount = floorAmount;
             Description = description;
-            Headers = headers;
+            Headers = headers == null ? new string[FloorAmount] : headers;
 
             for (int z = 0; z < FloorAmount; z++)
             {

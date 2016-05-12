@@ -13,6 +13,7 @@ namespace Evacuation_Master_3000
         DataSimulationStatistics GetSimulationStatistics();
         IFloorPlan ImportFloorPlan(string fileName);
         IFloorPlan CreateFloorPlan(int width, int height, int floorAmount, string description);
+        IFloorPlan ExportFloorPlan(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople);
         // Maybe CreateOrImportFloorPlan doesn't need the standard values since the delegate has them.
     }
 }

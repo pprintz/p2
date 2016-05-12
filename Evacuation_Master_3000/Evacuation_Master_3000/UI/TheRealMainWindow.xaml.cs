@@ -19,8 +19,8 @@ namespace Evacuation_Master_3000
     /// </summary>
     public partial class TheRealMainWindow : Window
     {
-        public TheRealMainWindow(UserInterface userInterface)
-        {
+        public TheRealMainWindow(UserInterface userInterface) {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
 
             TheUserInterface = userInterface;
@@ -63,6 +63,11 @@ namespace Evacuation_Master_3000
             MainWindowGrid.Children.Add(zoomControl);
             Grid.SetColumn(zoomControl, 0);
             Grid.SetRow(zoomControl, 1);
+        }
+        
+        public void ShowWindow() {
+            Show();
+            importWindow.OnShowWindow(NewImportWindow.NewOrImport.New);
         }
     }
 }

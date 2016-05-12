@@ -16,18 +16,29 @@ namespace Evacuation_Master_3000
         {
             _unevacuatedPeople = new List<Person>();
             TheFloorPlan = new FloorPlan();
-            AllPeople = new Dictionary<int, Person>();
+            _allPeople = new Dictionary<int, Person>();
             //Person.OnPersonMoved += Statistics?
         }
 
 
         public IFloorPlan TheFloorPlan { get; private set; }
-        public Dictionary<int, Person> AllPeople { get; set; }
+        private Dictionary<int, Person> _allPeople;
+        public Dictionary<int, Person> AllPeople { get { return _allPeople; } }
         public event PersonMoved OnSendPersonMoved;
 
         public IEnumerable<Person> GetPeople(Predicate<Person> predicate)
         {
             return AllPeople.Values.Where(predicate.Invoke);
+        }
+
+        private Dictionary<int, Person> UpdatePeople(IFloorPlan floorPlan) {
+            foreach (BuildingBlock tile in TheFloorPlan.Tiles.Values.Where(t => t.Type == Tile.Types.Person).Cast<BuildingBlock>()) {
+                Person current = new Person(tile);
+                if (!AllPeople.ContainsKey(current.ID)) {
+                    AllPeople.Add(current.ID, current);
+                }
+            }
+            return AllPeople;
         }
 
         public static bool SimulationStart = true;
@@ -42,7 +53,7 @@ namespace Evacuation_Master_3000
                 }
                 foreach (BuildingBlock tile in TheFloorPlan.Tiles.Values.Where(t => t.Type == Tile.Types.Person).Cast<BuildingBlock>())
                 {
-                    Person current = new Person(tile, tickLength);
+                    Person current = new Person(tile);
                     if (!AllPeople.ContainsKey(current.ID))
                     {
                         AllPeople.Add(current.ID, current);
@@ -55,6 +66,7 @@ namespace Evacuation_Master_3000
                     foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0))
                     {
                         person.OnPersonEvacuated += RemoveEvacuatedPerson;
+                        person.TickLength = tickLength;
                         //person.OnExtendedPathRequest += IPathfinding.
                         person.PathList.AddRange(pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
                         OnTick += person.ConditionalMove;
@@ -102,12 +114,23 @@ namespace Evacuation_Master_3000
 
         public IFloorPlan ImportFloorPlan(string fileName)
         {
-            Import import = new Import(fileName);
-            IFloorPlan temporaryFloorPlan = CreateFloorPlan(import.Width, import.Height, import.FloorAmount, import.Description, import.Headers);
-            import.ImportFloorPlanSettings(temporaryFloorPlan /*, AllPeople*/); //AllPeople skal sendes med, så der kan tilføjes personer, hvis der er personer i det importerede grid!
+            BuildingInformationCollection buildingInformation = Import.ImportBuilding(fileName);
+            IFloorPlan temporaryFloorPlan = CreateFloorPlan(buildingInformation);
+            UpdatePeople(temporaryFloorPlan);
+            Import.EffectuateFloorPlanSettings(buildingInformation, ref temporaryFloorPlan, ref _allPeople);
             return temporaryFloorPlan;
         }
 
+        public IFloorPlan CreateFloorPlan(BuildingInformationCollection buildingInformation) {
+            string[] headers = new string[buildingInformation.Floors];
+            for(int currentFloor = 0; currentFloor < buildingInformation.Floors; currentFloor++) {
+                if (buildingInformation.FloorCollection[currentFloor] == null)
+                    continue;
+
+                headers[currentFloor] = buildingInformation.FloorCollection[currentFloor].Header;
+            }
+            return CreateFloorPlan(buildingInformation.Width, buildingInformation.Height, buildingInformation.Floors, buildingInformation.Description, headers);
+        }
 
         public IFloorPlan CreateFloorPlan(int width, int height, int floorAmount, string description)
         {
@@ -117,6 +140,12 @@ namespace Evacuation_Master_3000
         {
             TheFloorPlan.CreateFloorPlan(width, height, floorAmount, description, headers);
             return TheFloorPlan;
+        }
+
+        public IFloorPlan ExportFloorPlan(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople) {
+            Export.ExportBuilding(filePath, floorPlan, allPeople);
+            return TheFloorPlan;                                                                            ////<<<-------- OBS OBS OBS skal TheFloorPlan sættes til floorPlan (metode parameter)???
+
         }
 
         public void ResetData()

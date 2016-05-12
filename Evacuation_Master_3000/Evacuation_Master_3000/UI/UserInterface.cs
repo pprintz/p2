@@ -46,7 +46,7 @@ namespace Evacuation_Master_3000
         private Dictionary<int, Person> People { get; set; } = new Dictionary<int, Person>();
 
         public void Display() {
-            TheMainWindow.Show();
+            TheMainWindow.ShowWindow();
         }
 
         public void DisplayGeneralErrorMessage(string errorMessage) {
@@ -64,6 +64,11 @@ namespace Evacuation_Master_3000
 
         public void ImportFloorPlan(string filePath) {
             LocalFloorPlan = OnImportFloorPlan?.Invoke(filePath);
+            TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
+        }
+
+        public void ExportFloorPlan(string filePath) {
+            LocalFloorPlan = OnExportFloorPlan?.Invoke(filePath, LocalFloorPlan, People);
         }
 
         public void SimulationStart(bool showHeatMap, bool stepByStep, IPathfinding pathfinding, int milliseconds)

@@ -14,9 +14,11 @@ namespace Evacuation_Master_3000
     public delegate void ResetClicked();
     public delegate Dictionary<int, Person> UISimulationStart(IFloorPlan floorPlan, bool heatMapActive, bool stepByStep, IPathfinding pathfinding, int milliseconds);
     public delegate IFloorPlan ImportFloorPlan(string fileName);
-    public delegate IFloorPlan ExportFloorPlan(IFloorPlan floorPlan, string[] headers, string description, string fileName);
+    public delegate IFloorPlan ExportFloorPlan(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople);
     public delegate IFloorPlan NewFloorPlan(int width, int height, int floorAmount, string description);
     public delegate IFloorPlan RevertToPeopleStartPositions();
     public delegate void Tick();
     public delegate void ChangeVisualFloor(int currentFloor);
+    public delegate void ExportFloorPlanFeedBack(string message);
+    public delegate void ImportFloorPlanFeedBack();
 }

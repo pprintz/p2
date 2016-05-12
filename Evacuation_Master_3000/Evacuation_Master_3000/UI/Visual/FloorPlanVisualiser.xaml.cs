@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Evacuation_Master_3000.ImageScan;
 using static Evacuation_Master_3000.ImportExportSettings;
@@ -21,7 +14,7 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for FloorPlanVisualiser.xaml
     /// </summary>
-    public partial class FloorPlanVisualiser : UserControl
+    public partial class FloorPlanVisualiser
     {
         public FloorPlanVisualiser(TheRealMainWindow mainWindow)
         {  
@@ -175,7 +168,11 @@ namespace Evacuation_Master_3000
         {
             int deltaX = block.X - previousBlock.X;
             int deltaY = block.Y - previousBlock.Y;
-
+            if (deltaX == 0 && deltaY == 0)
+            {
+                // The same block has been pressed twice.
+                return;
+            }
             double deltaTilt = Math.Min(Math.Abs((double)deltaY / (double)deltaX), Math.Abs((double)deltaY)) * Math.Sign((double)deltaY / (double)deltaX);
             double tilt = 0;
 
@@ -227,7 +224,7 @@ namespace Evacuation_Master_3000
                     if (prev.OriginalType == Tile.Types.Person)
                     {
                         prev.Type = Tile.Types.Free;
-                        if (prev.HeatmapCounter > 0)
+                        if (_mainWindow.TheUserInterface.HeatMapActivated)
                             ColorRectangle(child, CalculateHeatMapColor(prev));
                         else
                             ColorizeBuildingBlock(child, Tile.Types.Free);
@@ -235,7 +232,7 @@ namespace Evacuation_Master_3000
                     else
                     {
                         prev.Type = prev.OriginalType;
-                        if (prev.HeatmapCounter > 0)
+                        if (_mainWindow.TheUserInterface.HeatMapActivated)
                             ColorRectangle(child, CalculateHeatMapColor(prev));
                         else
                             ColorizeBuildingBlock(child, prev.OriginalType);
@@ -261,39 +258,39 @@ namespace Evacuation_Master_3000
         /* Might need re-work - lavet QnD! */
         private void ColorizeBuildingBlock(Rectangle buildingBlockRepresentation, Tile.Types type)
         {
-            SolidColorBrush newColor;
+            Color newColor;
             switch (type)
             {
                 case Tile.Types.Free:
-                    newColor = new SolidColorBrush(Colors.White);
+                    newColor = Colors.White;
                     break;
                 case Tile.Types.Occupied:
-                    newColor = new SolidColorBrush(Colors.Green);
+                    newColor = Colors.Green;
                     break;
                 case Tile.Types.Furniture:
-                    newColor = new SolidColorBrush(Colors.Gray);
+                    newColor = Colors.Gray;
                     break;
                 case Tile.Types.Wall:
-                    newColor = new SolidColorBrush(Colors.Black);
+                    newColor = Colors.Black;
                     break;
                 case Tile.Types.Door:
-                    newColor = new SolidColorBrush(Colors.Pink);
+                    newColor = Colors.Pink;
                     break;
                 case Tile.Types.Exit:
-                    newColor = new SolidColorBrush(Colors.Blue);
+                    newColor =Colors.Blue;
                     break;
                 case Tile.Types.Person:
-                    newColor = new SolidColorBrush(Colors.Red);
+                    newColor = Colors.Red;
                     break;
                 case Tile.Types.Stair:
-                    newColor = new SolidColorBrush(Colors.BlueViolet);
+                    newColor = Colors.BlueViolet;
                     break;
                 default:
-                    newColor = new SolidColorBrush(Colors.BlanchedAlmond);
+                    newColor = Colors.BlanchedAlmond;
                     break;
             }
 
-            buildingBlockRepresentation.Fill = newColor;
+            ColorRectangle(buildingBlockRepresentation, newColor);
         }
 
         private void ColorRectangle(Rectangle rect, Color color)
@@ -303,14 +300,62 @@ namespace Evacuation_Master_3000
 
         private Color CalculateHeatMapColor(BuildingBlock block)
         {
+            // Stolen and modified from: http://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients
 
-            double value = Math.Max(block.HeatmapCounter / _mainWindow.TheUserInterface.LocalPeopleDictionary.Count, 1);
-            int aR = 0; int aG = 0; int aB = 255;  // RGB for our 1st color (blue in this case).
-            int bR = 255; int bG = 0; int bB = 0;    // RGB for our 2nd color (red in this case).
+            double value = Math.Min((double)block.HeatmapCounter / (double)_mainWindow.TheUserInterface.LocalPeopleDictionary.Count, 1.0);
+            int colorAmount = 4;
+            double[,] color =
+            {
+                {
+                    0,
+                    0,
+                    255
+                }
+                ,
+                {
+                    0,
+                    255,
+                    0
+                }
+                ,
+                {
+                    255,
+                    255,
+                    0
+                }
+                ,
+                {
+                    255,
+                    0,
+                    0
+                }
+            };
+            // A static array of 4 colors:  (blue,   green,  yellow,  red) using {r,g,b} for each.
 
-            double red = (bR - aR) * value + aR;      // Evaluated as -255*value + 255.
-            double green = (bG - aG) * value + aG;      // Evaluates as 0.
-            double blue = (bB - aB) * value + aB;
+            int idx1; // |-- Our desired color will be between these two indexes in "color".
+            int idx2; // |
+            double fractBetween = 0; // Fraction between "idx1" and "idx2" where our value is.
+
+            if (value <= 0)
+            {
+                idx1 = idx2 = 0;
+            } // accounts for an input <=0
+            else if (value >= 255)
+            {
+                idx1 = idx2 = colorAmount - 1;
+            } // accounts for an input >=0
+            else
+            {
+                value = value*(colorAmount - 1); // Will multiply value by 3.
+                idx1 = (int)Math.Floor(value); // Our desired color will be after this index.
+                idx2 = Math.Min(idx1 + 1, colorAmount-1); // ... and before this index (inclusive).
+                fractBetween = value - idx1; // Distance between the two indexes (0-1).
+            }
+
+
+            int red = (int)Math.Round((color[idx2,0] - color[idx1,0])*fractBetween + color[idx1,0]);
+            int green = (int)Math.Round((color[idx2,1] - color[idx1,1])*fractBetween + color[idx1,1]);
+            int blue = (int)Math.Round((color[idx2,2] - color[idx1,2])*fractBetween + color[idx1,2]);
             return new Color
             {
                 A = 255,

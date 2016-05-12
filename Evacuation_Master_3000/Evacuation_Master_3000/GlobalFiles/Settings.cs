@@ -1,6 +1,5 @@
 ﻿#region
 
-using System.Linq;
 using System.Windows.Input;
 
 #endregion

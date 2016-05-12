@@ -1,8 +1,3 @@
-using System;
-using System.Data;
-using System.Diagnostics.Eventing.Reader;
-using System.Windows.Forms;
-
 namespace Evacuation_Master_3000
 {
     public partial class Program

@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using static Evacuation_Master_3000.ImportExportSettings;
-
-namespace Evacuation_Master_3000
+﻿namespace Evacuation_Master_3000
 {
     //internal class Graph
     //{

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Evacuation_Master_3000
 {
@@ -17,7 +14,7 @@ namespace Evacuation_Master_3000
         {
             set
             {
-                if (value == true)
+                if (value)
                 {
                     OnSimulationEnd?.Invoke();
                 } 
@@ -46,6 +43,8 @@ namespace Evacuation_Master_3000
         private Dictionary<int, Person> People { get; set; } = new Dictionary<int, Person>();
         public IReadOnlyDictionary<int, Person> LocalPeopleDictionary => People;
         private bool _floorplanHasBeenCreated;
+
+        public bool HeatMapActivated { get; private set; }
 
         public void Display() {
             TheMainWindow.ShowWindow();
@@ -88,7 +87,7 @@ namespace Evacuation_Master_3000
         public void SimulationStart(bool showHeatMap, bool stepByStep, IPathfinding pathfinding, int milliseconds)
         {
             People = OnUISimulationStart?.Invoke(LocalFloorPlan, showHeatMap, stepByStep, pathfinding, milliseconds);
-            
+            HeatMapActivated = showHeatMap;
         }
 
         private void VisualizeFloorPlan() {

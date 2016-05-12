@@ -20,7 +20,6 @@ namespace Evacuation_Master_3000
             Person.OnPersonMoved += UpdateSimulationStats;
             Data.OnTick += UpdateTicksAndTime;
             UserInterface.OnReset += ResetPeopleAndSimulationInformation;
-
         }
 
         private void ResetPeopleAndSimulationInformation()

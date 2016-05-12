@@ -31,7 +31,7 @@ namespace Evacuation_Master_3000
 
         private void UpdatePeople(IFloorPlan floorPlan)
         {
-            foreach (BuildingBlock tile in TheFloorPlan.Tiles.Values.Where(t => t.Type == Tile.Types.Person).Cast<BuildingBlock>())
+            foreach (BuildingBlock tile in TheFloorPlan.Tiles.Values.Where(t => t.OriginalType == Tile.Types.Person).Cast<BuildingBlock>())
             {
                 Person current = new Person(tile);
                 if (!AllPeople.Values.Any(p => p.OriginalPosition == tile))
@@ -71,11 +71,11 @@ namespace Evacuation_Master_3000
             UpdatePeople(floorPlan);
             foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0))
             {
-                person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                person.TickLength = tickLength;
-                //person.OnExtendedPathRequest += IPathfinding.
-                person.PathList.AddRange(pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
-                person.Evacuated = false;
+                //person.OnPersonEvacuated += RemoveEvacuatedPerson;
+                //person.TickLength = tickLength;
+                ////person.OnExtendedPathRequest += IPathfinding.
+                //person.PathList.AddRange(pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
+                //person.Evacuated = false;
             }
             StartTicks();
             return AllPeople;

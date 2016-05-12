@@ -26,11 +26,19 @@ namespace Evacuation_Master_3000
 
         private void UpdateVisualOnReset()
         {
-            foreach (Tile tile in localFloorPlan.Tiles.Values.Where(t => t.OriginalType != t.Type))
+            foreach (BuildingBlock buildingBlock in localFloorPlan.Tiles.Values.Where(t => t.OriginalType != t.Type).Cast<BuildingBlock>())
             {
-                var rectangle = FloorContainer[tile.Z].Children.Cast<Rectangle>()
-                    .Single(c => Coordinate(tile) == c.Tag.ToString());
-                ColorizeBuildingBlock(rectangle, tile.OriginalType);
+                var rectangle = FloorContainer[buildingBlock.Z].Children.Cast<Rectangle>()
+                    .Single(c => Coordinate(buildingBlock) == c.Tag.ToString());
+                ColorizeBuildingBlock(rectangle, buildingBlock.OriginalType);
+            }
+            foreach (BuildingBlock buildingBlock in localFloorPlan.Tiles.Values.Cast<BuildingBlock>().Where(b => b.HeatmapCounter != 0))
+            {
+                buildingBlock.HeatmapCounter = 0;
+                Rectangle rectangle =
+                    FloorContainer[buildingBlock.Z].Children.Cast<Rectangle>()
+                        .Single(c => Coordinate(buildingBlock) == c.Tag.ToString());
+                ColorizeBuildingBlock(rectangle, buildingBlock.OriginalType);
             }
         }
 

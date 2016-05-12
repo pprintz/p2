@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Evacuation_Master_3000.ImageScan;
 using static Evacuation_Master_3000.ImportExportSettings;
 
 namespace Evacuation_Master_3000
@@ -148,14 +149,18 @@ namespace Evacuation_Master_3000
         {
             Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
             Rectangle senderRectangle = sender as Rectangle;                    //Get a reference to the sender rectangle
+            if (senderRectangle == null) throw new GeneralInternalException();
             BuildingBlock senderBlock = (BuildingBlock) localFloorPlan.Tiles[senderRectangle.Tag.ToString()];
 
             SetBlockType(senderBlock, type);
-            if (Keyboard.IsKeyDown(Key.LeftShift) && previousBlock != null)
+            if (Keyboard.IsKeyDown(Settings.LineToolKey))
             {
-                DrawLine(senderBlock,type);
+                if (previousBlock != null)
+                {
+                    DrawLine(senderBlock, type);
+                }
+                previousBlock = senderBlock;
             }
-            previousBlock = senderBlock;
         }
 
         private void SetBlockType(BuildingBlock block, Tile.Types targetType)
@@ -192,6 +197,11 @@ namespace Evacuation_Master_3000
                 tilt += deltaTilt * Math.Sign(deltaX);
                 i += Math.Sign(deltaX);
             } while (Math.Abs(i) < Math.Abs(deltaX));
+        }
+
+        public void LineToolReleased()
+        {
+            previousBlock = null;
         }
 
         private static bool firstTime = true;

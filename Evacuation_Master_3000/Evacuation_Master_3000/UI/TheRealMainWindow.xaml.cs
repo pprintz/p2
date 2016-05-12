@@ -64,10 +64,20 @@ namespace Evacuation_Master_3000
             Grid.SetColumn(zoomControl, 0);
             Grid.SetRow(zoomControl, 1);
         }
+
+        
         
         public void ShowWindow() {
             Show();
             importWindow.OnShowWindow(NewImportWindow.NewOrImport.New);
+        }
+
+        private void TheRealMainWindow_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.SystemKey == Settings.LineToolKey)
+            {
+                floorPlanVisualiserControl.LineToolReleased();
+            }
         }
     }
 }

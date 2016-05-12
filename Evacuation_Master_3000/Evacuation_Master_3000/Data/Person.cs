@@ -68,7 +68,7 @@ namespace Evacuation_Master_3000
             }
 
             PersonInteractionStats = new DataSimulationStatistics(this);
-            MovementSpeed = movementSpeed == 0 ? 5 + rand.NextDouble() * 10 : movementSpeed;
+            MovementSpeed = movementSpeed < 5 ? 5 + rand.NextDouble() * 10 : movementSpeed; // Less than 5 means that it was not created.
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;
             OriginalPosition = position;
@@ -138,7 +138,8 @@ namespace Evacuation_Master_3000
                 else
                 {
                     // Counts up the heatmapcounter for every "round" the person needs to wait before moving.
-                    if (ticksSpentWaiting % ticksToWaitBeforeNextMove == 0) ((BuildingBlock)Position).HeatmapCounter++;
+                    if (ticksSpentWaiting % ticksToWaitBeforeNextMove == 0)
+                        ((BuildingBlock)Position).HeatmapCounter++;
                     PersonInteractionStats.CountTicksBeingBlocked(ticksSpentWaiting);
 
                 }

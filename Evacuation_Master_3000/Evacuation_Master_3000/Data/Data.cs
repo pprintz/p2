@@ -80,7 +80,7 @@ namespace Evacuation_Master_3000
                 person.Evacuated = false;
             }
             StartTicks();
-            return null;
+            return AllPeople;
         }
         public void StartTicks()
         {

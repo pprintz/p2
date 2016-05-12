@@ -45,6 +45,7 @@ namespace Evacuation_Master_3000
         public IFloorPlan LocalFloorPlan { get; private set; }
         private Dictionary<int, Person> People { get; set; } = new Dictionary<int, Person>();
         public IReadOnlyDictionary<int, Person> LocalPeopleDictionary => People;
+        private bool _floorplanHasBeenCreated;
 
         public void Display() {
             TheMainWindow.ShowWindow();
@@ -58,9 +59,21 @@ namespace Evacuation_Master_3000
             throw new NotImplementedException();
         }
 
-        public void CreateFloorplan(int width, int height, int floorAmount, string description) {
-            LocalFloorPlan = OnNewFloorPlan?.Invoke(width, height, floorAmount, description);
-            TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
+        
+
+        public void CreateFloorplan(int width, int height, int floorAmount, string description)
+        {
+            if (!_floorplanHasBeenCreated)
+            {
+                LocalFloorPlan = OnNewFloorPlan?.Invoke(width, height, floorAmount, description);
+                TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
+                _floorplanHasBeenCreated = true;
+            }
+            else
+            {
+
+                System.Windows.MessageBox.Show("A building has already been made.");
+            }
         }
 
         public void ImportFloorPlan(string filePath) {

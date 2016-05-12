@@ -175,11 +175,8 @@ namespace Evacuation_Master_3000
         {
             int deltaX = block.X - previousBlock.X;
             int deltaY = block.Y - previousBlock.Y;
-            if (deltaX - deltaY == 0)
-            {
-                return;
-            }
-            double deltaTilt = Math.Min(Math.Abs((double)deltaY / (double)deltaX), Math.Abs(deltaY)) * Math.Sign((double)deltaY / (double)deltaX);
+
+            double deltaTilt = Math.Min(Math.Abs((double)deltaY / (double)deltaX), Math.Abs((double)deltaY)) * Math.Sign((double)deltaY / (double)deltaX);
             double tilt = 0;
 
             int i = 0;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Evacuation_Master_3000
@@ -14,7 +15,15 @@ namespace Evacuation_Master_3000
         {
             TicksWaited += ticksSpentTryingToMove;
         }
-        public double DistanceTraveled { get; set; }
+
+        private double _distanceTraveled;
+        public double DistanceTraveled
+        {
+            get { return Math.Round(_distanceTraveled, 2); }
+            set { _distanceTraveled = value; }
+        }
+
         public int TicksWaited { get; set; }
+        public double TimeWhenEvacuated;
     }
 }

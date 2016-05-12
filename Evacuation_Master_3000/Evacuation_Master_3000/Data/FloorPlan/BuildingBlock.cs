@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Shapes;
 using static Evacuation_Master_3000.ImportExportSettings;
 namespace Evacuation_Master_3000
 {
@@ -14,6 +15,7 @@ namespace Evacuation_Master_3000
         public BuildingBlock Parent { get; set; }
         public HashSet<BuildingBlock> BNeighbours = new HashSet<BuildingBlock>();
         public int HeatmapCounter { get; set; }
+        public Rectangle figure { get; set; }
         //Room info prop
 
         public int CompareTo(BuildingBlock other)

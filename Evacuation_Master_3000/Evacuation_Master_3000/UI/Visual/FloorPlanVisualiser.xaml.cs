@@ -97,6 +97,7 @@ namespace Evacuation_Master_3000
                             Tag = Coordinate(x, y, z) /* Makes binding rectangles to buildingblocks easier */
                         };
                         BuildingBlock current = (localFloorPlan.Tiles[Coordinate(x, y, z)] as BuildingBlock);
+                        current.figure = figure;
                         figure.ToolTip = current.Priority + " , " + current.Room;
                         figure.MouseLeftButtonDown += OnBuildingBlockClick;
                         container.Children.Add(figure);
@@ -141,17 +142,57 @@ namespace Evacuation_Master_3000
 
         public delegate Tile.Types BuildingBlockTypeFetch();
         public BuildingBlockTypeFetch OnBuildingBlockTypeFetch;
+        private BuildingBlock previousBlock;
 
         private void OnBuildingBlockClick(object sender, MouseButtonEventArgs e)
         {
             Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
-            Rectangle senderBuildingBlock = sender as Rectangle;                    //Get a reference to the sender rectangle
+            Rectangle senderRectangle = sender as Rectangle;                    //Get a reference to the sender rectangle
+            BuildingBlock senderBlock = (BuildingBlock) localFloorPlan.Tiles[senderRectangle.Tag.ToString()];
 
-            localFloorPlan.Tiles[senderBuildingBlock.Tag.ToString()].Type = type;   //Change the type of the BuildingBlock
-
-            ColorizeBuildingBlock(senderBuildingBlock, type);                       //Colorize the visual representation of the BuildingBlock
+            SetBlockType(senderBlock, type);
+            if (Keyboard.IsKeyDown(Key.LeftShift) && previousBlock != null)
+            {
+                DrawLine(senderBlock,type);
+            }
+            previousBlock = senderBlock;
         }
 
+        private void SetBlockType(BuildingBlock block, Tile.Types targetType)
+        {
+            block.Type = targetType;
+            ColorizeBuildingBlock(block.figure, targetType);
+        }
+
+        private void DrawLine(BuildingBlock block, Tile.Types targetType)
+        {
+            int deltaX = block.X - previousBlock.X;
+            int deltaY = block.Y - previousBlock.Y;
+            if (deltaX - deltaY == 0)
+            {
+                return;
+            }
+            double deltaTilt = Math.Min(Math.Abs((double)deltaY / (double)deltaX), Math.Abs(deltaY)) * Math.Sign((double)deltaY / (double)deltaX);
+            double tilt = 0;
+
+            int i = 0;
+            do
+            {
+                int j = 0;
+                do
+                {
+                    int x = i + previousBlock.X;
+                    int y = (int)(tilt) + previousBlock.Y + j;
+
+                    SetBlockType((BuildingBlock)localFloorPlan.Tiles[Coordinate(x,y,block.Z)],targetType);
+
+                    j += Math.Sign(deltaY);
+                } while (Math.Abs(j) < Math.Abs(deltaTilt));
+
+                tilt += deltaTilt * Math.Sign(deltaX);
+                i += Math.Sign(deltaX);
+            } while (Math.Abs(i) < Math.Abs(deltaX));
+        }
 
         private static bool firstTime = true;
 
@@ -161,10 +202,10 @@ namespace Evacuation_Master_3000
             {
                 foreach (UniformGrid uniformGrid in FloorContainer)
                 {
-                    foreach (var VARIABLE in uniformGrid.Children.Cast<Rectangle>())
+                    foreach (var rect in uniformGrid.Children.Cast<Rectangle>())
                     {
-                        BuildingBlock current = localFloorPlan.Tiles[VARIABLE.Tag.ToString()] as BuildingBlock;
-                        VARIABLE.ToolTip = current.Priority + " ," + current.Room;
+                        BuildingBlock current = localFloorPlan.Tiles[rect.Tag.ToString()] as BuildingBlock;
+                        rect.ToolTip = current.Priority + " ," + current.Room;
                     }
                 }
             }

@@ -44,7 +44,11 @@ namespace Evacuation_Master_3000
                 person.PersonInteractionStats.DistanceTraveled = 0;
                 person.PersonInteractionStats.MovementSteps.Clear();
                 person.PersonInteractionStats.TicksWaited = 0;
-                person.Evacuated = false;
+                if (person.Evacuated)
+                {
+                    person.Evacuated = false;
+                }
+                person.stepsTaken = 0;
             }
             ticks = -1;
             EvacuatedPeopleList.Clear();

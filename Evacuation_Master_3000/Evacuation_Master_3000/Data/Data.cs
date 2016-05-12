@@ -82,7 +82,6 @@ namespace Evacuation_Master_3000
             StartTicks();
             return null;
         }
-
         public void StartTicks()
         {
             while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused)

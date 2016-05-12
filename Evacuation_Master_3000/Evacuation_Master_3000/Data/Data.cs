@@ -73,6 +73,7 @@ namespace Evacuation_Master_3000
                     }
                 }
                 SimulationStart = false;
+                return AllPeople;
             }
             StartTicks();
             return null;

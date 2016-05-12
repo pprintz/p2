@@ -44,6 +44,7 @@ namespace Evacuation_Master_3000
         public event NewFloorPlan OnNewFloorPlan;
         public IFloorPlan LocalFloorPlan { get; private set; }
         private Dictionary<int, Person> People { get; set; } = new Dictionary<int, Person>();
+        public IReadOnlyDictionary<int, Person> LocalPeopleDictionary => People;
 
         public void Display() {
             TheMainWindow.ShowWindow();

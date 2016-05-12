@@ -9,7 +9,7 @@ namespace Evacuation_Master_3000
         public bool IsChecked { get; set; }
         public double LengthToDestination { get; set; }
         public int Room { get; set; }
-        public int Priority { get; set; } = 100;
+        public int Priority { get; set; } = Int32.MaxValue;
         public double LengthFromSource { get; set; } = double.MaxValue;
         public BuildingBlock Parent { get; set; }
         public HashSet<BuildingBlock> BNeighbours = new HashSet<BuildingBlock>();

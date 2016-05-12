@@ -131,7 +131,10 @@ namespace Evacuation_Master_3000
                 }
                 else
                 {
+                    // Counts up the heatmapcounter for every "round" the person needs to wait before moving.
+                    if (ticksSpentWaiting % ticksToWaitBeforeNextMove == 0) ((BuildingBlock)Position).HeatmapCounter++;
                     PersonInteractionStats.CountTicksBeingBlocked(ticksSpentWaiting);
+
                 }
             }
             catch (ArgumentOutOfRangeException)

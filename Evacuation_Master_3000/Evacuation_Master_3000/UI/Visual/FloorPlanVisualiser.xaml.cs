@@ -23,11 +23,12 @@ namespace Evacuation_Master_3000
     /// </summary>
     public partial class FloorPlanVisualiser : UserControl
     {
-        public FloorPlanVisualiser()
-        {
+        public FloorPlanVisualiser(TheRealMainWindow mainWindow)
+        {  
             InitializeComponent();
             Person.OnPersonMoved += UpdateVisualsOnEvacuatableMoved;
             UserInterface.OnReset += UpdateVisualOnReset;
+            _mainWindow = mainWindow;
         }
 
         private void UpdateVisualOnReset()
@@ -40,6 +41,7 @@ namespace Evacuation_Master_3000
             }
         }
 
+        private readonly TheRealMainWindow _mainWindow;
         private IFloorPlan localFloorPlan { get; set; }
         private Dictionary<string, Person> localPeople { get; set; }
         private Dictionary<string, Tile> tilesWithChanges { get; set; }
@@ -48,7 +50,7 @@ namespace Evacuation_Master_3000
 
         public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
         {
-
+            
             localPeople = people.ToDictionary(k => Coordinate(k.Value.Position), v => v.Value);
             //localPeople = people.Where(p => !localPeople.Values.Contains(p as Person)).ToDictionary(k => Coordinate(k.Position.X, k.Position.Y, k.Position.Z), v => v as Person);
             //First find all tiles with changes - this is done with clever use of lambda expressions
@@ -215,7 +217,7 @@ namespace Evacuation_Master_3000
                     foreach (var rect in uniformGrid.Children.Cast<Rectangle>())
                     {
                         BuildingBlock current = localFloorPlan.Tiles[rect.Tag.ToString()] as BuildingBlock;
-                        rect.ToolTip = current.Priority + " ," + current.Room;
+                        rect.ToolTip = current?.Priority + " ," + current?.Room;
                     }
                 }
             }
@@ -223,20 +225,26 @@ namespace Evacuation_Master_3000
             BuildingBlock next = person.PathList[person.stepsTaken];
             foreach (Rectangle child in FloorContainer[prev.Z].Children.Cast<Rectangle>())
             {
-                if (child.Tag.ToString() == ImportExportSettings.Coordinate(prev))
+                if (child.Tag.ToString() == Coordinate(prev))
                 {
                     if (prev.OriginalType == Tile.Types.Person)
                     {
                         prev.Type = Tile.Types.Free;
-                        ColorizeBuildingBlock(child, Tile.Types.Free);
+                        if (prev.HeatmapCounter > 0)
+                            ColorRectangle(child, CalculateHeatMapColor(prev));
+                        else
+                            ColorizeBuildingBlock(child, Tile.Types.Free);
                     }
                     else
                     {
                         prev.Type = prev.OriginalType;
-                        ColorizeBuildingBlock(child, prev.OriginalType);
+                        if (prev.HeatmapCounter > 0)
+                            ColorRectangle(child, CalculateHeatMapColor(prev));
+                        else
+                            ColorizeBuildingBlock(child, prev.OriginalType);
                     }
                 }
-                else if (child.Tag.ToString() == ImportExportSettings.Coordinate(next))
+                else if (child.Tag.ToString() == Coordinate(next))
                 {
                     if (next.OriginalType == Tile.Types.Exit || next.OriginalType == Tile.Types.Stair)
                     {
@@ -291,6 +299,29 @@ namespace Evacuation_Master_3000
             buildingBlockRepresentation.Fill = newColor;
         }
 
+        private void ColorRectangle(Rectangle rect, Color color)
+        {
+            rect.Fill = new SolidColorBrush(color);
+        }
+
+        private Color CalculateHeatMapColor(BuildingBlock block)
+        {
+
+            double value = Math.Max(block.HeatmapCounter / _mainWindow.TheUserInterface.LocalPeopleDictionary.Count, 1);
+            int aR = 0; int aG = 0; int aB = 255;  // RGB for our 1st color (blue in this case).
+            int bR = 255; int bG = 0; int bB = 0;    // RGB for our 2nd color (red in this case).
+
+            double red = (bR - aR) * value + aR;      // Evaluated as -255*value + 255.
+            double green = (bG - aG) * value + aG;      // Evaluates as 0.
+            double blue = (bB - aB) * value + aB;
+            return new Color
+            {
+                A = 255,
+                R = Convert.ToByte(red),
+                G = Convert.ToByte(green),
+                B = Convert.ToByte(blue)
+            };
+        }
 
 
         //Change single tile on mouse click

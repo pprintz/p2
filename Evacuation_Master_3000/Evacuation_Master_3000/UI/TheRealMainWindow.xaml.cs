@@ -26,7 +26,7 @@ namespace Evacuation_Master_3000
             TheUserInterface = userInterface;
             importWindow = new NewImportWindow(this);
             exportWindow = new ExportWindow(this);
-            floorPlanVisualiserControl = new FloorPlanVisualiser();
+            floorPlanVisualiserControl = new FloorPlanVisualiser(this);
             controlPanelControl = new ControlPanel(this);
             simulationControlsControl = new SimulationControls(this);
             zoomControl = new Zoom(this);

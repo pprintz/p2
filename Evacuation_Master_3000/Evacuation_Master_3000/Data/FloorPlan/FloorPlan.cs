@@ -79,6 +79,7 @@ namespace Evacuation_Master_3000
                     }
                 }
             }
+            CheckForConnectionsThroughDiagonalUnwalkableElements();
         }
         private void CheckForStairConnection(BuildingBlock buildingBlock)
         {
@@ -102,26 +103,29 @@ namespace Evacuation_Master_3000
         }
         private void CheckForConnectionsThroughDiagonalUnwalkableElements()
         {
-            //foreach (KeyValuePair<string, BuildingBlock> pair in AllPoints) {
-            //    if (pair.Value.Type == BuildingBlock.Types.Wall ||
-            //        pair.Value.Type == BuildingBlock.Types.Furniture) {
-            //        foreach (BuildingBlock neighbour in pair.Value.Neighbours) {
-            //if (neighbour.DistanceTo(pair.Value) > 1) // Then it is a diagonal
-            //{
-            //    var illegalConnectedPointCoordinateSetOne = Coordinate(pair.Value.X,
-            //        neighbour.Y);
-            //    var illegalConnectedPointCoordinateSetTwo = Coordinate(neighbour.X,
-            //        pair.Value.Y);
-            //    if (!AllPoints.ContainsKey(illegalConnectedPointCoordinateSetOne) ||
-            //        !AllPoints.ContainsKey(illegalConnectedPointCoordinateSetTwo)) continue;
-            //    AllPoints[illegalConnectedPointCoordinateSetOne].Neighbours.Remove(
-            //        AllPoints[illegalConnectedPointCoordinateSetTwo]);
-            //    AllPoints[illegalConnectedPointCoordinateSetTwo].Neighbours.Remove(
-            //        AllPoints[illegalConnectedPointCoordinateSetOne]);
-            //}
-            //        }
-            //    }
-            //}
+            foreach (BuildingBlock pair in BuildingBlocks.Values)
+            {
+                if (pair.Type == BuildingBlock.Types.Wall ||
+                    pair.Type == BuildingBlock.Types.Furniture)
+                {
+                    foreach (BuildingBlock neighbour in pair.Neighbours)
+                    {
+                        if (neighbour.DistanceTo(pair) > 1) // Then it is a diagonal
+                        {
+                            var illegalConnectedPointCoordinateSetOne = Coordinate(pair.X,
+                                neighbour.Y, neighbour.Z);
+                            var illegalConnectedPointCoordinateSetTwo = Coordinate(neighbour.X,
+                                pair.Y, neighbour.Z);
+                            if (!BuildingBlocks.ContainsKey(illegalConnectedPointCoordinateSetOne) ||
+                                !BuildingBlocks.ContainsKey(illegalConnectedPointCoordinateSetTwo)) continue;
+                            BuildingBlocks[illegalConnectedPointCoordinateSetOne].Neighbours.Remove(
+                                BuildingBlocks[illegalConnectedPointCoordinateSetTwo]);
+                            BuildingBlocks[illegalConnectedPointCoordinateSetTwo].Neighbours.Remove(
+                                BuildingBlocks[illegalConnectedPointCoordinateSetOne]);
+                        }
+                    }
+                }
+            }
         }
 
 

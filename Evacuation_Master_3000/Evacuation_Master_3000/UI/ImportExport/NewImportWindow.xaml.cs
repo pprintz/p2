@@ -105,9 +105,9 @@ namespace Evacuation_Master_3000 {
             OpenFileDialog open = new OpenFileDialog();
             if (open.ShowDialog() == true)
             {
-                new ImageScanWindow(open.FileName);
-                
-                ParentWindow.TheUserInterface.ImportFloorPlan(open.FileName);
+                var imageScanWindow = new ImageScanWindow(open.FileName);
+                imageScanWindow.CpImageScanControls.OnImageSuccesfullyScanned +=
+                    ParentWindow.TheUserInterface.ImportFloorPlan;
                 OnSucces();
             }
         }

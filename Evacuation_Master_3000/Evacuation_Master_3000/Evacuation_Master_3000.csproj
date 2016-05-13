@@ -91,7 +91,6 @@
       <DependentUpon>CP_ImageScanpicture.xaml</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\GeneralInternalException.cs" />
-    <Compile Include="ImageScan\ImageProgram.cs" />
     <Compile Include="ImageScan\ImageScanningTools.cs" />
     <Compile Include="ImageScan\ImageScanWindow.xaml.cs">
       <DependentUpon>ImageScanWindow.xaml</DependentUpon>

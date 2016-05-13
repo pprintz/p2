@@ -51,7 +51,7 @@ namespace Evacuation_Master_3000 {
 
         internal static BuildingInformationCollection ImportBuilding(string filePath) {
             /* BuildingInformation is what we're going to return when the building has been sucessfully imported. 
-            Because of how the import mechanisms work, BuildingInformation has to be instantiated and visible for the intire class.*/
+            Because of how the import mechanisms work, BuildingInformation has to be instantiated and visible for the entire class.*/
             if (BuildingInformation == null)
                 SetupImport();
 
@@ -59,7 +59,6 @@ namespace Evacuation_Master_3000 {
                 throw new ImportExportException($"Error while importing building:\n\t-No file with path {filePath} exists!");
 
             using (XmlReader reader = XmlReader.Create(File.OpenRead(filePath))) {
-                PropertyInfo currentMemberInfo;
                 while (reader.Read()) {
                     if (reader.NodeType == XmlNodeType.Whitespace || reader.Value == "\n")
                         continue;
@@ -81,7 +80,7 @@ namespace Evacuation_Master_3000 {
 
                             string name = reader.Name, value = reader.Value;
 
-                            currentMemberInfo = TargetInformationList.FirstOrDefault(p => p.Name == name);
+                            var currentMemberInfo = TargetInformationList.FirstOrDefault(p => p.Name == name);
                             if (currentMemberInfo == default(PropertyInfo)) continue; /* Like a null-reference check-up */
 
                             object[] values = AttributeMethods[NodeParent].Item2?.DynamicInvoke(value) as object[];
@@ -104,14 +103,11 @@ namespace Evacuation_Master_3000 {
             var result = TypeDescriptor.GetConverter(typeof(T));
             if (typeof(T) == typeof(double) && value.Contains('.'))
                 value = input.Replace('.', ',');
-            if (result != null)
-                return (T)result.ConvertFrom(value);
-            else
-                throw new ArgumentException($"Could not convert \"{value}\" to {typeof(T)}");
+            return (T)result.ConvertFrom(value);
         }
 
         internal static void EffectuateFloorPlanSettings(BuildingInformationCollection buildingInformation, ref IFloorPlan floorPlan, ref Dictionary<int, Person> allPeople) {
-            const int freeTypeIntRepresentation = (int)BuildingBlock.Types.Free;
+            const int freeTypeIntRepresentation = (int)Tile.Types.Free;
             /* Step 1: Subject the types of each tile to the type of the tile in the BuildingInformationCollection */
             for (int z = 0; z < buildingInformation.Floors; z++) {
                 for (int y = 0; y < buildingInformation.Height; y++) {

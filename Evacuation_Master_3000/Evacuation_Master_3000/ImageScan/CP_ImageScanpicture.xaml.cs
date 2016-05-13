@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Media;
 using System.IO;
 using System.Drawing;
+using static Evacuation_Master_3000.Settings;
 
 namespace Evacuation_Master_3000.ImageScan
 {
@@ -21,10 +23,10 @@ namespace Evacuation_Master_3000.ImageScan
         private bool _firstTimeDrawing = true;
         private bool _sobelFilterActivated;
         private ImageScanWindow ParentWindow { get; }
-        public double ContrastThreshold;
+        private readonly double _contrastThreshold;
         public bool SobelFilterActivated
         {
-            get { return _sobelFilterActivated; }
+            private get { return _sobelFilterActivated; }
             set
             {
                 _sobelFilterActivated = value;
@@ -39,7 +41,7 @@ namespace Evacuation_Master_3000.ImageScan
             InitializeComponent();
             ParentWindow = parentWindow;
             CalculateAndSetupVisualRepresentation(imageFilePath);
-            ContrastThreshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
+            _contrastThreshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
         }
 
         
@@ -66,9 +68,9 @@ namespace Evacuation_Master_3000.ImageScan
         {
             if (_firstTimeDrawing)
             {
-                for (int y = 0; y < ImageHeight; y++)
+                for (int y = 1; y < ImageHeight; y++)
                 {
-                    for (int x = 0; x < ImageWidth; x++)
+                    for (int x = 1; x < ImageWidth; x++)
                     {
                         int[] coordinates = {x, y};
 
@@ -111,47 +113,38 @@ namespace Evacuation_Master_3000.ImageScan
         {
             if (SobelFilterActivated)
             {
-                return pixelValue >= ContrastThreshold
+                return pixelValue >= _contrastThreshold
                     ? new SolidColorBrush(Colors.Black)
                     : new SolidColorBrush(Colors.White);
             }
             // The Sobel filter gives a high value if there is a big contrast.
-            return pixelValue >= ContrastThreshold
+            return pixelValue >= _contrastThreshold
                 ? new SolidColorBrush(Colors.White)
                 : new SolidColorBrush(Colors.Black);
         }
 
 
-        
-        /// <summary>
-        /// Creates a new .grid file based on the given input image.
-        /// </summary>
-        /// <param name="filePath">Output filepath</param>
-        /// <param name="header">Header / title</param>
-        /// <param name="description"></param>
-        /// <param name="contrastTurnOver">The RGB value (0 - 255) where it differentiates between a wall or free. 100 seems to do the trick.</param>
-        public void CreateGridFile(string filePath, string header, string description, int contrastTurnOver)
+        public void SaveAsGridFile(string filePath)
         {
-            StringBuilder gridFileText = new StringBuilder();
-            gridFileText.Append($"<Settings>{Environment.NewLine}<Width>{ImageWidth}</Width>{Environment.NewLine}<Height>{ImageHeight}</Height>{Environment.NewLine}<Header>{header}</Header>{Environment.NewLine}<Description>{description}</Description>{Environment.NewLine}</Settings>{Environment.NewLine}<Grid>{Environment.NewLine}");
-            for (int x = 1; x < ImageWidth; x++)
+            Dictionary<string, Tile> theTiles = new Dictionary<string, Tile>();
+            for (int y = 0; y < ImageHeight; y++)
             {
-                gridFileText.Append("<Row>");
-                for (int y = 1; y < ImageHeight; y++)
+                for (int x = 0; x < ImageWidth; x++)
                 {
-                    gridFileText.Append(_pixelsRegular[y, x] < contrastTurnOver ? "3" : "0");
+                    Tile.Types theType;
+                    if (SobelFilterActivated)
+                        theType = _pixelsCurrentlyActive[y, x] >= _contrastThreshold ? Tile.Types.Wall: Tile.Types.Free;
+                    else
+                        theType = _pixelsCurrentlyActive[y, x] <= _contrastThreshold ? Tile.Types.Wall : Tile.Types.Free;
+
+                    Tile currentTile = new Tile(x, y, 0, theType);
+
+                    theTiles.Add(Coordinate(currentTile), currentTile);   
                 }
-                gridFileText.Append($"</Row>{Environment.NewLine}");
             }
-            gridFileText.Append("</Grid>");
-            try
-            {
-                File.WriteAllText(filePath, gridFileText.ToString());
-            }
-            catch (Exception e)
-            {
-                throw new GeneralInternalException(@"Something went wrong with creating the gridfile: " + e);
-            }
+            IFloorPlan theFloorPlan = new FloorPlan();
+            theFloorPlan.CreateFloorPlan(ImageWidth, ImageHeight, theTiles);
+            Export.ExportBuilding(filePath, theFloorPlan, new Dictionary<int, Person>());
         }
 
     }

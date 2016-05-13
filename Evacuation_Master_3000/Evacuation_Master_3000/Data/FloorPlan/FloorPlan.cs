@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using static Evacuation_Master_3000.ImportExportSettings;
 namespace Evacuation_Master_3000
 {
@@ -18,7 +19,7 @@ namespace Evacuation_Master_3000
         public int Height { get; private set; }
         public int FloorAmount { get; private set; }
         public string Description { get; private set; }
-        public Dictionary<string, Tile> Tiles { get; }
+        public Dictionary<string, Tile> Tiles { get; private set; }
         public Dictionary<string, BuildingBlock> BuildingBlocks { get; set; }
         public string[] Headers { get; set; }
         private bool floorPlanAlreadyExist;
@@ -30,9 +31,10 @@ namespace Evacuation_Master_3000
 
             Width = width;
             Height = height;
+
             FloorAmount = floorAmount;
             Description = description;
-            Headers = headers == null ? new string[FloorAmount] : headers;
+            Headers = headers ?? new string[FloorAmount];
 
             for (int z = 0; z < FloorAmount; z++)
             {
@@ -45,6 +47,22 @@ namespace Evacuation_Master_3000
                 }
             }
             BuildingBlocks = Tiles.ToDictionary(k => k.Key, v => v.Value as BuildingBlock);
+            floorPlanAlreadyExist = true;
+        }
+
+        // This overload is used for Import Images
+        public void CreateFloorPlan(int width, int height, Dictionary<string, Tile> tiles)
+        {
+            if (floorPlanAlreadyExist)
+                return;
+            Width = width;
+            Height = height;
+            Tiles = tiles;
+            FloorAmount = 1; // Currently the Import Images can only handle one floor at a time.
+            Headers = new[] {""};
+            Description = "";
+            BuildingBlocks = tiles.ToDictionary(k => k.Key, v => v.Value as BuildingBlock);
+            
             floorPlanAlreadyExist = true;
         }
 

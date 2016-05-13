@@ -28,8 +28,18 @@ namespace Evacuation_Master_3000.UI.ControlPanelUI
 
         private void OnSaveButtonClicked(object sender, RoutedEventArgs e)
         {
-           ParentWindow.CpImageScanPicture.CreateGridFile(ParentWindow.CpImageScanControls.FilePathTextbox.Text, "", "", (int)Math.Round(ParentWindow.CpImageScanControls.ContrastSlider.Value));
+            string filePath = ParentWindow.CpImageScanControls.FilePathTextbox.Text;
+            ParentWindow.CpImageScanPicture.SaveAsGridFile(filePath);
+
+            OnImageSuccesfullyScanned?.Invoke(filePath);
+
+            ParentWindow.Close();
         }
+
+        public delegate void ImageSuccesfullyScanned(string filePath);
+
+        public event ImageSuccesfullyScanned OnImageSuccesfullyScanned;
+
 
         private void OnSobelFilterCheckboxChange(object sender, RoutedEventArgs e)
         {

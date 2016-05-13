@@ -30,15 +30,22 @@ namespace Evacuation_Master_3000
         }
 
 
-        public Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan) {
-            TheFloorPlan.Initiate();
-            foreach (Tile tile in floorPlan.Tiles.Values) {
-                tile.OriginalType = tile.Type;
+        public Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan)
+        {
+            if (SimulationStart)
+            {
+                TheFloorPlan.Initiate();
+                foreach (Tile tile in floorPlan.Tiles.Values)
+                {
+                    tile.OriginalType = tile.Type;
 
-                if(tile.Type == Tile.Types.Person) {
-                    Person current = new Person(tile as BuildingBlock);
-                    if (!AllPeople.Values.Any(p => p.OriginalPosition == tile)) {
-                        AllPeople.Add(current.ID, current);
+                    if (tile.OriginalType == Tile.Types.Person)
+                    {
+                        Person current = new Person(tile as BuildingBlock);
+                        if (!AllPeople.Values.Any(p => p.OriginalPosition == tile))
+                        {
+                            AllPeople.Add(current.ID, current);
+                        }
                     }
                 }
             }
@@ -48,17 +55,21 @@ namespace Evacuation_Master_3000
         public static bool SimulationStart = true;
         public Dictionary<int, Person> StartSimulation(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)                                           //<---- kan formentligt være void?
         {
-            if (AllPeople != null) {
-                _unevacuatedPeople.AddRange(AllPeople.Values);
-                foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0)) {
-                    person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                    person.TickLength = tickLength;
-                    //person.OnExtendedPathRequest += IPathfinding.
-                    person.PathList.AddRange(pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
-                    person.Evacuated = false;
+            if (SimulationStart)
+            {
+                if (AllPeople != null)
+                {
+                    foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0))
+                    {
+                        person.OnPersonEvacuated += RemoveEvacuatedPerson;
+                        person.TickLength = tickLength;
+                        person.PathList.AddRange(
+                            pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
+                        person.Evacuated = false;
+                    }
+                    SimulationStart = false;
                 }
             }
-
             StartTicks();
             return AllPeople;
         }
@@ -66,10 +77,8 @@ namespace Evacuation_Master_3000
         {
             while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused)
             {
-                Stopwatch stopWatch = Stopwatch.StartNew();
                 Yield(1);
                 OnTick?.Invoke();
-                stopWatch.Stop();
                 // unchecked throws an OverflowException if we've spent more than 600+ hours on one tick.
             }
 

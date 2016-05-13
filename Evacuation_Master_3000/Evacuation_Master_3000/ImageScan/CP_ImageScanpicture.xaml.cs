@@ -59,7 +59,6 @@ namespace Evacuation_Master_3000.ImageScan
             _pixelsSobel = ImageScanningTools.ApplySobelFilter(_pixelsRegular, ImageWidth, ImageHeight);
             _pixelsCurrentlyActive = _pixelsRegular;
             CreateOrUpdateVisualRepresentation();
-            
         }
 
 

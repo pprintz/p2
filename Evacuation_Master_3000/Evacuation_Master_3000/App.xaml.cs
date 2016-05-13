@@ -9,7 +9,7 @@ namespace Evacuation_Master_3000 {
             IData data = new Data();
             IUserInterface ui = new UserInterface();
             Controller controller = new Controller(data, ui);
-            controller._ui.Display();
+            controller.UI.Display();
         }
     }
 }

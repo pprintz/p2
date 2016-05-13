@@ -3,9 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Windows;
 using System.Xml;
 using static Evacuation_Master_3000.Settings;
 #endregion
@@ -45,7 +43,7 @@ namespace Evacuation_Master_3000 {
                     for (int currentFloor = 0; currentFloor < floorPlan.FloorAmount; currentFloor++) {
                         writer.WriteStartElement("Floor");
                         writer.WriteAttributeString("Level", currentFloor.ToString());
-                        writer.WriteAttributeString("Header", floorPlan.Headers[currentFloor]); //<---------- Kaster exception!
+                        writer.WriteAttributeString("Header", floorPlan.Headers[currentFloor]); 
 
                         StringBuilder rowAttributeBuilder = new StringBuilder();
                         StringBuilder rowBuilder = new StringBuilder();
@@ -59,7 +57,7 @@ namespace Evacuation_Master_3000 {
                             rowBuilder.Clear();
                         }
 
-                        writer.WriteAttributeString("RowInformation", rowAttributeBuilder.ToString().TrimEnd(','));
+                        writer.WriteAttributeString("RowInformation", rowAttributeBuilder.ToString().TrimEnd(' ').TrimEnd(','));
                         writer.WriteEndElement();
                     }
                     writer.WriteEndElement();

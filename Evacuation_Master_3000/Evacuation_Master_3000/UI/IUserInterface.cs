@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Evacuation_Master_3000
 {
     public interface IUserInterface
@@ -8,6 +6,7 @@ namespace Evacuation_Master_3000
         void Display();
         void DisplayGeneralErrorMessage(string errorMessage);
         void DisplayStatistics(DataSimulationStatistics dataSimulationStatistics);
+        event PrepareSimulation OnPrepareSimulation;
         event UISimulationStart OnUISimulationStart;
         event ImportFloorPlan OnImportFloorPlan;
         event ExportFloorPlan OnExportFloorPlan;

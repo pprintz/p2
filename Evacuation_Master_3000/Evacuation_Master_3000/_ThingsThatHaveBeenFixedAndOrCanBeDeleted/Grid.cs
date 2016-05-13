@@ -1,12 +1,9 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
-using static Evacuation_Master_3000.ImportExportSettings;
 
 #endregion
 

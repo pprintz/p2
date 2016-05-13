@@ -39,6 +39,8 @@ namespace Evacuation_Master_3000
                 else
                 {
                     firstRun = true;
+                    stepsTaken = 0;
+                    Data.OnTick += ConditionalMove;
                 }
             }
         }
@@ -47,14 +49,18 @@ namespace Evacuation_Master_3000
         public event ExtendedPathRequest OnExtendedPathRequest;
         private static Random rand = new Random();
         public Person(BuildingBlock position) : this(0, 0, position) { }
-        internal Person(int id, double movementSpeed, BuildingBlock position) {
-            if(id <= 0) { /* Negative or zero-valued id means this is a totally new person */ 
+        internal Person(int id, double movementSpeed, BuildingBlock position)
+        {
+            if (id <= 0)
+            { /* Negative or zero-valued id means this is a totally new person */
                 int newID;
-                do {
+                do
+                {
                     newID = _idCounter++;
                 } while (_idsInUse.Contains(newID));
                 ID = newID;
-            } else { /* non-zeroed, positive value means this is an existing person */
+            }
+            else { /* non-zeroed, positive value means this is an existing person */
                 if (_idsInUse.Contains(id))
                     throw new PersonException($"A user with ID {id} already exists!");
                 else
@@ -62,7 +68,7 @@ namespace Evacuation_Master_3000
             }
 
             PersonInteractionStats = new DataSimulationStatistics(this);
-            MovementSpeed = movementSpeed == 0 ? 5 + rand.NextDouble() * 10 : movementSpeed;
+            MovementSpeed = movementSpeed < 5 ? 5 + rand.NextDouble() * 10 : movementSpeed; // Less than 5 means that it was not created.
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;
             OriginalPosition = position;
@@ -131,7 +137,11 @@ namespace Evacuation_Master_3000
                 }
                 else
                 {
+                    // Counts up the heatmapcounter for every "round" the person needs to wait before moving.
+                    if (AmountOfTicksSpent % ticksToWaitBeforeNextMove == 0)
+                        ((BuildingBlock)Position).HeatmapCounter++;
                     PersonInteractionStats.CountTicksBeingBlocked(ticksSpentWaiting);
+
                 }
             }
             catch (ArgumentOutOfRangeException)

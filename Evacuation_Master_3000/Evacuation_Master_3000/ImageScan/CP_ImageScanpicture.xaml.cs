@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Text;
-using System.Windows;
 using System.Windows.Media;
 using System.IO;
 using System.Drawing;
-using Evacuation_Master_3000.UI.ControlPanelUI;
 
 namespace Evacuation_Master_3000.ImageScan
 {

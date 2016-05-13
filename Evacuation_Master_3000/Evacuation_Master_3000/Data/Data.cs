@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Windows.Threading;
 using System.Diagnostics;
-using System.Windows.Forms.VisualStyles;
 
 [assembly: InternalsVisibleTo("P2TestEnvironment")]
 namespace Evacuation_Master_3000
@@ -31,60 +29,46 @@ namespace Evacuation_Master_3000
             return AllPeople.Values.Where(predicate.Invoke);
         }
 
-        private Dictionary<int, Person> UpdatePeople(IFloorPlan floorPlan) {
-            foreach (BuildingBlock tile in TheFloorPlan.Tiles.Values.Where(t => t.Type == Tile.Types.Person).Cast<BuildingBlock>()) {
-                Person current = new Person(tile);
-                if (!AllPeople.ContainsKey(current.ID)) {
-                    AllPeople.Add(current.ID, current);
+
+        public Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan) {
+            TheFloorPlan.Initiate();
+            foreach (Tile tile in floorPlan.Tiles.Values) {
+                tile.OriginalType = tile.Type;
+
+                if(tile.Type == Tile.Types.Person) {
+                    Person current = new Person(tile as BuildingBlock);
+                    if (!AllPeople.Values.Any(p => p.OriginalPosition == tile)) {
+                        AllPeople.Add(current.ID, current);
+                    }
                 }
             }
             return AllPeople;
         }
 
         public static bool SimulationStart = true;
-        public Dictionary<int, Person> StartSimulation(IFloorPlan floorPlan, bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)
+        public Dictionary<int, Person> StartSimulation(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)                                           //<---- kan formentligt være void?
         {
-            if (SimulationStart)
-            {
-                TheFloorPlan.Initiate();
-                foreach (Tile tile in floorPlan.Tiles.Values)
-                {
-                    tile.OriginalType = tile.Type;
+            if (AllPeople != null) {
+                _unevacuatedPeople.AddRange(AllPeople.Values);
+                foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0)) {
+                    person.OnPersonEvacuated += RemoveEvacuatedPerson;
+                    person.TickLength = tickLength;
+                    //person.OnExtendedPathRequest += IPathfinding.
+                    person.PathList.AddRange(pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
+                    person.Evacuated = false;
                 }
-                foreach (BuildingBlock tile in TheFloorPlan.Tiles.Values.Where(t => t.Type == Tile.Types.Person).Cast<BuildingBlock>())
-                {
-                    Person current = new Person(tile);
-                    if (!AllPeople.ContainsKey(current.ID))
-                    {
-                        AllPeople.Add(current.ID, current);
-                    }
-                }
-                if (AllPeople != null)
-                {
-                    _unevacuatedPeople.AddRange(AllPeople.Values);
-
-                    foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0))
-                    {
-                        person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                        person.TickLength = tickLength;
-                        //person.OnExtendedPathRequest += IPathfinding.
-                        person.PathList.AddRange(pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
-                        OnTick += person.ConditionalMove;
-                    }
-                }
-                SimulationStart = false;
             }
-            StartTicks();
-            return null;
-        }
 
+            StartTicks();
+            return AllPeople;
+        }
         public void StartTicks()
         {
             while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused)
             {
                 Stopwatch stopWatch = Stopwatch.StartNew();
-                OnTick?.Invoke();
                 Yield(1);
+                OnTick?.Invoke();
                 stopWatch.Stop();
                 // unchecked throws an OverflowException if we've spent more than 600+ hours on one tick.
             }
@@ -116,14 +100,15 @@ namespace Evacuation_Master_3000
         {
             BuildingInformationCollection buildingInformation = Import.ImportBuilding(fileName);
             IFloorPlan temporaryFloorPlan = CreateFloorPlan(buildingInformation);
-            UpdatePeople(temporaryFloorPlan);
             Import.EffectuateFloorPlanSettings(buildingInformation, ref temporaryFloorPlan, ref _allPeople);
             return temporaryFloorPlan;
         }
 
-        public IFloorPlan CreateFloorPlan(BuildingInformationCollection buildingInformation) {
+        public IFloorPlan CreateFloorPlan(BuildingInformationCollection buildingInformation)
+        {
             string[] headers = new string[buildingInformation.Floors];
-            for(int currentFloor = 0; currentFloor < buildingInformation.Floors; currentFloor++) {
+            for (int currentFloor = 0; currentFloor < buildingInformation.Floors; currentFloor++)
+            {
                 if (buildingInformation.FloorCollection[currentFloor] == null)
                     continue;
 
@@ -142,7 +127,8 @@ namespace Evacuation_Master_3000
             return TheFloorPlan;
         }
 
-        public IFloorPlan ExportFloorPlan(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople) {
+        public IFloorPlan ExportFloorPlan(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople)
+        {
             Export.ExportBuilding(filePath, floorPlan, allPeople);
             return TheFloorPlan;                                                                            ////<<<-------- OBS OBS OBS skal TheFloorPlan sættes til floorPlan (metode parameter)???
 

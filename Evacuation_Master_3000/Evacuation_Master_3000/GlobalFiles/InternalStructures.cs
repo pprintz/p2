@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Evacuation_Master_3000
 {
@@ -12,7 +8,8 @@ namespace Evacuation_Master_3000
     public delegate void SimulationEnd();
     public delegate void TileTypeChange(Tile tile);
     public delegate void ResetClicked();
-    public delegate Dictionary<int, Person> UISimulationStart(IFloorPlan floorPlan, bool heatMapActive, bool stepByStep, IPathfinding pathfinding, int milliseconds);
+    public delegate Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan);
+    public delegate Dictionary<int, Person> UISimulationStart(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength);
     public delegate IFloorPlan ImportFloorPlan(string fileName);
     public delegate IFloorPlan ExportFloorPlan(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople);
     public delegate IFloorPlan NewFloorPlan(int width, int height, int floorAmount, string description);

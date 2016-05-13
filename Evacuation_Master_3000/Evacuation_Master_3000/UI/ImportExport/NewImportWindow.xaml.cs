@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
@@ -20,9 +9,8 @@ namespace Evacuation_Master_3000 {
     /// <summary>
     /// Interaction logic for NewImportWindow.xaml
     /// </summary>
-    public partial class NewImportWindow : Window, INotifyPropertyChanged {
-        public NewImportWindow(TheRealMainWindow parentWindow) : this(parentWindow, NewOrImport.New) { }
-        public NewImportWindow(TheRealMainWindow parentWindow, NewOrImport window) {
+    public partial class NewImportWindow : INotifyPropertyChanged {
+        public NewImportWindow(TheRealMainWindow parentWindow, NewOrImport window = NewOrImport.New) {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
 
@@ -48,27 +36,47 @@ namespace Evacuation_Master_3000 {
 
         private TheRealMainWindow ParentWindow { get; }
         public enum NewOrImport { New, Import }
+        private int BuildingWidthAndHeightMax = 500;
         private int _buildingWidth;
-        public int BuildingWidth {
+        public int BuildingWidth
+        {
             get { return _buildingWidth; }
-            set {
+            set
+            {
                 _buildingWidth = value;
+                if (_buildingWidth > BuildingWidthAndHeightMax)
+                {
+                    _buildingWidth = BuildingWidthAndHeightMax;
+                }
                 OnPropertyChanged("BuildingWidth");
             }
         }
         private int _buildingHeight;
-        public int BuildingHeight {
+        public int BuildingHeight
+        {
             get { return _buildingHeight; }
-            set {
+            set
+            {
                 _buildingHeight = value;
+                if (_buildingHeight > BuildingWidthAndHeightMax)
+                {
+                    _buildingHeight = BuildingWidthAndHeightMax;
+                }
                 OnPropertyChanged("BuildingHeight");
             }
         }
+        private int BuildingFloorMax = 40;
         private int _buildingFloorAmount;
-        public int BuildingFloorAmount {
+        public int BuildingFloorAmount
+        {
             get { return _buildingFloorAmount; }
-            set {
+            set
+            {
                 _buildingFloorAmount = value;
+                if (_buildingFloorAmount > BuildingFloorMax)
+                {
+                    _buildingFloorAmount = BuildingFloorMax;
+                }
                 OnPropertyChanged("BuildingFloorAmount");
             }
         }

@@ -3,18 +3,18 @@ namespace Evacuation_Master_3000
 
     internal class Controller
     {
-        public IData _data;
-        public IUserInterface _ui;
+        public IData Data { get; }
+        public IUserInterface UI { get; }
 
         public Controller(IData data, IUserInterface ui)
         {
-            _data = data;
-            _ui = ui;
-            _ui.OnImportFloorPlan += _data.ImportFloorPlan;
-            _ui.OnNewFloorPlan += _data.CreateFloorPlan;
-            _ui.OnExportFloorPlan += _data.ExportFloorPlan;
-            _ui.OnUISimulationStart += data.StartSimulation;
-            // _ui.OnSimulationStart += _data.StartSimulation;
+            Data = data;
+            UI = ui;
+            UI.OnImportFloorPlan += Data.ImportFloorPlan;
+            UI.OnNewFloorPlan += Data.CreateFloorPlan;
+            UI.OnExportFloorPlan += Data.ExportFloorPlan;
+            UI.OnUISimulationStart += Data.StartSimulation;
+            UI.OnPrepareSimulation += Data.PrepareSimulation;
         }
 
         private void PrepareAndStartSimulation()

@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Evacuation_Master_3000.ImageScan;
 using static Evacuation_Master_3000.ImportExportSettings;
 
 namespace Evacuation_Master_3000
@@ -20,25 +14,35 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for FloorPlanVisualiser.xaml
     /// </summary>
-    public partial class FloorPlanVisualiser : UserControl
+    public partial class FloorPlanVisualiser
     {
-        public FloorPlanVisualiser()
-        {
+        public FloorPlanVisualiser(TheRealMainWindow mainWindow)
+        {  
             InitializeComponent();
             Person.OnPersonMoved += UpdateVisualsOnEvacuatableMoved;
             UserInterface.OnReset += UpdateVisualOnReset;
+            _mainWindow = mainWindow;
         }
 
         private void UpdateVisualOnReset()
         {
-            foreach (Tile tile in localFloorPlan.Tiles.Values.Where(t => t.OriginalType != t.Type))
+            foreach (BuildingBlock buildingBlock in localFloorPlan.Tiles.Values.Where(t => t.OriginalType != t.Type).Cast<BuildingBlock>())
             {
-                var rectangle = FloorContainer[tile.Z].Children.Cast<Rectangle>()
-                    .Single(c => Coordinate(tile) == c.Tag.ToString());
-                ColorizeBuildingBlock(rectangle, tile.OriginalType);
+                var rectangle = FloorContainer[buildingBlock.Z].Children.Cast<Rectangle>()
+                    .Single(c => Coordinate(buildingBlock) == c.Tag.ToString());
+                ColorizeBuildingBlock(rectangle, buildingBlock.OriginalType);
+            }
+            foreach (BuildingBlock buildingBlock in localFloorPlan.Tiles.Values.Cast<BuildingBlock>().Where(b => b.HeatmapCounter != 0))
+            {
+                buildingBlock.HeatmapCounter = 0;
+                Rectangle rectangle =
+                    FloorContainer[buildingBlock.Z].Children.Cast<Rectangle>()
+                        .Single(c => Coordinate(buildingBlock) == c.Tag.ToString());
+                ColorizeBuildingBlock(rectangle, buildingBlock.OriginalType);
             }
         }
 
+        private readonly TheRealMainWindow _mainWindow;
         private IFloorPlan localFloorPlan { get; set; }
         private Dictionary<string, Person> localPeople { get; set; }
         private Dictionary<string, Tile> tilesWithChanges { get; set; }
@@ -47,7 +51,7 @@ namespace Evacuation_Master_3000
 
         public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
         {
-
+            
             localPeople = people.ToDictionary(k => Coordinate(k.Value.Position), v => v.Value);
             //localPeople = people.Where(p => !localPeople.Values.Contains(p as Person)).ToDictionary(k => Coordinate(k.Position.X, k.Position.Y, k.Position.Z), v => v as Person);
             //First find all tiles with changes - this is done with clever use of lambda expressions
@@ -96,14 +100,24 @@ namespace Evacuation_Master_3000
                             Fill = z % 2 == 0 ? new SolidColorBrush(Colors.Aqua) : new SolidColorBrush(Colors.Bisque),
                             Tag = Coordinate(x, y, z) /* Makes binding rectangles to buildingblocks easier */
                         };
+
+                        if (localFloorPlan.Tiles[Coordinate(x, y, z)].Type != Tile.Types.Free)
+                            ColorizeBuildingBlock(figure, localFloorPlan.Tiles[Coordinate(x, y, z)].Type);
+
                         BuildingBlock current = (localFloorPlan.Tiles[Coordinate(x, y, z)] as BuildingBlock);
+                        current.figure = figure;                                                //<<-------------------- Lige nu bliver current.figure ikke brugt til de to nedenstående assignments - er det meningen/hensigten?
                         figure.ToolTip = current.Priority + " , " + current.Room;
                         figure.MouseLeftButtonDown += OnBuildingBlockClick;
+
+
+
                         container.Children.Add(figure);
                     }
                 }
                 FloorContainer[z] = container;
             }
+
+            VisualContainer.Children.Add(FloorContainer[0]);
         }
 
         private void AddFloorPlanSwitcherControls(int floorAmount)
@@ -121,7 +135,13 @@ namespace Evacuation_Master_3000
 
         private void UpdateVisualRepresentation()
         {
-            VisualContainer.Children.Add(FloorContainer[0]);
+            //for(int z = 0; z < localFloorPlan.FloorAmount; z++) {
+            //    for(int y = 0; y < localFloorPlan.Height; y++) {
+            //        for(int x = 0; x < localFloorPlan.Width; x++) {
+                        
+            //        }
+            //    }
+            //}
         }
 
         public void UpdateTile(IEnumerable<Tile> tilesToChange)
@@ -141,17 +161,67 @@ namespace Evacuation_Master_3000
 
         public delegate Tile.Types BuildingBlockTypeFetch();
         public BuildingBlockTypeFetch OnBuildingBlockTypeFetch;
+        private BuildingBlock previousBlock;
 
         private void OnBuildingBlockClick(object sender, MouseButtonEventArgs e)
         {
             Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
-            Rectangle senderBuildingBlock = sender as Rectangle;                    //Get a reference to the sender rectangle
+            Rectangle senderRectangle = sender as Rectangle;                    //Get a reference to the sender rectangle
+            if (senderRectangle == null) throw new GeneralInternalException();
+            BuildingBlock senderBlock = (BuildingBlock) localFloorPlan.Tiles[senderRectangle.Tag.ToString()];
 
-            localFloorPlan.Tiles[senderBuildingBlock.Tag.ToString()].Type = type;   //Change the type of the BuildingBlock
-
-            ColorizeBuildingBlock(senderBuildingBlock, type);                       //Colorize the visual representation of the BuildingBlock
+            SetBlockType(senderBlock, type);
+            if (Keyboard.IsKeyDown(Settings.LineToolKey))
+            {
+                if (previousBlock != null)
+                {
+                    DrawLine(senderBlock, type);
+                }
+                previousBlock = senderBlock;
+            }
         }
 
+        private void SetBlockType(BuildingBlock block, Tile.Types targetType)
+        {
+            block.Type = targetType;
+            ColorizeBuildingBlock(block.figure, targetType);
+        }
+
+        private void DrawLine(BuildingBlock block, Tile.Types targetType)
+        {
+            int deltaX = block.X - previousBlock.X;
+            int deltaY = block.Y - previousBlock.Y;
+            if (deltaX == 0 && deltaY == 0)
+            {
+                // The same block has been pressed twice.
+                return;
+            }
+            double deltaTilt = Math.Min(Math.Abs((double)deltaY / (double)deltaX), Math.Abs((double)deltaY)) * Math.Sign((double)deltaY / (double)deltaX);
+            double tilt = 0;
+
+            int i = 0;
+            do
+            {
+                int j = 0;
+                do
+                {
+                    int x = i + previousBlock.X;
+                    int y = (int)(tilt) + previousBlock.Y + j;
+
+                    SetBlockType((BuildingBlock)localFloorPlan.Tiles[Coordinate(x,y,block.Z)],targetType);
+
+                    j += Math.Sign(deltaY);
+                } while (Math.Abs(j) < Math.Abs(deltaTilt));
+
+                tilt += deltaTilt * Math.Sign(deltaX);
+                i += Math.Sign(deltaX);
+            } while (Math.Abs(i) < Math.Abs(deltaX));
+        }
+
+        public void LineToolReleased()
+        {
+            previousBlock = null;
+        }
 
         private static bool firstTime = true;
 
@@ -161,10 +231,10 @@ namespace Evacuation_Master_3000
             {
                 foreach (UniformGrid uniformGrid in FloorContainer)
                 {
-                    foreach (var VARIABLE in uniformGrid.Children.Cast<Rectangle>())
+                    foreach (var rect in uniformGrid.Children.Cast<Rectangle>())
                     {
-                        BuildingBlock current = localFloorPlan.Tiles[VARIABLE.Tag.ToString()] as BuildingBlock;
-                        VARIABLE.ToolTip = current.Priority + " ," + current.Room;
+                        BuildingBlock current = localFloorPlan.Tiles[rect.Tag.ToString()] as BuildingBlock;
+                        rect.ToolTip = current?.Priority + " ," + current?.Room;
                     }
                 }
             }
@@ -172,20 +242,26 @@ namespace Evacuation_Master_3000
             BuildingBlock next = person.PathList[person.stepsTaken];
             foreach (Rectangle child in FloorContainer[prev.Z].Children.Cast<Rectangle>())
             {
-                if (child.Tag.ToString() == ImportExportSettings.Coordinate(prev))
+                if (child.Tag.ToString() == Coordinate(prev))
                 {
                     if (prev.OriginalType == Tile.Types.Person)
                     {
                         prev.Type = Tile.Types.Free;
-                        ColorizeBuildingBlock(child, Tile.Types.Free);
+                        if (_mainWindow.TheUserInterface.HeatMapActivated)
+                            ColorRectangle(child, CalculateHeatMapColor(prev));
+                        else
+                            ColorizeBuildingBlock(child, Tile.Types.Free);
                     }
                     else
                     {
                         prev.Type = prev.OriginalType;
-                        ColorizeBuildingBlock(child, prev.OriginalType);
+                        if (_mainWindow.TheUserInterface.HeatMapActivated)
+                            ColorRectangle(child, CalculateHeatMapColor(prev));
+                        else
+                            ColorizeBuildingBlock(child, prev.OriginalType);
                     }
                 }
-                else if (child.Tag.ToString() == ImportExportSettings.Coordinate(next))
+                else if (child.Tag.ToString() == Coordinate(next))
                 {
                     if (next.OriginalType == Tile.Types.Exit || next.OriginalType == Tile.Types.Stair)
                     {
@@ -205,41 +281,112 @@ namespace Evacuation_Master_3000
         /* Might need re-work - lavet QnD! */
         private void ColorizeBuildingBlock(Rectangle buildingBlockRepresentation, Tile.Types type)
         {
-            SolidColorBrush newColor;
+            Color newColor;
             switch (type)
             {
                 case Tile.Types.Free:
-                    newColor = new SolidColorBrush(Colors.White);
+                    newColor = Colors.White;
                     break;
                 case Tile.Types.Occupied:
-                    newColor = new SolidColorBrush(Colors.Green);
+                    newColor = Colors.Green;
                     break;
                 case Tile.Types.Furniture:
-                    newColor = new SolidColorBrush(Colors.Gray);
+                    newColor = Colors.Gray;
                     break;
                 case Tile.Types.Wall:
-                    newColor = new SolidColorBrush(Colors.Black);
+                    newColor = Colors.Black;
                     break;
                 case Tile.Types.Door:
-                    newColor = new SolidColorBrush(Colors.Pink);
+                    newColor = Colors.Pink;
                     break;
                 case Tile.Types.Exit:
-                    newColor = new SolidColorBrush(Colors.Blue);
+                    newColor =Colors.Blue;
                     break;
                 case Tile.Types.Person:
-                    newColor = new SolidColorBrush(Colors.Red);
+                    newColor = Colors.Red;
                     break;
                 case Tile.Types.Stair:
-                    newColor = new SolidColorBrush(Colors.BlueViolet);
+                    newColor = Colors.BlueViolet;
                     break;
                 default:
-                    newColor = new SolidColorBrush(Colors.BlanchedAlmond);
+                    newColor = Colors.BlanchedAlmond;
                     break;
             }
 
-            buildingBlockRepresentation.Fill = newColor;
+            ColorRectangle(buildingBlockRepresentation, newColor);
         }
 
+        private void ColorRectangle(Rectangle rect, Color color)
+        {
+            rect.Fill = new SolidColorBrush(color);
+        }
+
+        private Color CalculateHeatMapColor(BuildingBlock block)
+        {
+            // Stolen and modified from: http://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients
+
+            double value = Math.Min((double)block.HeatmapCounter / (double)_mainWindow.TheUserInterface.LocalPeopleDictionary.Count, 1.0);
+            int colorAmount = 4;
+            double[,] color =
+            {
+                {
+                    0,
+                    0,
+                    255
+                }
+                ,
+                {
+                    0,
+                    255,
+                    0
+                }
+                ,
+                {
+                    255,
+                    255,
+                    0
+                }
+                ,
+                {
+                    255,
+                    0,
+                    0
+                }
+            };
+            // A static array of 4 colors:  (blue,   green,  yellow,  red) using {r,g,b} for each.
+
+            int idx1; // |-- Our desired color will be between these two indexes in "color".
+            int idx2; // |
+            double fractBetween = 0; // Fraction between "idx1" and "idx2" where our value is.
+
+            if (value <= 0)
+            {
+                idx1 = idx2 = 0;
+            } // accounts for an input <=0
+            else if (value >= 255)
+            {
+                idx1 = idx2 = colorAmount - 1;
+            } // accounts for an input >=0
+            else
+            {
+                value = value*(colorAmount - 1); // Will multiply value by 3.
+                idx1 = (int)Math.Floor(value); // Our desired color will be after this index.
+                idx2 = Math.Min(idx1 + 1, colorAmount-1); // ... and before this index (inclusive).
+                fractBetween = value - idx1; // Distance between the two indexes (0-1).
+            }
+
+
+            int red = (int)Math.Round((color[idx2,0] - color[idx1,0])*fractBetween + color[idx1,0]);
+            int green = (int)Math.Round((color[idx2,1] - color[idx1,1])*fractBetween + color[idx1,1]);
+            int blue = (int)Math.Round((color[idx2,2] - color[idx1,2])*fractBetween + color[idx1,2]);
+            return new Color
+            {
+                A = 255,
+                R = Convert.ToByte(red),
+                G = Convert.ToByte(green),
+                B = Convert.ToByte(blue)
+            };
+        }
 
 
         //Change single tile on mouse click

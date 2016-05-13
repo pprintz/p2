@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
 using System.Reflection;
@@ -95,7 +93,7 @@ namespace Evacuation_Master_3000 {
                     }
                 };
             }
-            
+
             OnImportFeedBack?.Invoke();
             /* We're finished, return the results for further working */
             return (BuildingInformationCollection)BuildingInformation;
@@ -116,16 +114,16 @@ namespace Evacuation_Master_3000 {
             const int freeTypeIntRepresentation = (int)BuildingBlock.Types.Free;
             /* Step 1: Subject the types of each tile to the type of the tile in the BuildingInformationCollection */
             for (int z = 0; z < buildingInformation.Floors; z++) {
-                for (int x = 0; x < buildingInformation.Width; x++) {
-                    for (int y = 0; y < buildingInformation.Height; y++) {
-                        int type = int.Parse(buildingInformation.FloorCollection[z].Rows[x][y].ToString());
+                for (int y = 0; y < buildingInformation.Height; y++) {
+                    for (int x = 0; x < buildingInformation.Width; x++) {
+                        int type = int.Parse(buildingInformation.FloorCollection[z].Rows[y][x].ToString());
                         /* If the point is already marked as free, continue - no need to force-convert it to free */
                         if (type == freeTypeIntRepresentation)
                             continue;
 
                         Tile.Types newType = (Tile.Types)type;
 
-                        if(newType == Tile.Types.Person) {
+                        if (newType == Tile.Types.Person) {
                             PersonInformation personInfo = buildingInformation.PeopleCollection.FirstOrDefault(p => p.Position == Coordinate(x, y, z));
                             allPeople.Add(personInfo.ID, new Person(personInfo.ID, personInfo.MovementSpeed, floorPlan.Tiles[personInfo.Position] as BuildingBlock));
                         }

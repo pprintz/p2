@@ -23,6 +23,7 @@ namespace Evacuation_Master_3000
             Person.OnPersonMoved += UpdateVisualsOnEvacuatableMoved;
             UserInterface.OnReset += UpdateVisualOnReset;
             _mainWindow = mainWindow;
+            AllRectangles = new Dictionary<string, Rectangle>();
         }
 
         private void UpdateVisualOnReset()
@@ -47,9 +48,9 @@ namespace Evacuation_Master_3000
         private IFloorPlan localFloorPlan { get; set; }
         private Dictionary<string, Person> localPeople { get; set; }
         private Dictionary<string, Tile> tilesWithChanges { get; set; }
-        private Canvas[] FloorContainer;
+        private Grid[] FloorContainer;
         private SwitchBetweenFloorsControl floorSwitcherControls { get; set; }              //<<------ OBS er det nødvendigt med property til at gemme floorswitchcontrols i???
-
+        private Dictionary<string, Rectangle> AllRectangles { get; }
         public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
         {
             
@@ -81,12 +82,11 @@ namespace Evacuation_Master_3000
             int width = localFloorPlan.Width;
             int height = localFloorPlan.Height;
             int floorAmount = localFloorPlan.FloorAmount;
-            FloorContainer = new Canvas[floorAmount];
+            FloorContainer = new Grid[floorAmount];
 
             for (int z = 0; z < floorAmount; z++)
             {
-                Canvas container = new Canvas()
-                {
+                Grid container = new Grid() {
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top
                 };
@@ -99,7 +99,7 @@ namespace Evacuation_Master_3000
                             Width = tileSize,
                             Fill = new SolidColorBrush(Colors.White),
                             Tag = Coordinate(x, y, z), /* Makes binding rectangles to buildingblocks easier */
-                            Margin = new Thickness(x * tileSize, y * tileSize, 0, 0)
+                            Margin = new Thickness(x * 22, y * 22, 0, 0)
                         };
 
                         if (localFloorPlan.Tiles[Coordinate(x, y, z)].Type != Tile.Types.Free)
@@ -111,7 +111,7 @@ namespace Evacuation_Master_3000
                         figure.MouseLeftButtonDown += OnBuildingBlockClick;
 
 
-
+                        AllRectangles.Add(Coordinate(x, y, z), figure);
                         container.Children.Add(figure);
                     }
                 }
@@ -230,9 +230,9 @@ namespace Evacuation_Master_3000
         {
             if (firstTime)
             {
-                foreach (Canvas canvas in FloorContainer)
+                foreach (Grid grid in FloorContainer)
                 {
-                    foreach (Rectangle rect in canvas.Children.Cast<Rectangle>())
+                    foreach (Rectangle rect in grid.Children.Cast<Rectangle>())
                     {
                         BuildingBlock current = localFloorPlan.Tiles[rect.Tag.ToString()] as BuildingBlock;
                         rect.ToolTip = current?.Priority + " ," + current?.Room;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Evacuation_Master_3000
 {
@@ -15,6 +16,7 @@ namespace Evacuation_Master_3000
         private int ticksSpentWaiting;
         public int NumberOfBlocks { get; set; }
         public int stepsTaken;
+        public int roundsWaitedBecauseOfBlock;
         private bool firstRun = true;
         public Tile Position { get; set; }
         public Tile OriginalPosition { get; set; }
@@ -127,6 +129,7 @@ namespace Evacuation_Master_3000
                             PathList[stepsTaken + 1])
                         { TicksAtArrival = AmountOfTicksSpent });
                         stepsTaken++;
+                        roundsWaitedBecauseOfBlock = 0;
                     }
                     Position = _target;
                     if (Position.Type == Tile.Types.Exit)
@@ -140,7 +143,22 @@ namespace Evacuation_Master_3000
                     // Counts up the heatmapcounter for every "round" the person needs to wait before moving.
                     ((BuildingBlock)Position).HeatmapCounter++;
                     PersonInteractionStats.CountTicksBeingBlocked(ticksSpentWaiting);
-
+                    roundsWaitedBecauseOfBlock++;
+                    if (roundsWaitedBecauseOfBlock == 5)
+                    {
+                        BuildingBlock position = Position as BuildingBlock;
+                        if (
+                            position.BNeighbours.Count(
+                                n => n.Type != Tile.Types.Person && n.Type != Tile.Types.Wall) > 0)
+                        {
+                            Position = position.BNeighbours.First(
+                                n => n.Type != Tile.Types.Person && n.Type != Tile.Types.Wall);
+                            int indexOfTarget = PathList.IndexOf(_target as BuildingBlock);
+                            PathList.Insert(indexOfTarget, Position as BuildingBlock);
+                            stepsTaken++;
+                            OnPersonMoved?.Invoke(this);
+                        }
+                    }
                 }
             }
             catch (ArgumentOutOfRangeException)

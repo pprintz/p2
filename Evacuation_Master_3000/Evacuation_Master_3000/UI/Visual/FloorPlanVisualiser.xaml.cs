@@ -317,7 +317,7 @@ namespace Evacuation_Master_3000
         {
             // Stolen and modified from: http://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients
 
-            double value = Math.Min((double)block.HeatmapCounter / (double)_mainWindow.TheUserInterface.LocalPeopleDictionary.Count, 1.0);
+            double value = Math.Min((double)block.HeatmapCounter / ((double)_mainWindow.TheUserInterface.LocalPeopleDictionary.Count * 2), 1.0);
             int colorAmount = 4;
             double[,] color =
             {

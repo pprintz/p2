@@ -6,7 +6,7 @@ namespace Evacuation_Master_3000
     public class UserInterface : IUserInterface
     {
         public UserInterface() {
-            TheMainWindow = new TheRealMainWindow(this);
+            TheMainWindow = new MainWindow(this);
         }
 
         public static bool IsSimulationPaused = false;
@@ -34,12 +34,13 @@ namespace Evacuation_Master_3000
 
         public static event ResetClicked OnReset;
         public static event SimulationEnd OnSimulationEnd;
-        private TheRealMainWindow TheMainWindow { get; }
+        private MainWindow TheMainWindow { get; }
         public event PrepareSimulation OnPrepareSimulation;
         public event UISimulationStart OnUISimulationStart;
         public event ImportFloorPlan OnImportFloorPlan;
         public event ExportFloorPlan OnExportFloorPlan;
         public event NewFloorPlan OnNewFloorPlan;
+        public event BuildingPlanSuccessfullLoaded OnBuildingPlanSuccessfullLoaded;
         public IFloorPlan LocalFloorPlan { get; private set; }
         private Dictionary<int, Person> People { get; set; } = new Dictionary<int, Person>();
         public IReadOnlyDictionary<int, Person> LocalPeopleDictionary => People;
@@ -68,6 +69,7 @@ namespace Evacuation_Master_3000
                 LocalFloorPlan = OnNewFloorPlan?.Invoke(width, height, floorAmount, description);
                 TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
                 _floorplanHasBeenCreated = true;
+                OnBuildingPlanSuccessfullLoaded?.Invoke();
             }
             else
             {
@@ -80,6 +82,7 @@ namespace Evacuation_Master_3000
             LocalFloorPlan = OnImportFloorPlan?.Invoke(filePath);
             People = OnPrepareSimulation?.Invoke(LocalFloorPlan);
             TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
+            OnBuildingPlanSuccessfullLoaded?.Invoke();
         }
 
         public void ExportFloorPlan(string filePath) {

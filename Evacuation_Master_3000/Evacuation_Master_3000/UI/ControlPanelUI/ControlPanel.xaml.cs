@@ -7,7 +7,7 @@ namespace Evacuation_Master_3000
     /// </summary>
     public partial class ControlPanel : UserControl
     {
-        public ControlPanel(TheRealMainWindow parentWindow)
+        public ControlPanel(MainWindow parentWindow)
         {
             InitializeComponent();
             ParentWindow = parentWindow;
@@ -23,14 +23,14 @@ namespace Evacuation_Master_3000
             UserControlTabPanel.SelectedIndex = 0;
         }
 
-        public TheRealMainWindow ParentWindow { get; set; }
+        public MainWindow ParentWindow { get; set; }
 
         public CP_FloorPlanControls FloorPlanControls { get; set; }
         public CP_SimulationControls SimulationControls { get; set; }
         public CP_SimulationStats SimulationStats { get; set; }
         public CP_ImportExport ImportExport { get; set; }
 
-        private void SetupUserControlTabs(TheRealMainWindow parentWindow)
+        private void SetupUserControlTabs(MainWindow parentWindow)
         {
             TabItem floorPlanControls = new TabItem
             {

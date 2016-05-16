@@ -13,7 +13,6 @@ namespace Evacuation_Master_3000.ImageScan
     /// </summary>
     public partial class CP_ImageScanPicture
     {
-
         private static Bitmap _theImage;
         private double[,] _pixelsRegular;
         private double[,] _pixelsSobel;

@@ -9,7 +9,7 @@ namespace Evacuation_Master_3000 {
     /// Interaction logic for Zoom.xaml
     /// </summary>
     public partial class Zoom : UserControl {
-        public Zoom(TheRealMainWindow parentWindow) {
+        public Zoom(MainWindow parentWindow) {
             InitializeComponent();
 
             ParentWindow = parentWindow;
@@ -17,7 +17,7 @@ namespace Evacuation_Master_3000 {
 
             SetupZoom();
         }
-        private TheRealMainWindow ParentWindow { get; }
+        private MainWindow ParentWindow { get; }
         private FloorPlanVisualiser FloorPlanVisualRepresentation { get; }
         private bool IsMouseHoveringVisual { get; set; }
         private bool _isAbleToZoom;

@@ -9,7 +9,7 @@ namespace Evacuation_Master_3000
     /// </summary>
     public partial class CP_FloorPlanControls : UserControl
     {
-        public CP_FloorPlanControls(TheRealMainWindow parentWindow)
+        public CP_FloorPlanControls(MainWindow parentWindow)
         {
             InitializeComponent();
             ParentWindow = parentWindow;
@@ -22,7 +22,7 @@ namespace Evacuation_Master_3000
             parentWindow.floorPlanVisualiserControl.OnBuildingBlockTypeFetch += OnFetchType;
         }
 
-        private TheRealMainWindow ParentWindow { get; }
+        private MainWindow ParentWindow { get; }
 
         private Tile.Types TileType { get; set; }
 

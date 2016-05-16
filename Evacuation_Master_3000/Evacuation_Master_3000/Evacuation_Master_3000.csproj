@@ -82,10 +82,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BuildingInformationCollection.cs" />
+    <Compile Include="Data\ImportExport\BuildingInformationCollection.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Data\DataSimulationStatistics\MovementStep.cs" />
-    <Compile Include="FloorInformation.cs" />
+    <Compile Include="Data\ImportExport\FloorInformation.cs" />
     <Compile Include="GlobalFiles\GlobalVariables.cs" />
     <Compile Include="ImageScan\CP_ImageScanpicture.xaml.cs">
       <DependentUpon>CP_ImageScanpicture.xaml</DependentUpon>
@@ -144,7 +144,6 @@
     <Compile Include="Data\Person.cs" />
     <Compile Include="GlobalFiles\Settings.cs" />
     <Compile Include="Data\FloorPlan\Tile.cs" />
-    <Compile Include="ToDoList.cs" />
     <Compile Include="UI\TheRealMainWindow.xaml.cs">
       <DependentUpon>TheRealMainWindow.xaml</DependentUpon>
     </Compile>
@@ -201,7 +200,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\OldMainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -209,7 +208,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Export.cs" />
+    <Compile Include="Data\ImportExport\Export.cs" />
     <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml.cs">
       <DependentUpon>old_ExportWindow.xaml</DependentUpon>
     </Compile>
@@ -220,8 +219,8 @@
     </Compile>
     <Compile Include="GlobalFiles\ImportExportSettings.cs" />
     <Compile Include="GlobalFiles\IntStringConverter.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\OldMainWindow.xaml.cs">
+      <DependentUpon>OldMainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\ControlPanelUI\ControlPanel.xaml">
@@ -246,7 +245,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Import.cs" />
+    <Compile Include="Data\ImportExport\Import.cs" />
     <Compile Include="Data\FloorPlan\BuildingBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -287,9 +286,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\ImportExport\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="UI\Visual\floor_switcher_arrow.png" />
     <Resource Include="UI\Visual\floor_switcher_bar_off.png" />

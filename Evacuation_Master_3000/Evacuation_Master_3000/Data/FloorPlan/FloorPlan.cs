@@ -196,12 +196,12 @@ namespace Evacuation_Master_3000
         private void InitializeRoomPriority(BuildingBlock door, int priorityCounter)
         {
             GlobalRoomCounter++;
+            priorityCounter++;
             bool done = false;
             List<BuildingBlock> tileList = BuildingBlocks.Values.Where(t => t.Type == Tile.Types.Free ||
                                                                             t.Type == Tile.Types.Person ||
                                                                             t.Type == Tile.Types.Stair).ToList();
-            priorityCounter++;
-            var currentList =
+            List<BuildingBlock> currentList =
                 door.BNeighbours.Where(
                     n =>
                         (n.Type == BuildingBlock.Types.Free || n.Type == Tile.Types.Person) &&

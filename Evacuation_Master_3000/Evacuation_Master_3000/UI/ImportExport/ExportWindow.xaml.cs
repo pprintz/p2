@@ -7,7 +7,7 @@ namespace Evacuation_Master_3000 {
     /// Interaction logic for ExportWindow.xaml
     /// </summary>
     public partial class ExportWindow : Window, INotifyPropertyChanged {
-        public ExportWindow(TheRealMainWindow parentWindow) {
+        public ExportWindow(MainWindow parentWindow) {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
 
@@ -27,7 +27,7 @@ namespace Evacuation_Master_3000 {
             ParentWindow.TheUserInterface.ExportFloorPlan(Path + "\\" + FileName + Extension);
         }
 
-        private TheRealMainWindow ParentWindow { get; }
+        private MainWindow ParentWindow { get; }
         private double WindowBaseHeight { get; }
         public string FileName { get; set; }
         public string Extension { get; }

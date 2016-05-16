@@ -18,4 +18,5 @@ namespace Evacuation_Master_3000
     public delegate void ChangeVisualFloor(int currentFloor);
     public delegate void ExportFloorPlanFeedBack(string message);
     public delegate void ImportFloorPlanFeedBack();
+    public delegate void BuildingPlanSuccessfullLoaded();
 }

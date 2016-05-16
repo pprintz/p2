@@ -10,7 +10,7 @@ namespace Evacuation_Master_3000
             SourceTile = sourceTile;
             DestinationTile = destinationTile;
             Distance = sourceTile.DistanceTo(destinationTile);
-            DistanceInMeters = Distance * 0.40;
+            DistanceInMeters = Distance * GlobalVariables.BlockWidthInMeters;
             Person.PersonInteractionStats.DistanceTraveled += DistanceInMeters;
         }
 

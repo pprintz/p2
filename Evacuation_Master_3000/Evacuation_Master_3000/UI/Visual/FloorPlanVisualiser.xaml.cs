@@ -101,7 +101,7 @@ namespace Evacuation_Master_3000
                             Width = tileSize,
                             Fill = new SolidColorBrush(Colors.White),
                             Tag = Coordinate(x, y, z), /* Makes binding rectangles to buildingblocks easier */
-                            Margin = new Thickness(x * 22, y * 22, 0, 0)
+                            Margin = new Thickness(0, 0, x * tileSize * 2 + x, y * tileSize * 2 + y)
                         };
 
                         if (localFloorPlan.Tiles[Coordinate(x, y, z)].Type != Tile.Types.Free)

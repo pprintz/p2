@@ -304,10 +304,10 @@ namespace Evacuation_Master_3000
                     newColor =Colors.Blue;
                     break;
                 case Tile.Types.Person:
-                    newColor = Colors.Red;
+                    newColor = Colors.BlueViolet;
                     break;
                 case Tile.Types.Stair:
-                    newColor = Colors.BlueViolet;
+                    newColor = Colors.Thistle;
                     break;
                 default:
                     newColor = Colors.BlanchedAlmond;

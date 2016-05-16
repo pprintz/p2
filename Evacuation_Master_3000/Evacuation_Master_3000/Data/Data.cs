@@ -18,7 +18,7 @@ namespace Evacuation_Master_3000
             //Person.OnPersonMoved += Statistics?
         }
 
-
+        private IPathfinding pathfindingAlgorithm;
         public IFloorPlan TheFloorPlan { get; private set; }
         private Dictionary<int, Person> _allPeople;
         public Dictionary<int, Person> AllPeople { get { return _allPeople; } }
@@ -55,17 +55,19 @@ namespace Evacuation_Master_3000
         public static bool SimulationStart = true;
         public Dictionary<int, Person> StartSimulation(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)                                           //<---- kan formentligt være void?
         {
+            this.pathfindingAlgorithm = pathfindingAlgorithm;
             if (SimulationStart)
             {
                 if (AllPeople != null)
                 {
                     foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0))
                     {
+                        person.Evacuated = false;
                         person.OnPersonEvacuated += RemoveEvacuatedPerson;
                         person.TickLength = tickLength;
+                        person.OnExtendedPathRequest += FindNewPath;
                         person.PathList.AddRange(
                             pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
-                        person.Evacuated = false;
                     }
                     SimulationStart = false;
                 }
@@ -73,6 +75,29 @@ namespace Evacuation_Master_3000
             StartTicks();
             return AllPeople;
         }
+
+        private IEnumerable<BuildingBlock> FindNewPath(Person person)
+        {
+            var target = person.PathList[person.stepsTaken + 1];
+            var pos = person.PathList[person.stepsTaken];
+            if (AllPeople.Values.Count(p => p.PathList[p.stepsTaken] == target && p.PathList.Count > p.stepsTaken + 1 && p.PathList[p.stepsTaken + 1] == pos) == 1)
+            {
+                Person personBlocking = AllPeople.Values.First(p => p.PathList[p.stepsTaken] == target);
+                if (personBlocking.PathList.Count > 0 &&
+                    (person.Position as BuildingBlock).BNeighbours.Any(n => n.Type != Tile.Types.Person))
+                {
+                    if (personBlocking.PathList.Count(b => b.Type != Tile.Types.Person) <
+                        person.PathList.Count(b => b.Type != Tile.Types.Person))
+                    {
+                        person.PathList.Clear();
+                        person.PathList.AddRange(personBlocking.PathList);
+                        person.stepsTaken = personBlocking.stepsTaken + 1;
+                    }
+                }
+            }
+            return null;
+        }
+
         public void StartTicks()
         {
             while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused)

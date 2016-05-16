@@ -43,6 +43,7 @@ namespace Evacuation_Master_3000
                     firstRun = true;
                     stepsTaken = 0;
                     Data.OnTick += ConditionalMove;
+                   
                 }
             }
         }
@@ -80,7 +81,7 @@ namespace Evacuation_Master_3000
         public void ConditionalMove()
         { // Person should be removed from event thingy when evacuated
             AmountOfTicksSpent++;
-            if (firstRun)
+            if (_target == null)
             {
                 _target = PathList[stepsTaken + 1];
                 ResetTickConditions();
@@ -121,7 +122,6 @@ namespace Evacuation_Master_3000
                 }
                 if (_target.Type != Tile.Types.Person || _target.OriginalType == Tile.Types.Stair)
                 {
-
                     // Move to new tile and check if evacuated. If not, keep going.
                     if (stepsTaken + 1 < PathList.Count)
                     {
@@ -129,13 +129,13 @@ namespace Evacuation_Master_3000
                             PathList[stepsTaken + 1])
                         { TicksAtArrival = AmountOfTicksSpent });
                         stepsTaken++;
-                        roundsWaitedBecauseOfBlock = 0;
                     }
                     Position = _target;
                     if (Position.Type == Tile.Types.Exit)
                     {
                         Evacuated = true;
                     }
+                    roundsWaitedBecauseOfBlock = 0;
                     OnPersonMoved?.Invoke(this);
                 }
                 else
@@ -144,24 +144,24 @@ namespace Evacuation_Master_3000
                     ((BuildingBlock)Position).HeatmapCounter++;
                     PersonInteractionStats.CountTicksBeingBlocked(ticksSpentWaiting);
                     roundsWaitedBecauseOfBlock++;
-                    if (roundsWaitedBecauseOfBlock == 5)
+                    if (roundsWaitedBecauseOfBlock >= 3 && _target.Type == Tile.Types.Person)
                     {
-                        BuildingBlock position = Position as BuildingBlock;
-                        if (
-                            position.BNeighbours.Count(
-                                n => n.Type != Tile.Types.Person && n.Type != Tile.Types.Wall) > 0)
+                        OnExtendedPathRequest?.Invoke(this);
+                        _target = PathList[stepsTaken + 1];
+                        if (PathList.Count > stepsTaken + 1 && _target.Type != Tile.Types.Person)
                         {
-                            Position = position.BNeighbours.First(
-                                n => n.Type != Tile.Types.Person && n.Type != Tile.Types.Wall);
-                            int indexOfTarget = PathList.IndexOf(_target as BuildingBlock);
-                            PathList.Insert(indexOfTarget, Position as BuildingBlock);
+                            PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[stepsTaken],
+                          PathList[stepsTaken + 1])
+                            { TicksAtArrival = AmountOfTicksSpent });
                             stepsTaken++;
+                            Position = PathList[stepsTaken + 1];
+                            roundsWaitedBecauseOfBlock = 0;
                             OnPersonMoved?.Invoke(this);
                         }
                     }
                 }
             }
-            catch (ArgumentOutOfRangeException)
+            catch (DivideByZeroException)
             {
                 throw new PersonException($"Person with id: {ID} could not find a path out.    {stepsTaken} {PathList.Count}"); // Check if this can ever happen due to catch above ^
             }

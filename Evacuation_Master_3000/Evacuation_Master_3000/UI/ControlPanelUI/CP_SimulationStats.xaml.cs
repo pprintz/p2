@@ -40,6 +40,11 @@ namespace Evacuation_Master_3000
                 if (person.Evacuated)
                 {
                     person.Evacuated = false;
+                    person.PathList.Clear();
+                    foreach (MovementStep movementStep in person.PersonInteractionStats.MovementSteps)
+                    {
+                        person.PathList.Add(movementStep.SourceTile as BuildingBlock);
+                    }
                 }
                 person.stepsTaken = 0;
             }

@@ -2,6 +2,6 @@
 {
     static class GlobalVariables
     {
-        public const double BlockWidthInMeters = 0.40;
+        public const double BlockWidthInMeters = 0.50;
     }
 }

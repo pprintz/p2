@@ -14,18 +14,21 @@ namespace Evacuation_Master_3000
     /// </summary>
     public partial class CP_SimulationStats : UserControl
     {
-        public CP_SimulationStats()
+        public CP_SimulationStats(MainWindow parentWindow)
         {
             InitializeComponent();
             SetupStats();
             Person.OnPersonMoved += UpdateSimulationStats;
             Data.OnTick += UpdateTicksAndTime;
             UserInterface.OnReset += ResetPeopleAndSimulationInformation;
+            _parentWindow = parentWindow;
         }
+
+        private MainWindow _parentWindow;
 
         private void ResetPeopleAndSimulationInformation()
         {
-            foreach (Person person in PeopleList)
+            foreach (Person person in _parentWindow.TheUserInterface.LocalPeopleDictionary.Values)
             {
                 person.Position.Type = Tile.Types.Free;
                 person.Position = person.OriginalPosition;
@@ -49,7 +52,6 @@ namespace Evacuation_Master_3000
         }
 
 
-        List<Person> PeopleList = new List<Person>();
         List<Person> EvacuatedPeopleList = new List<Person>();
         private int ticks;
         private double fillWidthPerPerson;
@@ -62,27 +64,24 @@ namespace Evacuation_Master_3000
         }
         private void UpdateSimulationStats(Person person)
         {
-            if (!PeopleList.Contains(person))
-            {
-                PeopleList.Add(person);
-                TotalPersonCount.Text = PeopleList.Count + "";
-                fillWidthPerPerson = (PersonsEvacuatedProgressBarBackground.ActualWidth) / PeopleList.Count;
-            }
+            int peopleCount = _parentWindow.TheUserInterface.LocalPeopleDictionary.Count;
+            TotalPersonCount.Text = peopleCount + "";
+            fillWidthPerPerson = (PersonsEvacuatedProgressBarBackground.ActualWidth) / peopleCount;
             if (person.Evacuated)
             {
                 if (!EvacuatedPeopleList.Contains(person))
                 {
                     EvacuatedPeopleList.Add(person);
-                    int multiplier = (int)Math.Round(255f / PeopleList.Count);
+                    int multiplier = (int)Math.Round(255f / peopleCount);
                     int count = multiplier * EvacuatedPeopleList.Count;
                     PersonsEvacuatedProgressBarFill.Fill = BarColor(count);
                     PersonsEvacuatedProgressBarFill.Width = fillWidthPerPerson * EvacuatedPeopleList.Count;
                     CurrentNumberOfEvacuatedPersons.Text = EvacuatedPeopleList.Count + "";
-                    double percentageEvacuated = ((double)EvacuatedPeopleList.Count) / PeopleList.Count * 100;
+                    double percentageEvacuated = ((double)EvacuatedPeopleList.Count) / peopleCount * 100;
                     PersonsEvacuatedProgressBarText.Text = Math.Round(percentageEvacuated, 2) + "%";
                     person.PersonInteractionStats.TimeWhenEvacuated = Math.Round((double)ticks / 100, 2);
                 }
-                if (PeopleList.Count == EvacuatedPeopleList.Count)
+                if (peopleCount == EvacuatedPeopleList.Count)
                 {
                     StringBuilder sb = new StringBuilder();
                     //UserInterface.HasSimulationEnded = true;
@@ -95,16 +94,16 @@ namespace Evacuation_Master_3000
                     double threeQuarterOfTimeElapsed = timeElapsed * 0.75;
                     sb.AppendLine(
                         $"Amount of people evacuated at {quarterOfTimeElapsed} seconds: " +
-                        $"{Math.Round((double)EvacuatedPeopleList.Count(p => p.PersonInteractionStats.TimeWhenEvacuated <= quarterOfTimeElapsed)/(double)EvacuatedPeopleList.Count * 100,2)}%");
+                        $"{Math.Round((double)EvacuatedPeopleList.Count(p => p.PersonInteractionStats.TimeWhenEvacuated <= quarterOfTimeElapsed) / (double)EvacuatedPeopleList.Count * 100, 2)}%");
                     sb.AppendLine(
                         $"Amount of people evacuated at {halfOfTimeElapsed} seconds: " +
-                        $"{Math.Round((double)EvacuatedPeopleList.Count(p => p.PersonInteractionStats.TimeWhenEvacuated <= halfOfTimeElapsed)/(double)EvacuatedPeopleList.Count * 100,2)}%");
+                        $"{Math.Round((double)EvacuatedPeopleList.Count(p => p.PersonInteractionStats.TimeWhenEvacuated <= halfOfTimeElapsed) / (double)EvacuatedPeopleList.Count * 100, 2)}%");
                     sb.AppendLine(
                         $"Amount of people evacuated at {threeQuarterOfTimeElapsed} seconds: " +
-                        $"{Math.Round((double)EvacuatedPeopleList.Count(p => p.PersonInteractionStats.TimeWhenEvacuated <= threeQuarterOfTimeElapsed)/(double)EvacuatedPeopleList.Count * 100,2)}%");
+                        $"{Math.Round((double)EvacuatedPeopleList.Count(p => p.PersonInteractionStats.TimeWhenEvacuated <= threeQuarterOfTimeElapsed) / (double)EvacuatedPeopleList.Count * 100, 2)}%");
                     sb.AppendLine(
                         $"Amount of people evacuated at {timeElapsed} seconds: " +
-                        $"{EvacuatedPeopleList.Count(p => p.PersonInteractionStats.TimeWhenEvacuated <= timeElapsed)/EvacuatedPeopleList.Count * 100}%");
+                        $"{EvacuatedPeopleList.Count(p => p.PersonInteractionStats.TimeWhenEvacuated <= timeElapsed) / EvacuatedPeopleList.Count * 100}%");
 
                     double averageTime = EvacuatedPeopleList.Sum(p => p.PersonInteractionStats.TimeWhenEvacuated) /
                                          EvacuatedPeopleList.Count;

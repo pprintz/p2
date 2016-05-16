@@ -13,7 +13,7 @@ namespace Evacuation_Master_3000
             ParentWindow = parentWindow;
             FloorPlanControls = new CP_FloorPlanControls(ParentWindow);
             SimulationControls = new CP_SimulationControls();
-            SimulationStats = new CP_SimulationStats();
+            SimulationStats = new CP_SimulationStats(ParentWindow);
             ImportExport = new CP_ImportExport(ParentWindow);
             Import.OnImportFeedBack += OnImportedFloorPlan;
             SetupUserControlTabs(parentWindow);

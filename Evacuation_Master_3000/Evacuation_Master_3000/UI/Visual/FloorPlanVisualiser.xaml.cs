@@ -94,19 +94,13 @@ namespace Evacuation_Master_3000
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        //Rectangle figure = new Rectangle {
-                        //    Height = tileSize,
-                        //    Width = tileSize,
-                        //    Fill = new SolidColorBrush(Colors.White),
-                        //    Tag = Coordinate(x, y, z), /* Makes binding rectangles to buildingblocks easier */
-                        //    Margin = new Thickness(x * 30, y * 30, 0, 0)
-                        //};
-                        Rectangle figure = new Rectangle();
-                        figure.Height = tileSize;
-                        figure.Width = tileSize;
-                        figure.Fill = new SolidColorBrush(Colors.White);
-                        figure.Tag = Coordinate(x, y, z);
-                        figure.Margin = new Thickness(0, 0, x*tileSize*2+x, y*tileSize*2+y);
+                        Rectangle figure = new Rectangle {
+                            Height = tileSize,
+                            Width = tileSize,
+                            Fill = new SolidColorBrush(Colors.White),
+                            Tag = Coordinate(x, y, z), /* Makes binding rectangles to buildingblocks easier */
+                            Margin = new Thickness(0, 0, x * tileSize * 2 + x, y * tileSize * 2 + y)
+                        };
 
                         if (localFloorPlan.Tiles[Coordinate(x, y, z)].Type != Tile.Types.Free)
                             ColorizeBuildingBlock(figure, localFloorPlan.Tiles[Coordinate(x, y, z)].Type);

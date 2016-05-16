@@ -146,12 +146,6 @@ namespace Evacuation_Master_3000
             //    }
             //}
         }
-
-        public void UpdateTile(IEnumerable<Tile> tilesToChange)
-        {
-
-        }
-
         public void ChangeFloor(int currentFloor)
         {
             VisualContainer.Children.Clear();
@@ -240,6 +234,7 @@ namespace Evacuation_Master_3000
                         rect.ToolTip = current?.Priority + " ," + current?.Room;
                     }
                 }
+                firstTime = false;
             }
             BuildingBlock prev = person.PathList[person.stepsTaken - 1];
             BuildingBlock next = person.PathList[person.stepsTaken];
@@ -261,8 +256,6 @@ namespace Evacuation_Master_3000
                 else
                     ColorizeBuildingBlock(prevRectangleToColorize, prev.OriginalType);
             }
-
-
             Rectangle nextRectangleToColorize;
             AllRectangles.TryGetValue(Coordinate(next), out nextRectangleToColorize);
             if (next.OriginalType == Tile.Types.Exit || next.OriginalType == Tile.Types.Stair)
@@ -275,7 +268,6 @@ namespace Evacuation_Master_3000
                 next.Type = Tile.Types.Person;
                 ColorizeBuildingBlock(nextRectangleToColorize, next.Type);
             }
-
         }
 
         /* Might need re-work - lavet QnD! */

@@ -18,7 +18,7 @@ namespace Evacuation_Master_3000
     public partial class FloorPlanVisualiser
     {
         public FloorPlanVisualiser(MainWindow mainWindow)
-        {  
+        {
             InitializeComponent();
             Person.OnPersonMoved += UpdateVisualsOnEvacuatableMoved;
             UserInterface.OnReset += UpdateVisualOnReset;
@@ -53,7 +53,7 @@ namespace Evacuation_Master_3000
         private Dictionary<string, Rectangle> AllRectangles { get; }
         public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
         {
-            
+
             localPeople = people.ToDictionary(k => Coordinate(k.Value.Position), v => v.Value);
             //localPeople = people.Where(p => !localPeople.Values.Contains(p as Person)).ToDictionary(k => Coordinate(k.Position.X, k.Position.Y, k.Position.Z), v => v as Person);
             //First find all tiles with changes - this is done with clever use of lambda expressions
@@ -86,7 +86,8 @@ namespace Evacuation_Master_3000
 
             for (int z = 0; z < floorAmount; z++)
             {
-                Grid container = new Grid() {
+                Grid container = new Grid()
+                {
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top
                 };
@@ -94,7 +95,8 @@ namespace Evacuation_Master_3000
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        Rectangle figure = new Rectangle {
+                        Rectangle figure = new Rectangle
+                        {
                             Height = tileSize,
                             Width = tileSize,
                             Fill = new SolidColorBrush(Colors.White),
@@ -139,7 +141,7 @@ namespace Evacuation_Master_3000
             //for(int z = 0; z < localFloorPlan.FloorAmount; z++) {
             //    for(int y = 0; y < localFloorPlan.Height; y++) {
             //        for(int x = 0; x < localFloorPlan.Width; x++) {
-                        
+
             //        }
             //    }
             //}
@@ -169,7 +171,7 @@ namespace Evacuation_Master_3000
             Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
             Rectangle senderRectangle = sender as Rectangle;                    //Get a reference to the sender rectangle
             if (senderRectangle == null) throw new GeneralInternalException();
-            BuildingBlock senderBlock = (BuildingBlock) localFloorPlan.Tiles[senderRectangle.Tag.ToString()];
+            BuildingBlock senderBlock = (BuildingBlock)localFloorPlan.Tiles[senderRectangle.Tag.ToString()];
 
             SetBlockType(senderBlock, type);
             if (Keyboard.IsKeyDown(Settings.LineToolKey))
@@ -209,7 +211,7 @@ namespace Evacuation_Master_3000
                     int x = i + previousBlock.X;
                     int y = (int)(tilt) + previousBlock.Y + j;
 
-                    SetBlockType((BuildingBlock)localFloorPlan.Tiles[Coordinate(x,y,block.Z)],targetType);
+                    SetBlockType((BuildingBlock)localFloorPlan.Tiles[Coordinate(x, y, block.Z)], targetType);
 
                     j += Math.Sign(deltaY);
                 } while (Math.Abs(j) < Math.Abs(deltaTilt));
@@ -241,40 +243,37 @@ namespace Evacuation_Master_3000
             }
             BuildingBlock prev = person.PathList[person.stepsTaken - 1];
             BuildingBlock next = person.PathList[person.stepsTaken];
-            foreach (Rectangle child in FloorContainer[prev.Z].Children.Cast<Rectangle>())
+            Rectangle prevRectangleToColorize;
+            AllRectangles.TryGetValue(Coordinate(prev), out prevRectangleToColorize);
+            if (prev.OriginalType == Tile.Types.Person)
             {
-                if (child.Tag.ToString() == Coordinate(prev))
-                {
-                    if (prev.OriginalType == Tile.Types.Person)
-                    {
-                        prev.Type = Tile.Types.Free;
-                        if (_mainWindow.TheUserInterface.HeatMapActivated)
-                            ColorRectangle(child, CalculateHeatMapColor(prev));
-                        else
-                            ColorizeBuildingBlock(child, Tile.Types.Free);
-                    }
-                    else
-                    {
-                        prev.Type = prev.OriginalType;
-                        if (_mainWindow.TheUserInterface.HeatMapActivated)
-                            ColorRectangle(child, CalculateHeatMapColor(prev));
-                        else
-                            ColorizeBuildingBlock(child, prev.OriginalType);
-                    }
-                }
-                else if (child.Tag.ToString() == Coordinate(next))
-                {
-                    if (next.OriginalType == Tile.Types.Exit || next.OriginalType == Tile.Types.Stair)
-                    {
-                        next.Type = next.OriginalType;
-                        ColorizeBuildingBlock(child, next.OriginalType);
-                    }
-                    else
-                    {
-                        next.Type = Tile.Types.Person;
-                        ColorizeBuildingBlock(child, next.Type);
-                    }
-                }
+                prev.Type = Tile.Types.Free;
+                if (_mainWindow.TheUserInterface.HeatMapActivated)
+                    ColorRectangle(prevRectangleToColorize, CalculateHeatMapColor(prev));
+                else
+                    ColorizeBuildingBlock(prevRectangleToColorize, Tile.Types.Free);
+            }
+            else
+            {
+                prev.Type = prev.OriginalType;
+                if (_mainWindow.TheUserInterface.HeatMapActivated)
+                    ColorRectangle(prevRectangleToColorize, CalculateHeatMapColor(prev));
+                else
+                    ColorizeBuildingBlock(prevRectangleToColorize, prev.OriginalType);
+            }
+
+
+            Rectangle nextRectangleToColorize;
+            AllRectangles.TryGetValue(Coordinate(next), out nextRectangleToColorize);
+            if (next.OriginalType == Tile.Types.Exit || next.OriginalType == Tile.Types.Stair)
+            {
+                next.Type = next.OriginalType;
+                ColorizeBuildingBlock(nextRectangleToColorize, next.OriginalType);
+            }
+            else
+            {
+                next.Type = Tile.Types.Person;
+                ColorizeBuildingBlock(nextRectangleToColorize, next.Type);
             }
 
         }
@@ -301,7 +300,7 @@ namespace Evacuation_Master_3000
                     newColor = Colors.Pink;
                     break;
                 case Tile.Types.Exit:
-                    newColor =Colors.Blue;
+                    newColor = Colors.Blue;
                     break;
                 case Tile.Types.Person:
                     newColor = Colors.BlueViolet;
@@ -370,16 +369,16 @@ namespace Evacuation_Master_3000
             } // accounts for an input >=0
             else
             {
-                value = value*(colorAmount - 1); // Will multiply value by 3.
+                value = value * (colorAmount - 1); // Will multiply value by 3.
                 idx1 = (int)Math.Floor(value); // Our desired color will be after this index.
-                idx2 = Math.Min(idx1 + 1, colorAmount-1); // ... and before this index (inclusive).
+                idx2 = Math.Min(idx1 + 1, colorAmount - 1); // ... and before this index (inclusive).
                 fractBetween = value - idx1; // Distance between the two indexes (0-1).
             }
 
 
-            int red = (int)Math.Round((color[idx2,0] - color[idx1,0])*fractBetween + color[idx1,0]);
-            int green = (int)Math.Round((color[idx2,1] - color[idx1,1])*fractBetween + color[idx1,1]);
-            int blue = (int)Math.Round((color[idx2,2] - color[idx1,2])*fractBetween + color[idx1,2]);
+            int red = (int)Math.Round((color[idx2, 0] - color[idx1, 0]) * fractBetween + color[idx1, 0]);
+            int green = (int)Math.Round((color[idx2, 1] - color[idx1, 1]) * fractBetween + color[idx1, 1]);
+            int blue = (int)Math.Round((color[idx2, 2] - color[idx1, 2]) * fractBetween + color[idx1, 2]);
             return new Color
             {
                 A = 255,

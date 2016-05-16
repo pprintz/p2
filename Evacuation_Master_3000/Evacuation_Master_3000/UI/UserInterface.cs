@@ -93,9 +93,10 @@ namespace Evacuation_Master_3000
 
         public void SimulationStart(bool showHeatMap, bool stepByStep, IPathfinding pathfinding, int milliseconds)
         {
+            HeatMapActivated = showHeatMap;
             People = OnPrepareSimulation?.Invoke(LocalFloorPlan);
             /*People = */OnUISimulationStart?.Invoke(showHeatMap, stepByStep, pathfinding, milliseconds);
-            HeatMapActivated = showHeatMap;
+            
         }
 
         private void VisualizeFloorPlan() {

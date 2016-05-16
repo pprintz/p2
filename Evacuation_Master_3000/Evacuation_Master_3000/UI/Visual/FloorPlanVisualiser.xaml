@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Evacuation_Master_3000"
              mc:Ignorable="d" >
     <Grid Name="OverlayContainer">
-        <ScrollViewer Name="VisualContainerScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="White">
+        <ScrollViewer Name="VisualContainerScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="Gray">
             <Canvas Name="VisualContainer" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Canvas.LayoutTransform>
                     <TransformGroup>

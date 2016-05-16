@@ -144,8 +144,8 @@
     <Compile Include="Data\Person.cs" />
     <Compile Include="GlobalFiles\Settings.cs" />
     <Compile Include="Data\FloorPlan\Tile.cs" />
-    <Compile Include="UI\TheRealMainWindow.xaml.cs">
-      <DependentUpon>TheRealMainWindow.xaml</DependentUpon>
+    <Compile Include="UI\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UserInterface.cs" />
     <Compile Include="UI\SingleControls\Zoom.xaml.cs">
@@ -192,37 +192,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\GridNewOrLoadWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\OldMainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\ImportExport\Export.cs" />
-    <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\old_ExportWindow.xaml.cs">
-      <DependentUpon>old_ExportWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Graph.cs" />
-    <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\Grid.cs" />
-    <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\GridNewOrLoadWindow.xaml.cs">
-      <DependentUpon>GridNewOrLoadWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="GlobalFiles\ImportExportSettings.cs" />
     <Compile Include="GlobalFiles\IntStringConverter.cs" />
-    <Compile Include="_ThingsThatHaveBeenFixedAndOrCanBeDeleted\OldMainWindow.xaml.cs">
-      <DependentUpon>OldMainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="UI\ControlPanelUI\ControlPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -235,7 +212,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\TheRealMainWindow.xaml">
+    <Page Include="UI\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -97,7 +97,7 @@ namespace Evacuation_Master_3000
                         Rectangle figure = new Rectangle {
                             Height = tileSize,
                             Width = tileSize,
-                            Fill = z % 2 == 0 ? new SolidColorBrush(Colors.Aqua) : new SolidColorBrush(Colors.Bisque),
+                            Fill = new SolidColorBrush(Colors.White),
                             Tag = Coordinate(x, y, z), /* Makes binding rectangles to buildingblocks easier */
                             Margin = new Thickness(x * tileSize, y * tileSize, 0, 0)
                         };

@@ -40,6 +40,7 @@ namespace Evacuation_Master_3000
         public event ImportFloorPlan OnImportFloorPlan;
         public event ExportFloorPlan OnExportFloorPlan;
         public event NewFloorPlan OnNewFloorPlan;
+        public event BuildingPlanSuccessfullLoaded OnBuildingPlanSuccessfullLoaded;
         public IFloorPlan LocalFloorPlan { get; private set; }
         private Dictionary<int, Person> People { get; set; } = new Dictionary<int, Person>();
         public IReadOnlyDictionary<int, Person> LocalPeopleDictionary => People;
@@ -68,6 +69,7 @@ namespace Evacuation_Master_3000
                 LocalFloorPlan = OnNewFloorPlan?.Invoke(width, height, floorAmount, description);
                 TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
                 _floorplanHasBeenCreated = true;
+                OnBuildingPlanSuccessfullLoaded?.Invoke();
             }
             else
             {
@@ -80,6 +82,7 @@ namespace Evacuation_Master_3000
             LocalFloorPlan = OnImportFloorPlan?.Invoke(filePath);
             People = OnPrepareSimulation?.Invoke(LocalFloorPlan);
             TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
+            OnBuildingPlanSuccessfullLoaded?.Invoke();
         }
 
         public void ExportFloorPlan(string filePath) {

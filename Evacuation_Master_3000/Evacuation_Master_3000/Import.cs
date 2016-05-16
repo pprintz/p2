@@ -93,7 +93,6 @@ namespace Evacuation_Master_3000 {
                 };
             }
 
-            OnImportFeedBack?.Invoke();
             /* We're finished, return the results for further working */
             return (BuildingInformationCollection)BuildingInformation;
         }

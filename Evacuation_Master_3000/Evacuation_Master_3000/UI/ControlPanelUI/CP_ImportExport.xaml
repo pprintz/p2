@@ -13,24 +13,26 @@
         </StackPanel.Resources>
         <GroupBox Header="File information" Name="FileInformationGroup">
             <StackPanel>
-                <DockPanel>
+                <DockPanel Name="FileNamePanel">
                     <TextBlock Name="FileNameLabel" Text="File name: "/>
                     <TextBlock Name="FileNameText" HorizontalAlignment="Right" Text="Grid001.grid"/>
                 </DockPanel>
                 <DockPanel>
                     <TextBlock Name="DescriptionLabel" Text="Description: "/>
-                    <TextBox Name="DescriptionTextBox" HorizontalAlignment="Right" Text="Grid description"/>
+                    <TextBox Name="DescriptionTextBox" HorizontalAlignment="Right" Text="Grid description" Width="135"/>
                 </DockPanel>
                 <DockPanel>
                     <GroupItem>
                         <StackPanel>
                             <ComboBox Name="HeaderComboBox" Text="Header">
-                                <ComboBoxItem Content="Floor 1"/>
+                                <!--<ComboBoxItem Content="Floor 1" Name="nummer1" />
+                                <ComboBoxItem Content="Floor 2" Name="number2" />
+                                <ComboBoxItem Content="Floor 3" Name="numero3" />-->
                                 <!-- Skal dynamisk indsættes ved import/new -->
                             </ComboBox>
                             <DockPanel>
                                 <TextBlock Name="HeaderDescription" Text="Header: "/>
-                                <TextBox Name="HeaderTextBox" HorizontalAlignment="Right" Text="Header for floor"/>
+                                <TextBox Name="HeaderTextBox" HorizontalAlignment="Right" Text="Header for floor" Width="135"/>
                             </DockPanel>
                         </StackPanel>
                     </GroupItem>

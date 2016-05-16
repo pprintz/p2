@@ -16,7 +16,7 @@
                 <RadioButton x:Name="MakeFree" Tag="Free" GroupName="RadioElevation" Content="Fri"/>
                 <GroupBox Header="Inventar">
                     <StackPanel>
-                        <RadioButton x:Name="MakeWall" Tag="Wall" GroupName="RadioElevation" Content="Væg" IsChecked="True" />
+                        <RadioButton x:Name="MakeWall" Tag="Wall" GroupName="RadioElevation" Content="Væg" />
                         <RadioButton x:Name="MakeDoor" Tag="Door" GroupName="RadioElevation" Content="Dør"/>
                         <RadioButton x:Name="MakeStair" Tag="Stair" GroupName="RadioElevation" Content="Trappe"/>
                     </StackPanel>

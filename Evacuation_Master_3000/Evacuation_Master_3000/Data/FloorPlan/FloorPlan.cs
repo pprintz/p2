@@ -74,7 +74,7 @@ namespace Evacuation_Master_3000
         }
         private void CalculateNeighbours()
         {
-            foreach (var buildingBlock in BuildingBlocks.Values.Where(t => t.Type != Tile.Types.Wall))
+            foreach (var buildingBlock in BuildingBlocks.Values)
             {
                 CheckForStairConnection(buildingBlock);
                 int topLeftNeighbourX = buildingBlock.X - 1;
@@ -88,11 +88,12 @@ namespace Evacuation_Master_3000
                         if (Tiles.ContainsKey(coordinate))
                         {
                             BuildingBlock currentBuildingBlock = BuildingBlocks[coordinate];
-                            if (buildingBlock != currentBuildingBlock &&
-                                currentBuildingBlock.Type != Tile.Types.Wall &&
-                                currentBuildingBlock.Type != Tile.Types.Furniture)
-
+                            if (!Equals(buildingBlock, currentBuildingBlock) && (buildingBlock.Type != Tile.Types.Wall) && (currentBuildingBlock.Type != Tile.Types.Wall))
                                 buildingBlock.BNeighbours.Add(currentBuildingBlock);
+                            else if (!Equals(buildingBlock, currentBuildingBlock) && (buildingBlock.Type == Tile.Types.Wall))
+                            {
+                                buildingBlock.BNeighbours.Add(currentBuildingBlock);
+                            }
                         }
                     }
                 }
@@ -121,24 +122,24 @@ namespace Evacuation_Master_3000
         }
         private void CheckForConnectionsThroughDiagonalUnwalkableElements()
         {
-            foreach (BuildingBlock pair in BuildingBlocks.Values)
+            foreach (BuildingBlock buildingBlock in BuildingBlocks.Values)
             {
-                if (pair.Type == BuildingBlock.Types.Wall ||
-                    pair.Type == BuildingBlock.Types.Furniture)
+                if (buildingBlock.Type == BuildingBlock.Types.Wall ||
+                    buildingBlock.Type == BuildingBlock.Types.Furniture)
                 {
-                    foreach (BuildingBlock neighbour in pair.Neighbours)
+                    foreach (BuildingBlock neighbour in buildingBlock.BNeighbours)
                     {
-                        if (neighbour.DistanceTo(pair) > 1) // Then it is a diagonal
+                        if (neighbour.DistanceTo(buildingBlock) > 1) // Then it is a diagonal
                         {
-                            var illegalConnectedPointCoordinateSetOne = Coordinate(pair.X,
+                            var illegalConnectedPointCoordinateSetOne = Coordinate(buildingBlock.X,
                                 neighbour.Y, neighbour.Z);
                             var illegalConnectedPointCoordinateSetTwo = Coordinate(neighbour.X,
-                                pair.Y, neighbour.Z);
+                                buildingBlock.Y, neighbour.Z);
                             if (!BuildingBlocks.ContainsKey(illegalConnectedPointCoordinateSetOne) ||
                                 !BuildingBlocks.ContainsKey(illegalConnectedPointCoordinateSetTwo)) continue;
-                            BuildingBlocks[illegalConnectedPointCoordinateSetOne].Neighbours.Remove(
+                            BuildingBlocks[illegalConnectedPointCoordinateSetOne].BNeighbours.Remove(
                                 BuildingBlocks[illegalConnectedPointCoordinateSetTwo]);
-                            BuildingBlocks[illegalConnectedPointCoordinateSetTwo].Neighbours.Remove(
+                            BuildingBlocks[illegalConnectedPointCoordinateSetTwo].BNeighbours.Remove(
                                 BuildingBlocks[illegalConnectedPointCoordinateSetOne]);
                         }
                     }

@@ -7,13 +7,13 @@
              mc:Ignorable="d" >
     <Grid Name="OverlayContainer">
         <ScrollViewer Name="VisualContainerScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="White">
-            <UniformGrid Name="VisualContainer" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <UniformGrid.LayoutTransform>
+            <Canvas Name="VisualContainer" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Canvas.LayoutTransform>
                     <TransformGroup>
                         <ScaleTransform x:Name="VisualContainerScaleTransform"/>
                     </TransformGroup>
-                </UniformGrid.LayoutTransform>
-            </UniformGrid>
+                </Canvas.LayoutTransform>
+            </Canvas>
         </ScrollViewer>
     </Grid>
 

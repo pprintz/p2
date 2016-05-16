@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Evacuation_Master_3000.ImageScan;
 using static Evacuation_Master_3000.ImportExportSettings;
+using System.Windows.Controls;
 
 namespace Evacuation_Master_3000
 {
@@ -46,7 +47,7 @@ namespace Evacuation_Master_3000
         private IFloorPlan localFloorPlan { get; set; }
         private Dictionary<string, Person> localPeople { get; set; }
         private Dictionary<string, Tile> tilesWithChanges { get; set; }
-        private UniformGrid[] FloorContainer;
+        private Canvas[] FloorContainer;
         private SwitchBetweenFloorsControl floorSwitcherControls { get; set; }              //<<------ OBS er det nødvendigt med property til at gemme floorswitchcontrols i???
 
         public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
@@ -80,11 +81,11 @@ namespace Evacuation_Master_3000
             int width = localFloorPlan.Width;
             int height = localFloorPlan.Height;
             int floorAmount = localFloorPlan.FloorAmount;
-            FloorContainer = new UniformGrid[floorAmount];
+            FloorContainer = new Canvas[floorAmount];
 
             for (int z = 0; z < floorAmount; z++)
             {
-                UniformGrid container = new UniformGrid()
+                Canvas container = new Canvas()
                 {
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top
@@ -93,12 +94,12 @@ namespace Evacuation_Master_3000
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        Rectangle figure = new Rectangle
-                        {
+                        Rectangle figure = new Rectangle {
                             Height = tileSize,
                             Width = tileSize,
                             Fill = z % 2 == 0 ? new SolidColorBrush(Colors.Aqua) : new SolidColorBrush(Colors.Bisque),
-                            Tag = Coordinate(x, y, z) /* Makes binding rectangles to buildingblocks easier */
+                            Tag = Coordinate(x, y, z), /* Makes binding rectangles to buildingblocks easier */
+                            Margin = new Thickness(x * tileSize, y * tileSize, 0, 0)
                         };
 
                         if (localFloorPlan.Tiles[Coordinate(x, y, z)].Type != Tile.Types.Free)
@@ -229,9 +230,9 @@ namespace Evacuation_Master_3000
         {
             if (firstTime)
             {
-                foreach (UniformGrid uniformGrid in FloorContainer)
+                foreach (Canvas canvas in FloorContainer)
                 {
-                    foreach (var rect in uniformGrid.Children.Cast<Rectangle>())
+                    foreach (var rect in canvas.Children.Cast<Rectangle>())
                     {
                         BuildingBlock current = localFloorPlan.Tiles[rect.Tag.ToString()] as BuildingBlock;
                         rect.ToolTip = current?.Priority + " ," + current?.Room;

@@ -5,15 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Evacuation_Master_3000"
              mc:Ignorable="d" >
-    <Grid Name="OverlayContainer">
+    <Grid Name="OverlayContainer" >
         <ScrollViewer Name="VisualContainerScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="Gray">
-            <Canvas Name="VisualContainer" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Canvas.LayoutTransform>
+            <Grid Name="VisualContainer" Background="Gray" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid.LayoutTransform>
                     <TransformGroup>
                         <ScaleTransform x:Name="VisualContainerScaleTransform"/>
                     </TransformGroup>
-                </Canvas.LayoutTransform>
-            </Canvas>
+                </Grid.LayoutTransform>
+            </Grid>
         </ScrollViewer>
     </Grid>
 

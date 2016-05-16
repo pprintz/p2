@@ -6,7 +6,7 @@ namespace Evacuation_Master_3000
     public class UserInterface : IUserInterface
     {
         public UserInterface() {
-            TheMainWindow = new TheRealMainWindow(this);
+            TheMainWindow = new MainWindow(this);
         }
 
         public static bool IsSimulationPaused = false;
@@ -34,7 +34,7 @@ namespace Evacuation_Master_3000
 
         public static event ResetClicked OnReset;
         public static event SimulationEnd OnSimulationEnd;
-        private TheRealMainWindow TheMainWindow { get; }
+        private MainWindow TheMainWindow { get; }
         public event PrepareSimulation OnPrepareSimulation;
         public event UISimulationStart OnUISimulationStart;
         public event ImportFloorPlan OnImportFloorPlan;

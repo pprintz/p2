@@ -9,7 +9,7 @@ namespace Evacuation_Master_3000
     /// </summary>
     public partial class CP_ImportExport : UserControl
     {
-        public CP_ImportExport(TheRealMainWindow parentWindow)
+        public CP_ImportExport(MainWindow parentWindow)
         {
             InitializeComponent();
             ParentWindow = parentWindow;
@@ -25,7 +25,7 @@ namespace Evacuation_Master_3000
             FileNamePanel.Visibility = Visibility.Collapsed;
         }
 
-        private TheRealMainWindow ParentWindow { get; }
+        private MainWindow ParentWindow { get; }
         private IFloorPlan TheFloorPlan { get; set; }
 
         private void OnHeaderTextChanged(object sender, TextChangedEventArgs e) {

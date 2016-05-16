@@ -10,7 +10,7 @@ namespace Evacuation_Master_3000 {
     /// Interaction logic for NewImportWindow.xaml
     /// </summary>
     public partial class NewImportWindow : INotifyPropertyChanged {
-        public NewImportWindow(TheRealMainWindow parentWindow, NewOrImport window = NewOrImport.New) {
+        public NewImportWindow(MainWindow parentWindow, NewOrImport window = NewOrImport.New) {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
 
@@ -34,7 +34,7 @@ namespace Evacuation_Master_3000 {
             Closing += OnWindowClosing;
         }
 
-        private TheRealMainWindow ParentWindow { get; }
+        private MainWindow ParentWindow { get; }
         public enum NewOrImport { New, Import }
         private int BuildingWidthAndHeightMax = 500;
         private int _buildingWidth;

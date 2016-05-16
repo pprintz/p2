@@ -5,7 +5,7 @@ namespace Evacuation_Master_3000
 {
     public partial class SimulationControls : UserControl
     {
-        public SimulationControls(TheRealMainWindow parentWindow)
+        public SimulationControls(MainWindow parentWindow)
         {
             InitializeComponent();
             _parentWindow = parentWindow;
@@ -61,7 +61,7 @@ namespace Evacuation_Master_3000
                 (bool)_parentWindow.controlPanelControl.SimulationControls.HeatmapToggle.IsChecked,
                 (bool)_parentWindow.controlPanelControl.SimulationControls.StepByStepToggle.IsChecked, new AStar(_parentWindow.TheUserInterface.LocalFloorPlan), 100);
         }
-        TheRealMainWindow _parentWindow;
+        MainWindow _parentWindow;
 
     }
 }

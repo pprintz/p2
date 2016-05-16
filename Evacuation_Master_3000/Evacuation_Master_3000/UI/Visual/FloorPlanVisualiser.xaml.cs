@@ -17,7 +17,7 @@ namespace Evacuation_Master_3000
     /// </summary>
     public partial class FloorPlanVisualiser
     {
-        public FloorPlanVisualiser(TheRealMainWindow mainWindow)
+        public FloorPlanVisualiser(MainWindow mainWindow)
         {  
             InitializeComponent();
             Person.OnPersonMoved += UpdateVisualsOnEvacuatableMoved;
@@ -43,7 +43,7 @@ namespace Evacuation_Master_3000
             }
         }
 
-        private readonly TheRealMainWindow _mainWindow;
+        private readonly MainWindow _mainWindow;
         private IFloorPlan localFloorPlan { get; set; }
         private Dictionary<string, Person> localPeople { get; set; }
         private Dictionary<string, Tile> tilesWithChanges { get; set; }
@@ -232,7 +232,7 @@ namespace Evacuation_Master_3000
             {
                 foreach (Canvas canvas in FloorContainer)
                 {
-                    foreach (var rect in canvas.Children.Cast<Rectangle>())
+                    foreach (Rectangle rect in canvas.Children.Cast<Rectangle>())
                     {
                         BuildingBlock current = localFloorPlan.Tiles[rect.Tag.ToString()] as BuildingBlock;
                         rect.ToolTip = current?.Priority + " ," + current?.Room;

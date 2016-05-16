@@ -6,11 +6,11 @@ using System.Windows.Input;
 namespace Evacuation_Master_3000
 {
     /// <summary>
-    /// Interaction logic for TheRealMainWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class TheRealMainWindow : Window
+    public partial class MainWindow : Window
     {
-        public TheRealMainWindow(UserInterface userInterface) {
+        public MainWindow(UserInterface userInterface) {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
 

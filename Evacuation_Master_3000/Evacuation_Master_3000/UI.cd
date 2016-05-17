@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Evacuation_Master_3000.ControlPanel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="3.75" Width="1.5" />
+    <Members>
+      <Property Name="ParentWindow" Hidden="true" />
+    </Members>
+    <AssociationLine Name="FloorPlanControls" Type="Evacuation_Master_3000.CP_FloorPlanControls" FixedFromPoint="true">
+      <Path>
+        <Point X="8.25" Y="3.75" />
+        <Point X="8.25" Y="3.191" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.845" Y="0.166" Height="0.182" Width="1.344" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="ImportExport" Type="Evacuation_Master_3000.CP_ImportExport" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.625" Y="4.441" />
+        <Point X="7.625" Y="5.471" />
+        <Point X="7.625" Y="5.471" />
+        <Point X="7.625" Y="7" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.491" Y="1.793" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="SimulationStats" Type="Evacuation_Master_3000.CP_SimulationStats" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="9" Y="4.125" />
+        <Point X="10.188" Y="4.125" />
+        <Point X="10.188" Y="5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.098" Y="0.755" Height="0.182" Width="1.138" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="SimulationControls" Type="Evacuation_Master_3000.CP_SimulationControls" FixedToPoint="true">
+      <Path>
+        <Point X="8.75" Y="4.441" />
+        <Point X="8.75" Y="6" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.7" Y="0.47" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>gAAEAABAAAAAAAAAAgAAAAAAAEAAAAAAAAAAgAAAEAA=</HashCode>
+      <FileName>UI\ControlPanelUI\ControlPanel.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FloorPlanControls" />
+      <Property Name="ImportExport" />
+      <Property Name="SimulationStats" />
+      <Property Name="SimulationControls" />
+      <Property Name="ParentWindow" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.CP_FloorPlanControls" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.75" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>UI\ControlPanelUI\CP_FloorPlanControls.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.CP_ImportExport" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AUAAAAAAAgAAAAAAAgAgAAAAAAgAAAAAAAAAEAACAAA=</HashCode>
+      <FileName>UI\ControlPanelUI\CP_ImportExport.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.CP_SimulationControls" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\ControlPanelUI\CP_SimulationControls.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.CP_SimulationStats" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="5" Width="1.75" />
+    <AssociationLine Name="EvacuatedPeopleList" Type="Evacuation_Master_3000.Person" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.375" Y="5" />
+        <Point X="10.375" Y="3.769" />
+        <Point X="10.375" Y="3.769" />
+        <Point X="10.375" Y="3.062" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.747" Y="0.534" Height="0.182" Width="1.491" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAIAAQAACAEAAAAAAAAQQIAAAAAQAAAAAAQAAAAAA=</HashCode>
+      <FileName>UI\ControlPanelUI\CP_SimulationStats.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="EvacuatedPeopleList" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.ExportWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAiAAoEKgEQACAAygAAAQAAAAAAABBAAAA=</HashCode>
+      <FileName>UI\ImportExport\ExportWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.NewImportWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAgAICAIgEBIKEChAAAAQAAAAIAAQAACAA=</HashCode>
+      <FileName>UI\ImportExport\NewImportWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="3.75" Width="1.5" />
+    <AssociationLine Name="simulationControlsControl" Type="Evacuation_Master_3000.SimulationControls" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.625" Y="4.441" />
+        <Point X="5.625" Y="4.691" />
+        <Point X="5.625" Y="4.691" />
+        <Point X="5.625" Y="7" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.882" Y="0.361" Height="0.182" Width="1.778" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="controlPanelControl" Type="Evacuation_Master_3000.ControlPanel" FixedToPoint="true">
+      <Path>
+        <Point X="5.75" Y="4.063" />
+        <Point X="7.5" Y="4.063" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.194" Y="-0.091" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="exportWindow" Type="Evacuation_Master_3000.ExportWindow" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.25" Y="4.25" />
+        <Point X="2.5" Y="4.25" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.345" Y="-0.091" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="TheUserInterface" Type="Evacuation_Master_3000.UserInterface" FixedFromPoint="true">
+      <Path>
+        <Point X="5.25" Y="3.75" />
+        <Point X="5.25" Y="2.312" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.659" Y="0.589" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="importWindow" Type="Evacuation_Master_3000.NewImportWindow" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.25" Y="3.937" />
+        <Point X="3.062" Y="3.937" />
+        <Point X="3.062" Y="3.191" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.651" Y="0.252" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="floorPlanVisualiserControl" Type="Evacuation_Master_3000.FloorPlanVisualiser" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.688" Y="4.441" />
+        <Point X="4.688" Y="5.25" />
+        <Point X="2.75" Y="5.25" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.156" Y="-0.08" Height="0.182" Width="1.751" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="zoomControl" Type="Evacuation_Master_3000.Zoom" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.188" Y="4.441" />
+        <Point X="5.188" Y="6.25" />
+        <Point X="4.5" Y="6.25" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.082" Y="0.327" Height="0.182" Width="1.005" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAGACABAAAAAAAAAAAAEAAAACAAAAAAQACAAAAFAAAA=</HashCode>
+      <FileName>UI\MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="simulationControlsControl" />
+      <Property Name="controlPanelControl" />
+      <Property Name="exportWindow" />
+      <Property Name="TheUserInterface" />
+      <Property Name="importWindow" />
+      <Property Name="floorPlanVisualiserControl" />
+      <Property Name="zoomControl" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.225" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.SimulationControls" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="7" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAQAAAAAAAIEAAAAAAAAAAAQAAAAAAAAEAAAAA=</HashCode>
+      <FileName>UI\SingleControls\SimulationControls.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.Zoom" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAMAAAACIAAAAQgAAEAACBAAEAAAAAgAAAAAQAAA=</HashCode>
+      <FileName>UI\SingleControls\Zoom.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.UserInterface" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3.75" Y="1.75" Width="3.25" />
+    <Members>
+      <Property Name="LocalPeopleDictionary" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="LocalFloorPlan" Type="Evacuation_Master_3000.IFloorPlan">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.658" Y="0.264" Height="0.182" Width="1.256" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="TheMainWindow" Type="Evacuation_Master_3000.MainWindow" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.625" Y="2.312" />
+        <Point X="4.625" Y="3.75" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.564" Y="0.32" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="People" Type="Evacuation_Master_3000.Person" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7" Y="2" />
+        <Point X="9.938" Y="2" />
+        <Point X="9.938" Y="2.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="1.064" Y="0.409" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>ACEAAAAEBIQBAAQAAAgAIQGEAoSAQAAAAgAABMAgIAA=</HashCode>
+      <FileName>UI\UserInterface.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="LocalFloorPlan" />
+      <Property Name="LocalPeopleDictionary" />
+      <Property Name="TheMainWindow" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="People" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.FloorPlanVisualiser" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1" Y="5" Width="1.75" />
+    <Members>
+      <Field Name="FloorContainer" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Delegate Name="Evacuation_Master_3000.FloorPlanVisualiser.BuildingBlockTypeFetch" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI\Visual\FloorPlanVisualiser.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <AssociationLine Name="_mainWindow" Type="Evacuation_Master_3000.MainWindow" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.75" Y="5.5" />
+        <Point X="4.984" Y="5.5" />
+        <Point X="4.984" Y="4.441" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.535" Y="0.967" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAQBlAAEEUAgAAAAgASDCCAgECAAAEAAAEAAAAACAAA=</HashCode>
+      <FileName>UI\Visual\FloorPlanVisualiser.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="FloorContainer" />
+      <Field Name="_mainWindow" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.SwitchBetweenFloorsControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1" Y="6" Width="1.75" />
+    <NestedTypes>
+      <Enum Name="Evacuation_Master_3000.SwitchBetweenFloorsControl.OnOrNot" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI\Visual\SwitchBetweenFloorsControl.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIAAAQAAAAAAAAAAgAAgAgAQAAAAAABAAAAgA=</HashCode>
+      <FileName>UI\Visual\SwitchBetweenFloorsControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Evacuation_Master_3000.Person" Collapsed="true">
+    <Position X="9" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACYAiAIAAgAEkAAACAAAEUAgAhoAAAgAChBAgBAA=</HashCode>
+      <FileName>Data\Person.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Evacuation_Master_3000.IUserInterface" Collapsed="true">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAgAAQGEAAAAQAAAAAAAAIAAIAA=</HashCode>
+      <FileName>UI\IUserInterface.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Evacuation_Master_3000.IFloorPlan" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAgAAAAAAAAAECACgAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\FloorPlan\IFloorPlan.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

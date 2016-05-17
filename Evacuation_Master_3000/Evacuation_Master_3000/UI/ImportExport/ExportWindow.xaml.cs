@@ -13,7 +13,7 @@ namespace Evacuation_Master_3000 {
 
             ParentWindow = parentWindow;
             Extension = ImportExportSettings.Extension;
-            FileName = ImportExportSettings.FileName;
+            FileName = string.Empty;
             Path = ImportExportSettings.GridDirectoryPath;
             WindowBaseHeight = Height;
             BrowseButton.Click += BrowseDirectory;
@@ -29,7 +29,15 @@ namespace Evacuation_Master_3000 {
 
         private MainWindow ParentWindow { get; }
         private double WindowBaseHeight { get; }
-        public string FileName { get; set; }
+        private string _fileName;
+        public string FileName {
+            get { return _fileName; }
+            set {
+                _fileName = value;
+                ExportButton.IsEnabled = string.IsNullOrWhiteSpace(_fileName) ? false : true;
+                OnPropertyChanged("Path");
+            }
+        }
         public string Extension { get; }
         private string _path;
         public string Path {
@@ -71,8 +79,9 @@ namespace Evacuation_Master_3000 {
                 Path = dialog.SelectedPath.ToString();
         }
 
-        private void OnExportFeedBack(string message) {
+        private void OnExportFeedBack(string message, Export.ExportOutcomes outcome) {
             Hide();
+            ParentWindow.TheUserInterface.DisplayGeneralMessage(message, $"Export {outcome.ToString()}");
         }
 
         /* Cancels the Close-event when the window is closed. 

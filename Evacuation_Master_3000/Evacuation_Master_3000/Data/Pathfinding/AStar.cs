@@ -48,7 +48,7 @@ namespace Evacuation_Master_3000
             {
                 if ((person.Position as BuildingBlock).Priority == Int32.MaxValue)
                 {
-                    throw new PersonException();
+                    throw new PersonException(); //<<---- Personen kan ikke finde ud?? I så fald skal der ikke kastes en exception, men i stedet skal personen håndteres (som i tages ud af simuleringen, der skal gives besked til analyse-delen, at personen ikke er medtaget i simuleringen osv osv osv)
                 }
                 BuildingBlock dest = FindNextPathTarget(person);
                 pathList.AddRange(GetPathFromSourceToDestinationAStar(person, dest));

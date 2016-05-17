@@ -163,8 +163,8 @@ namespace Evacuation_Master_3000
         private void OnBuildingBlockClick(object sender, MouseButtonEventArgs e)
         {
             Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
-            Rectangle senderRectangle = sender as Rectangle;                    //Get a reference to the sender rectangle
-            if (senderRectangle == null) throw new GeneralInternalException();
+            Rectangle senderRectangle = sender as Rectangle;                        //Get a reference to the sender rectangle
+            if (senderRectangle == null) return;
             BuildingBlock senderBlock = (BuildingBlock)localFloorPlan.Tiles[senderRectangle.Tag.ToString()];
 
             SetBlockType(senderBlock, type);

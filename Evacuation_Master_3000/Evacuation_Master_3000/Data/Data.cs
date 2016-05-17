@@ -24,7 +24,7 @@ namespace Evacuation_Master_3000
         public Dictionary<int, Person> AllPeople { get { return _allPeople; } }
         public event PersonMoved OnSendPersonMoved;
 
-        public IEnumerable<Person> GetPeople(Predicate<Person> predicate)
+        public IEnumerable<Person> GetPeople(Predicate<Person> predicate)           //<------ Nødvendig?? 0 references
         {
             return AllPeople.Values.Where(predicate.Invoke);
         }
@@ -61,7 +61,7 @@ namespace Evacuation_Master_3000
         }
 
         public static bool SimulationStart = true;
-        public Dictionary<int, Person> StartSimulation(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)                                           //<---- kan formentligt være void?
+        public Dictionary<int, Person> StartSimulation(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)       //<<----- OBS kan metoden være void??           
         {
             this.pathfindingAlgorithm = pathfindingAlgorithm;
             if (SimulationStart)

@@ -10,14 +10,17 @@ namespace Evacuation_Master_3000
         }
 
         public static bool IsSimulationPaused = false;
+        private static bool _hasSimulationEnded;
         public static bool HasSimulationEnded
         {
+            get { return _hasSimulationEnded; }
             set
             {
                 if (value)
                 {
                     OnSimulationEnd?.Invoke();
-                } 
+                }
+                _hasSimulationEnded = value;
             }
         }
 

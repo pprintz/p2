@@ -11,7 +11,6 @@ namespace Evacuation_Master_3000
             _parentWindow = parentWindow;
             StartSimulationButton.Click += OnSimulationStartClick;
             Data.OnTick += ChangeSimulationControls;
-            UserInterface.OnSimulationEnd += ChangeSimulationControlsOnEnd;
             PauseSimulationButton.Click += OnPauseAndContinueButtonClick;
             ResetSimulationButton.Click += OnResetButtonClick;
         }
@@ -22,8 +21,8 @@ namespace Evacuation_Master_3000
             ChangeSimulationControlsOnEnd();
             UserInterface.IsSimulationPaused = false;
             PauseSimulationButton.Content = "Pause";
+            UserInterface.HasSimulationEnded = true;
         }
-
 
         private void OnPauseAndContinueButtonClick(object sender, RoutedEventArgs e)
         {

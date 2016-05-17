@@ -32,6 +32,7 @@ namespace Evacuation_Master_3000
 
         public Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan)
         {
+            UserInterface.HasSimulationEnded = false;
             if (SimulationStart)
             {
                 TheFloorPlan.Initiate();
@@ -94,10 +95,13 @@ namespace Evacuation_Master_3000
 
         public void StartTicks()
         {
-            while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused)
+            while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused && !UserInterface.HasSimulationEnded)
             {
                 Yield(1);
-                OnTick?.Invoke();
+                if (!UserInterface.HasSimulationEnded)
+                {
+                    OnTick?.Invoke();
+                }
                 // unchecked throws an OverflowException if we've spent more than 600+ hours on one tick.
             }
 

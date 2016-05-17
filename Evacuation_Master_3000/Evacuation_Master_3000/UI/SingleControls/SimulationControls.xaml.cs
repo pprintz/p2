@@ -39,8 +39,6 @@ namespace Evacuation_Master_3000
                 OnSimulationStartClick(sender, e);
             }
         }
-
-
         private void ChangeSimulationControls()
         {
             StartSimulationButton.Visibility = Visibility.Hidden;
@@ -51,8 +49,6 @@ namespace Evacuation_Master_3000
             StartSimulationButton.Visibility = Visibility.Visible;
             PostSimulationControls.Visibility = Visibility.Collapsed;
         }
-
-
 
         private void OnSimulationStartClick(object sender, RoutedEventArgs e)
         {

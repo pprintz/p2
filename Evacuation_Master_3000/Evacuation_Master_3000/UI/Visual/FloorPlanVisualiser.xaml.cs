@@ -181,6 +181,7 @@ namespace Evacuation_Master_3000
         private void SetBlockType(BuildingBlock block, Tile.Types targetType)
         {
             block.Type = targetType;
+            block.OriginalType = targetType;
             ColorizeBuildingBlock(block.figure, targetType);
         }
 

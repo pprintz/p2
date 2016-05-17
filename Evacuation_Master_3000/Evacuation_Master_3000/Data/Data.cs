@@ -38,7 +38,6 @@ namespace Evacuation_Master_3000
                 foreach (Tile tile in floorPlan.Tiles.Values)
                 {
                     tile.OriginalType = tile.Type;
-
                     if (tile.OriginalType == Tile.Types.Person)
                     {
                         Person current = new Person(tile as BuildingBlock);
@@ -47,6 +46,14 @@ namespace Evacuation_Master_3000
                             AllPeople.Add(current.ID, current);
                         }
                     }
+                }
+            }
+            foreach (Tile value in floorPlan.Tiles.Values.Where(t => t.OriginalType == Tile.Types.Person))
+            {
+                if (!AllPeople.Values.Any(p => p.OriginalPosition == value))
+                {
+                    Person newPerson = new Person(value as BuildingBlock);
+                    AllPeople.Add(newPerson.ID, newPerson);
                 }
             }
             return AllPeople;
@@ -72,30 +79,17 @@ namespace Evacuation_Master_3000
                     SimulationStart = false;
                 }
             }
+            foreach (Person person1 in AllPeople.Values.Where(p => p.PathList.Count == 0))
+            {
+                person1.Evacuated = false;
+                person1.OnPersonEvacuated += RemoveEvacuatedPerson;
+                person1.TickLength = tickLength;
+                person1.OnExtendedPathRequest += FindNewPath;
+                person1.PathList.AddRange(
+                    pathfindingAlgorithm.CalculatePath(person1).Cast<BuildingBlock>().ToList());
+            }
             StartTicks();
             return AllPeople;
-        }
-
-        private IEnumerable<BuildingBlock> FindNewPath(Person person)
-        {
-            var target = person.PathList[person.stepsTaken + 1];
-            var pos = person.PathList[person.stepsTaken];
-            if (AllPeople.Values.Count(p => p.PathList[p.stepsTaken] == target && p.PathList.Count > p.stepsTaken + 1 && p.PathList[p.stepsTaken + 1] == pos) == 1)
-            {
-                Person personBlocking = AllPeople.Values.First(p => p.PathList[p.stepsTaken] == target);
-                if (personBlocking.PathList.Count > 0 &&
-                    (person.Position as BuildingBlock).BNeighbours.Any(n => n.Type != Tile.Types.Person))
-                {
-                    if (personBlocking.PathList.Count(b => b.Type != Tile.Types.Person) <
-                        person.PathList.Count(b => b.Type != Tile.Types.Person))
-                    {
-                        person.PathList.Clear();
-                        person.PathList.AddRange(personBlocking.PathList);
-                        person.stepsTaken = personBlocking.stepsTaken + 1;
-                    }
-                }
-            }
-            return null;
         }
 
         public void StartTicks()
@@ -119,6 +113,28 @@ namespace Evacuation_Master_3000
         private void RemoveEvacuatedPerson(Person person)
         {
             OnTick -= person.ConditionalMove;
+        }
+
+        private IEnumerable<BuildingBlock> FindNewPath(Person person)
+        {
+            BuildingBlock target = person.PathList[person.stepsTaken + 1];
+            BuildingBlock pos = person.PathList[person.stepsTaken];
+            if (AllPeople.Values.Count(p => p.PathList[p.stepsTaken] == target && p.PathList.Count > p.stepsTaken + 1 && p.PathList[p.stepsTaken + 1] == pos) == 1)
+            {
+                Person personBlocking = AllPeople.Values.First(p => p.PathList[p.stepsTaken] == target);
+                if (personBlocking.PathList.Count > 0 &&
+                    (person.Position as BuildingBlock).BNeighbours.Any(n => n.Type != Tile.Types.Person))
+                {
+                    if (personBlocking.PathList.Count(b => b.Type != Tile.Types.Person) <
+                        person.PathList.Count(b => b.Type != Tile.Types.Person))
+                    {
+                        person.PathList.Clear();
+                        person.PathList.AddRange(personBlocking.PathList);
+                        person.stepsTaken = personBlocking.stepsTaken + 1;
+                    }
+                }
+            }
+            return null;
         }
 
         public static event Tick OnTick;

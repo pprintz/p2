@@ -30,23 +30,28 @@ namespace Evacuation_Master_3000
         {
             foreach (Person person in _parentWindow.TheUserInterface.LocalPeopleDictionary.Values)
             {
-                person.Position.Type = Tile.Types.Free;
-                person.Position = person.OriginalPosition;
-                person.Position.Type = person.Position.OriginalType;
+                if (person.OriginalPosition != person.Position)
+                {
+                    person.Position.Type = person.Position.OriginalType;
+                    person.Position = person.OriginalPosition;
+                    person.Position.Type = person.Position.OriginalType;
+                }
                 person.AmountOfTicksSpent = 0;
                 person.PersonInteractionStats.DistanceTraveled = 0;
-                person.PersonInteractionStats.MovementSteps.Clear();
                 person.PersonInteractionStats.TicksWaited = 0;
                 if (person.Evacuated)
                 {
                     person.Evacuated = false;
                     person.PathList.Clear();
+                    Console.WriteLine(person.PersonInteractionStats.MovementSteps.Count);
                     foreach (MovementStep movementStep in person.PersonInteractionStats.MovementSteps)
                     {
                         person.PathList.Add(movementStep.SourceTile as BuildingBlock);
                     }
+                    person.PathList.Add(person.PersonInteractionStats.MovementSteps.Last().DestinationTile as BuildingBlock);
                 }
                 person.stepsTaken = 0;
+                person.PersonInteractionStats.MovementSteps.Clear();
             }
             ticks = -1;
             EvacuatedPeopleList.Clear();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
-using System.Diagnostics;
 
 [assembly: InternalsVisibleTo("P2TestEnvironment")]
 namespace Evacuation_Master_3000
@@ -15,13 +14,11 @@ namespace Evacuation_Master_3000
             _unevacuatedPeople = new List<Person>();
             TheFloorPlan = new FloorPlan();
             _allPeople = new Dictionary<int, Person>();
-            //Person.OnPersonMoved += Statistics?
         }
 
-        private IPathfinding pathfindingAlgorithm;
         public IFloorPlan TheFloorPlan { get; private set; }
         private Dictionary<int, Person> _allPeople;
-        public Dictionary<int, Person> AllPeople { get { return _allPeople; } }
+        private Dictionary<int, Person> AllPeople => _allPeople;
         public event PersonMoved OnSendPersonMoved;
 
         public IEnumerable<Person> GetPeople(Predicate<Person> predicate)
@@ -41,7 +38,7 @@ namespace Evacuation_Master_3000
                     if (tile.OriginalType == Tile.Types.Person)
                     {
                         Person current = new Person(tile as BuildingBlock);
-                        if (!AllPeople.Values.Any(p => p.OriginalPosition == tile))
+                        if (AllPeople.Values.All(p => !Equals(p.OriginalPosition, tile)))
                         {
                             AllPeople.Add(current.ID, current);
                         }
@@ -50,7 +47,7 @@ namespace Evacuation_Master_3000
             }
             foreach (Tile value in floorPlan.Tiles.Values.Where(t => t.OriginalType == Tile.Types.Person))
             {
-                if (!AllPeople.Values.Any(p => p.OriginalPosition == value))
+                if (AllPeople.Values.All(p => !Equals(p.OriginalPosition, value)))
                 {
                     Person newPerson = new Person(value as BuildingBlock);
                     AllPeople.Add(newPerson.ID, newPerson);
@@ -59,10 +56,9 @@ namespace Evacuation_Master_3000
             return AllPeople;
         }
 
-        public static bool SimulationStart = true;
+        private static bool SimulationStart = true;
         public Dictionary<int, Person> StartSimulation(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)                                           //<---- kan formentligt være void?
         {
-            this.pathfindingAlgorithm = pathfindingAlgorithm;
             if (SimulationStart)
             {
                 if (AllPeople != null)
@@ -79,20 +75,24 @@ namespace Evacuation_Master_3000
                     SimulationStart = false;
                 }
             }
-            foreach (Person person1 in AllPeople.Values.Where(p => p.PathList.Count == 0))
+            if (AllPeople != null)
             {
-                person1.Evacuated = false;
-                person1.OnPersonEvacuated += RemoveEvacuatedPerson;
-                person1.TickLength = tickLength;
-                person1.OnExtendedPathRequest += FindNewPath;
-                person1.PathList.AddRange(
-                    pathfindingAlgorithm.CalculatePath(person1).Cast<BuildingBlock>().ToList());
+                foreach (Person person1 in AllPeople.Values.Where(p => p.PathList.Count == 0))
+                {
+                    person1.Evacuated = false;
+                    person1.OnPersonEvacuated += RemoveEvacuatedPerson;
+                    person1.TickLength = tickLength;
+                    person1.OnExtendedPathRequest += FindNewPath;
+                    person1.PathList.AddRange(
+                        pathfindingAlgorithm.CalculatePath(person1).Cast<BuildingBlock>().ToList());
+                }
+                
             }
             StartTicks();
             return AllPeople;
         }
 
-        public void StartTicks()
+        private void StartTicks()
         {
             while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused)
             {
@@ -102,15 +102,15 @@ namespace Evacuation_Master_3000
             }
 
         }
-        private void Yield(long ticks)
+        private static void Yield(long ticks)
         {
             long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
             while (DateTime.Now.Ticks < dtEnd)
             {
-                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate (object unused) { return null; }, null);
+                Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate { return null; }, null);
             }
         }
-        private void RemoveEvacuatedPerson(Person person)
+        private static void RemoveEvacuatedPerson(Person person)
         {
             OnTick -= person.ConditionalMove;
         }
@@ -123,7 +123,7 @@ namespace Evacuation_Master_3000
             {
                 Person personBlocking = AllPeople.Values.First(p => p.PathList[p.stepsTaken] == target);
                 if (personBlocking.PathList.Count > 0 &&
-                    (person.Position as BuildingBlock).BNeighbours.Any(n => n.Type != Tile.Types.Person))
+                    ((BuildingBlock) person.Position).BNeighbours.Any(n => n.Type != Tile.Types.Person))
                 {
                     if (personBlocking.PathList.Count(b => b.Type != Tile.Types.Person) <
                         person.PathList.Count(b => b.Type != Tile.Types.Person))

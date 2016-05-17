@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -26,63 +25,59 @@ namespace Evacuation_Master_3000
             AllRectangles = new Dictionary<string, Rectangle>();
         }
 
+        private readonly MainWindow _mainWindow;
+        private IFloorPlan LocalFloorPlan { get; set; }
+        private Dictionary<string, Person> LocalPeople { get; set; }
+        private Grid[] _floorContainer;
+        private SwitchBetweenFloorsControl _floorSwitcherControls;
+        private Dictionary<string, Rectangle> AllRectangles { get; }
+        public delegate Tile.Types BuildingBlockTypeFetch();
+        public BuildingBlockTypeFetch OnBuildingBlockTypeFetch;
+        private BuildingBlock _previousBlock;
+
+        public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
+        {
+
+            LocalPeople = people.ToDictionary(k => Coordinate(k.Value.Position), v => v.Value);
+
+            //Override the local floorplan to correspond to the new floorplan
+            LocalFloorPlan = floorPlan;
+
+            /* Ideen er vel, at man skal kalde ImplementFloorPlan() for hver ændring, d.v.s. ifm alle simuleringer osv. 
+            I så fald skal der tages højde for, at der ikke genereres en ny visualRepresentation hver gang
+            - det er nemmere at iterate gennem alle ændringer og ændre elevation types tilsvarende */
+            if (_floorContainer == null)
+                CreateVisualRepresentation();
+
+            if (LocalFloorPlan.FloorAmount > 1)
+                AddFloorPlanSwitcherControls();
+        }
+
         private void UpdateVisualOnReset()
         {
-            foreach (BuildingBlock buildingBlock in localFloorPlan.Tiles.Values.Where(t => t.OriginalType != t.Type).Cast<BuildingBlock>())
+            foreach (BuildingBlock buildingBlock in LocalFloorPlan.Tiles.Values.Where(t => t.OriginalType != t.Type).Cast<BuildingBlock>())
             {
-                var rectangle = FloorContainer[buildingBlock.Z].Children.Cast<Rectangle>()
+                var rectangle = _floorContainer[buildingBlock.Z].Children.Cast<Rectangle>()
                     .Single(c => Coordinate(buildingBlock) == c.Tag.ToString());
                 ColorizeBuildingBlock(rectangle, buildingBlock.OriginalType);
             }
-            foreach (BuildingBlock buildingBlock in localFloorPlan.Tiles.Values.Cast<BuildingBlock>().Where(b => b.HeatmapCounter != 0))
+            foreach (BuildingBlock buildingBlock in LocalFloorPlan.Tiles.Values.Cast<BuildingBlock>().Where(b => b.HeatmapCounter != 0))
             {
                 buildingBlock.HeatmapCounter = 0;
                 Rectangle rectangle =
-                    FloorContainer[buildingBlock.Z].Children.Cast<Rectangle>()
+                    _floorContainer[buildingBlock.Z].Children.Cast<Rectangle>()
                         .Single(c => Coordinate(buildingBlock) == c.Tag.ToString());
                 ColorizeBuildingBlock(rectangle, buildingBlock.OriginalType);
             }
         }
 
-        private readonly MainWindow _mainWindow;
-        private IFloorPlan localFloorPlan { get; set; }
-        private Dictionary<string, Person> localPeople { get; set; }
-        private Dictionary<string, Tile> tilesWithChanges { get; set; }
-        private Grid[] FloorContainer;
-        private SwitchBetweenFloorsControl floorSwitcherControls { get; set; }              //<<------ OBS er det nødvendigt med property til at gemme floorswitchcontrols i???
-        private Dictionary<string, Rectangle> AllRectangles { get; }
-        public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
-        {
-
-            localPeople = people.ToDictionary(k => Coordinate(k.Value.Position), v => v.Value);
-            //localPeople = people.Where(p => !localPeople.Values.Contains(p as Person)).ToDictionary(k => Coordinate(k.Position.X, k.Position.Y, k.Position.Z), v => v as Person);
-            //First find all tiles with changes - this is done with clever use of lambda expressions
-            //tilesWithChanges = floorPlan.Tiles.Values.Where(t => !t.Equals(localFloorPlan.Tiles[Coordinate(t.X, t.Y, t.Z)])).ToDictionary(k => Coordinate(k.X, k.Y, k.Z), v => v);
-
-            //Override the local floorplan to correspond to the new floorplan
-            localFloorPlan = floorPlan;
-
-            /* Ideen er vel, at man skal kalde ImplementFloorPlan() for hver ændring, d.v.s. ifm alle simuleringer osv. 
-            I så fald skal der tages højde for, at der ikke genereres en ny visualRepresentation hver gang
-            - det er nemmere at iterate gennem alle ændringer og ændre elevation types tilsvarende */
-            if (FloorContainer == null)
-                CreateVisualRepresentation();
-
-            //Update the visual representation of the floorplan
-            UpdateVisualRepresentation();
-
-            /* Add controls to switch between floors, if there are more than 1 floor*/
-            if (localFloorPlan.FloorAmount > 1)
-                AddFloorPlanSwitcherControls(localFloorPlan.FloorAmount);
-        }
-
         private void CreateVisualRepresentation()
         {
             int tileSize = 10;
-            int width = localFloorPlan.Width;
-            int height = localFloorPlan.Height;
-            int floorAmount = localFloorPlan.FloorAmount;
-            FloorContainer = new Grid[floorAmount];
+            int width = LocalFloorPlan.Width;
+            int height = LocalFloorPlan.Height;
+            int floorAmount = LocalFloorPlan.FloorAmount;
+            _floorContainer = new Grid[floorAmount];
 
             for (int z = 0; z < floorAmount; z++)
             {
@@ -104,11 +99,13 @@ namespace Evacuation_Master_3000
                             Margin = new Thickness(0, 0, x * tileSize * 2 + x, y * tileSize * 2 + y)
                         };
 
-                        if (localFloorPlan.Tiles[Coordinate(x, y, z)].Type != Tile.Types.Free)
-                            ColorizeBuildingBlock(figure, localFloorPlan.Tiles[Coordinate(x, y, z)].Type);
+                        if (LocalFloorPlan.Tiles[Coordinate(x, y, z)].Type != Tile.Types.Free)
+                            ColorizeBuildingBlock(figure, LocalFloorPlan.Tiles[Coordinate(x, y, z)].Type);
 
-                        BuildingBlock current = (localFloorPlan.Tiles[Coordinate(x, y, z)] as BuildingBlock);
-                        current.figure = figure;                                                //<<-------------------- Lige nu bliver current.figure ikke brugt til de to nedenstående assignments - er det meningen/hensigten?
+                        BuildingBlock current = (LocalFloorPlan.Tiles[Coordinate(x, y, z)] as BuildingBlock);
+                        if(current == null) throw new GeneralInternalException("CreateVisualRepresentation failed because a gived coordinate did not translate into a buildingblock.");
+
+                        current.Figure = figure;
                         figure.ToolTip = current.Priority + " , " + current.Room;
                         figure.MouseLeftButtonDown += OnBuildingBlockClick;
 
@@ -117,64 +114,54 @@ namespace Evacuation_Master_3000
                         container.Children.Add(figure);
                     }
                 }
-                FloorContainer[z] = container;
+                _floorContainer[z] = container;
             }
 
-            VisualContainer.Children.Add(FloorContainer[0]);
+            VisualContainer.Children.Add(_floorContainer[0]);
         }
 
-        private void AddFloorPlanSwitcherControls(int floorAmount)
+        private void AddFloorPlanSwitcherControls()
         {
             /* Setup and insert floor switcher controls */
-            floorSwitcherControls = new SwitchBetweenFloorsControl();
-            floorSwitcherControls.OnChangeVisualFloorChange += ChangeFloor; /* Callback når der er trykket op/ned mellem floors */
-            floorSwitcherControls.HorizontalAlignment = HorizontalAlignment.Right;
-            floorSwitcherControls.VerticalAlignment = VerticalAlignment.Bottom;
-            floorSwitcherControls.Margin = new Thickness(0, 0, 25, 25);
-            floorSwitcherControls.SetupFloorSwitcherVisuals(localFloorPlan.FloorAmount);
+            _floorSwitcherControls = new SwitchBetweenFloorsControl();
+            _floorSwitcherControls.OnChangeVisualFloorChange += ChangeFloor; /* Callback når der er trykket op/ned mellem floors */
+            _floorSwitcherControls.HorizontalAlignment = HorizontalAlignment.Right;
+            _floorSwitcherControls.VerticalAlignment = VerticalAlignment.Bottom;
+            _floorSwitcherControls.Margin = new Thickness(0, 0, 25, 25);
+            _floorSwitcherControls.SetupFloorSwitcherVisuals(LocalFloorPlan.FloorAmount);
 
-            OverlayContainer.Children.Add(floorSwitcherControls);
+            OverlayContainer.Children.Add(_floorSwitcherControls);
         }
 
-        private void UpdateVisualRepresentation()
-        {
-            //for(int z = 0; z < localFloorPlan.FloorAmount; z++) {
-            //    for(int y = 0; y < localFloorPlan.Height; y++) {
-            //        for(int x = 0; x < localFloorPlan.Width; x++) {
-
-            //        }
-            //    }
-            //}
-        }
-        public void ChangeFloor(int currentFloor)
+        private void ChangeFloor(int currentFloor)
         {
             VisualContainer.Children.Clear();
-            VisualContainer.Children.Add(FloorContainer[currentFloor]);
+            VisualContainer.Children.Add(_floorContainer[currentFloor]);
             /* Logik der sørger for at det er den korrekte floor der vises */
 
             //Obs kan problemet løses lettere i stil af dette: ??
             //VisualContainer.Children[currentFloor].Visibility = Visibility.Visible;
-        }
-
-        public delegate Tile.Types BuildingBlockTypeFetch();
-        public BuildingBlockTypeFetch OnBuildingBlockTypeFetch;
-        private BuildingBlock previousBlock;
+        }  
 
         private void OnBuildingBlockClick(object sender, MouseButtonEventArgs e)
         {
-            Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
-            Rectangle senderRectangle = sender as Rectangle;                    //Get a reference to the sender rectangle
-            if (senderRectangle == null) throw new GeneralInternalException();
-            BuildingBlock senderBlock = (BuildingBlock)localFloorPlan.Tiles[senderRectangle.Tag.ToString()];
-
-            SetBlockType(senderBlock, type);
-            if (Keyboard.IsKeyDown(Settings.LineToolKey))
+            var invoke = OnBuildingBlockTypeFetch?.Invoke();
+            if (invoke != null)
             {
-                if (previousBlock != null)
+                Tile.Types type = (Tile.Types)invoke;       //Get the type of the currently radio'ed FloorPlanControl-type
+                Rectangle senderRectangle = sender as Rectangle;                    //Get a reference to the sender rectangle
+                if (senderRectangle == null) throw new GeneralInternalException();
+                BuildingBlock senderBlock = (BuildingBlock)LocalFloorPlan.Tiles[senderRectangle.Tag.ToString()];
+
+                SetBlockType(senderBlock, type);
+                if (Keyboard.IsKeyDown(Settings.LineToolKey))
                 {
-                    DrawLine(senderBlock, type);
+                    if (_previousBlock != null)
+                    {
+                        DrawLine(senderBlock, type);
+                    }
+                    _previousBlock = senderBlock;
                 }
-                previousBlock = senderBlock;
             }
         }
 
@@ -182,13 +169,13 @@ namespace Evacuation_Master_3000
         {
             block.Type = targetType;
             block.OriginalType = targetType;
-            ColorizeBuildingBlock(block.figure, targetType);
+            ColorizeBuildingBlock(block.Figure, targetType);
         }
 
         private void DrawLine(BuildingBlock block, Tile.Types targetType)
         {
-            int deltaX = block.X - previousBlock.X;
-            int deltaY = block.Y - previousBlock.Y;
+            int deltaX = block.X - _previousBlock.X;
+            int deltaY = block.Y - _previousBlock.Y;
             if (deltaX == 0 && deltaY == 0)
             {
                 // The same block has been pressed twice.
@@ -203,10 +190,10 @@ namespace Evacuation_Master_3000
                 int j = 0;
                 do
                 {
-                    int x = i + previousBlock.X;
-                    int y = (int)(tilt) + previousBlock.Y + j;
+                    int x = i + _previousBlock.X;
+                    int y = (int)(tilt) + _previousBlock.Y + j;
 
-                    SetBlockType((BuildingBlock)localFloorPlan.Tiles[Coordinate(x, y, block.Z)], targetType);
+                    SetBlockType((BuildingBlock)LocalFloorPlan.Tiles[Coordinate(x, y, block.Z)], targetType);
 
                     j += Math.Sign(deltaY);
                 } while (Math.Abs(j) < Math.Abs(deltaTilt));
@@ -218,24 +205,24 @@ namespace Evacuation_Master_3000
 
         public void LineToolReleased()
         {
-            previousBlock = null;
+            _previousBlock = null;
         }
 
-        private static bool firstTime = true;
+        private static bool _firstTime = true;
 
         private void UpdateVisualsOnEvacuatableMoved(Person person)
         {
-            if (firstTime)
+            if (_firstTime)
             {
-                foreach (Grid grid in FloorContainer)
+                foreach (Grid grid in _floorContainer)
                 {
                     foreach (Rectangle rect in grid.Children.Cast<Rectangle>())
                     {
-                        BuildingBlock current = localFloorPlan.Tiles[rect.Tag.ToString()] as BuildingBlock;
+                        BuildingBlock current = LocalFloorPlan.Tiles[rect.Tag.ToString()] as BuildingBlock;
                         rect.ToolTip = current?.Priority + " ," + current?.Room;
                     }
                 }
-                firstTime = false;
+                _firstTime = false;
             }
             BuildingBlock prev = person.PathList[person.stepsTaken - 1];
             BuildingBlock next = person.PathList[person.stepsTaken];
@@ -271,7 +258,7 @@ namespace Evacuation_Master_3000
             }
         }
 
-        /* Might need re-work - lavet QnD! */
+
         private void ColorizeBuildingBlock(Rectangle buildingBlockRepresentation, Tile.Types type)
         {
             Color newColor;
@@ -316,62 +303,37 @@ namespace Evacuation_Master_3000
 
         private Color CalculateHeatMapColor(BuildingBlock block)
         {
-            // Stolen and modified from: http://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients
+            // Modified from: http://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients
 
             double value = Math.Min((double)block.HeatmapCounter / ((double)_mainWindow.TheUserInterface.LocalPeopleDictionary.Count * 2), 1.0);
             int colorAmount = 4;
-            double[,] color =
-            {
-                {
-                    0,
-                    0,
-                    255
-                }
-                ,
-                {
-                    0,
-                    255,
-                    0
-                }
-                ,
-                {
-                    255,
-                    255,
-                    0
-                }
-                ,
-                {
-                    255,
-                    0,
-                    0
-                }
-            };
-            // A static array of 4 colors:  (blue,   green,  yellow,  red) using {r,g,b} for each.
+            double[,] colors = {{0,0,255},{0,255,0},{255,255,0},{255,0,0}};
+            // (blue, green, yellow, red) with (r,g,b) values
 
-            int idx1; // |-- Our desired color will be between these two indexes in "color".
-            int idx2; // |
-            double fractBetween = 0; // Fraction between "idx1" and "idx2" where our value is.
+            int indexOne;
+            int indexTwo; 
+            double fractionBetween = 0; // Fraction between indexOne and indexTwo is where our value is.
 
             if (value <= 0)
             {
-                idx1 = idx2 = 0;
-            } // accounts for an input <=0
+                indexOne = indexTwo = 0;
+            } 
             else if (value >= 255)
             {
-                idx1 = idx2 = colorAmount - 1;
-            } // accounts for an input >=0
+                indexOne = indexTwo = colorAmount - 1;
+            }
             else
             {
                 value = value * (colorAmount - 1); // Will multiply value by 3.
-                idx1 = (int)Math.Floor(value); // Our desired color will be after this index.
-                idx2 = Math.Min(idx1 + 1, colorAmount - 1); // ... and before this index (inclusive).
-                fractBetween = value - idx1; // Distance between the two indexes (0-1).
+                indexOne = (int)Math.Floor(value); // Our desired color will be after this index.
+                indexTwo = Math.Min(indexOne + 1, colorAmount - 1); // ... and before this index (inclusive).
+                fractionBetween = value - indexOne; // Distance between the two indexes (0-1).
             }
 
 
-            int red = (int)Math.Round((color[idx2, 0] - color[idx1, 0]) * fractBetween + color[idx1, 0]);
-            int green = (int)Math.Round((color[idx2, 1] - color[idx1, 1]) * fractBetween + color[idx1, 1]);
-            int blue = (int)Math.Round((color[idx2, 2] - color[idx1, 2]) * fractBetween + color[idx1, 2]);
+            int red = (int)Math.Round((colors[indexTwo, 0] - colors[indexOne, 0]) * fractionBetween + colors[indexOne, 0]);
+            int green = (int)Math.Round((colors[indexTwo, 1] - colors[indexOne, 1]) * fractionBetween + colors[indexOne, 1]);
+            int blue = (int)Math.Round((colors[indexTwo, 2] - colors[indexOne, 2]) * fractionBetween + colors[indexOne, 2]);
             return new Color
             {
                 A = 255,

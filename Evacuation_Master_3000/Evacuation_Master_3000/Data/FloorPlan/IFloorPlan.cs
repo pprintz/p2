@@ -8,7 +8,7 @@ namespace Evacuation_Master_3000
         int FloorAmount { get; }
         string Description { get; }
         Dictionary<string, Tile> Tiles { get; }
-        string[] Headers { get; set; }
+        string[] Headers { get; }
         void CreateFloorPlan(int width, int height, int floorAmount, string description, string[] headers);
         void CreateFloorPlan(int width, int height, Dictionary<string, Tile> tiles);
         void Initiate();

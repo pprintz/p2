@@ -15,16 +15,16 @@ namespace Evacuation_Master_3000
         }
 
         public int TicksAtArrival { get; set; }
-        public Person Person { get; set; }
-        public Tile SourceTile { get; set; }
-        public Tile DestinationTile { get; set; }
-        public double Distance { get; set; }
+        private Person Person { get;  }
+        public Tile SourceTile { get; }
+        public Tile DestinationTile { get; }
+        private double Distance { get; }
 
         private double _distanceMeters;
         public double DistanceInMeters
         {
             get { return Math.Round(_distanceMeters, 2); }
-            set { _distanceMeters = value; }
+            private set { _distanceMeters = value; }
         }
     }
 }

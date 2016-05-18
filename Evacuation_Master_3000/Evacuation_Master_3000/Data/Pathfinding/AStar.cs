@@ -54,7 +54,14 @@ namespace Evacuation_Master_3000
                 pathList.AddRange(GetPathFromSourceToDestinationAStar(person, dest));
                 if (dest.Type == Tile.Types.Stair)
                 {
+                    if (dest.BNeighbours.Count(n => n.Priority < dest.Priority) != 0)
+                    {
                     dest = dest.BNeighbours.First(n => n.Priority < dest.Priority);
+                    }
+                    else if (dest.BNeighbours.Count(n => n.Z > dest.Z) != 0)
+                    {
+                    dest = dest.BNeighbours.First(n => n.Z > dest.Z);
+                    }
                     person.Position = dest;
                     person.CurrentRoom = dest.Room;
                     dest = FindNextPathTarget(person);

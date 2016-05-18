@@ -51,6 +51,8 @@ namespace Evacuation_Master_3000
         private Grid[] FloorContainer;
         private SwitchBetweenFloorsControl floorSwitcherControls { get; set; }              //<<------ OBS er det nødvendigt med property til at gemme floorswitchcontrols i???
         private Dictionary<string, Rectangle> AllRectangles { get; }
+        public int TileSize { get; private set; } = 10;
+
         public void ImplementFloorPlan(IFloorPlan floorPlan, Dictionary<int, Person> people)
         {
 
@@ -78,7 +80,6 @@ namespace Evacuation_Master_3000
 
         private void CreateVisualRepresentation()
         {
-            int tileSize = 10;
             int width = localFloorPlan.Width;
             int height = localFloorPlan.Height;
             int floorAmount = localFloorPlan.FloorAmount;
@@ -97,11 +98,11 @@ namespace Evacuation_Master_3000
                     {
                         Rectangle figure = new Rectangle
                         {
-                            Height = tileSize,
-                            Width = tileSize,
+                            Height = TileSize,
+                            Width = TileSize,
                             Fill = new SolidColorBrush(Colors.White),
                             Tag = Coordinate(x, y, z), /* Makes binding rectangles to buildingblocks easier */
-                            Margin = new Thickness(0, 0, x * tileSize * 2 + x, y * tileSize * 2 + y)
+                            Margin = new Thickness(0, 0, x * TileSize * 2 + x, y * TileSize * 2 + y)
                         };
 
                         if (localFloorPlan.Tiles[Coordinate(x, y, z)].Type != Tile.Types.Free)

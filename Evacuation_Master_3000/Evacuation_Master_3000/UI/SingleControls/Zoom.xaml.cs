@@ -14,6 +14,7 @@ namespace Evacuation_Master_3000 {
 
             ParentWindow = parentWindow;
             FloorPlanVisualRepresentation = ParentWindow.floorPlanVisualiserControl;
+            ParentWindow.TheUserInterface.OnBuildingPlanSuccessfullLoaded += ZoomToFit;
 
             SetupZoom();
         }
@@ -37,12 +38,14 @@ namespace Evacuation_Master_3000 {
             ParentWindow.PreviewKeyUp += OnKeyHandler;
             ZoomSlider.ValueChanged += OnSliderValueChanged;
             ZoomSliderText.MouseLeftButtonDown += ResetZoom;
-            OnSliderValueChanged(null, null);
+            ZoomSliderText.MouseRightButtonDown += ZoomToFit;
+            //OnSliderValueChanged(null, null);
         }
 
         private void MouseInVisual(object sender, MouseEventArgs e) => IsMouseHoveringVisual = true;
         private void MouseNotInVisual(object sender, MouseEventArgs e) => IsMouseHoveringVisual = false;
         private void ResetZoom(object sender, MouseButtonEventArgs e) => ZoomSlider.Value = 1;
+        private void ZoomToFit(object sender, MouseButtonEventArgs e) => ZoomToFit();
 
         private void OnMouseWheelActivity(object sender, MouseWheelEventArgs e) {
             e.Handled = IsAbleToZoom || HorizontalScrollEnabled;            //Handle the MouseWheelEventArgs if any custom made criteria is met
@@ -78,6 +81,21 @@ namespace Evacuation_Master_3000 {
             FloorPlanVisualRepresentation.VisualContainerScaleTransform.ScaleY = ZoomSlider.Value;
             //_lastCenterPositionOnTarget = ScrollViewer.TranslatePoint(centerOfViewport, Container);
             ZoomSliderText.Text = (Math.Round(ZoomSlider.Value, 2, MidpointRounding.AwayFromZero)*100).ToString() + "%";
+        }
+
+        public void ZoomToFit() {
+
+            int buildingWidth = ParentWindow.TheUserInterface.LocalFloorPlan.Width * FloorPlanVisualRepresentation.TileSize;
+            int buildingHeight = ParentWindow.TheUserInterface.LocalFloorPlan.Height * FloorPlanVisualRepresentation.TileSize;
+            int scrollBarThickness = 50;
+
+            double parentWindowVisualiserWidth = FloorPlanVisualRepresentation.ActualWidth - scrollBarThickness;
+            double parentWindowVisualiserHeight = FloorPlanVisualRepresentation.ActualHeight - scrollBarThickness;
+
+            double widthToFit = parentWindowVisualiserWidth / buildingWidth;
+            double heightToFit = parentWindowVisualiserHeight / buildingHeight;
+
+            ZoomSlider.Value = widthToFit < heightToFit ? widthToFit : heightToFit;
         }
     }
 }

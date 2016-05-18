@@ -109,7 +109,7 @@ namespace Evacuation_Master_3000
                             ColorizeBuildingBlock(figure, localFloorPlan.Tiles[Coordinate(x, y, z)].Type);
 
                         BuildingBlock current = (localFloorPlan.Tiles[Coordinate(x, y, z)] as BuildingBlock);
-                        current.figure = figure;                                                //<<-------------------- Lige nu bliver current.figure ikke brugt til de to nedenstående assignments - er det meningen/hensigten?
+                        current.Figure = figure;                                                //<<-------------------- Lige nu bliver current.figure ikke brugt til de to nedenstående assignments - er det meningen/hensigten?
                         figure.ToolTip = current.Priority + " , " + current.Room;
                         figure.MouseLeftButtonDown += OnBuildingBlockClick;
 
@@ -187,7 +187,7 @@ namespace Evacuation_Master_3000
             }
             block.Type = targetType;
             block.OriginalType = targetType;
-            ColorizeBuildingBlock(block.figure, targetType);
+            ColorizeBuildingBlock(block.Figure, targetType);
         }
 
         private void DrawLine(BuildingBlock block, Tile.Types targetType)

@@ -5,10 +5,12 @@
         public double MovementSpeed { get; set; }
     }
 
-    class BuildingInformationCollection {
+    internal class BuildingInformationCollection {
         public int Width { get; set; }
         public int Height { get; set; }
         private int _floors;
+        public PersonInformation[] PeopleCollection { get; private set; }
+        public FloorInformation[] FloorCollection { get; private set; }
         public int Floors {
             get { return _floors; }
             set {
@@ -25,7 +27,6 @@
                 PeopleCollection = new PersonInformation[NumberOfPeople];
             }
         }
-        public PersonInformation[] PeopleCollection { get; set; }
-        public FloorInformation[] FloorCollection { get; set; }
+ 
     }
 }

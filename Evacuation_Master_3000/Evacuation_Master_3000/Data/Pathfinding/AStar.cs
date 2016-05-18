@@ -33,7 +33,7 @@ namespace Evacuation_Master_3000
             return ListOfBuildingBlocks.Where(
                  b =>
                     b.Priority == targetPriority && b.Z == person.Position.Z &&
-                    b.BNeighbours.Any(n => n.Room == person.CurrentRoom)).OrderBy(b => b.DistanceTo(person.Position)).First();
+                    b.BuildingBlockNeighbours.Any(n => n.Room == person.CurrentRoom)).OrderBy(b => b.DistanceTo(person.Position)).First();
         }
         public IEnumerable<Tile> CalculatePath(IEvacuateable person)
         {
@@ -54,13 +54,13 @@ namespace Evacuation_Master_3000
                 pathList.AddRange(GetPathFromSourceToDestinationAStar(person, dest));
                 if (dest.Type == Tile.Types.Stair)
                 {
-                    if (dest.BNeighbours.Count(n => n.Priority < dest.Priority) != 0)
+                    if (dest.BuildingBlockNeighbours.Count(n => n.Priority < dest.Priority) != 0)
                     {
-                    dest = dest.BNeighbours.First(n => n.Priority < dest.Priority);
+                    dest = dest.BuildingBlockNeighbours.First(n => n.Priority < dest.Priority);
                     }
-                    else if (dest.BNeighbours.Count(n => n.Z > dest.Z) != 0)
+                    else if (dest.BuildingBlockNeighbours.Count(n => n.Z > dest.Z) != 0)
                     {
-                    dest = dest.BNeighbours.First(n => n.Z > dest.Z);
+                    dest = dest.BuildingBlockNeighbours.First(n => n.Z > dest.Z);
                     }
                     person.Position = dest;
                     person.CurrentRoom = dest.Room;
@@ -74,7 +74,7 @@ namespace Evacuation_Master_3000
                 if (dest.Priority % 2 == 0 && dest.Type == Tile.Types.Door)
                 {
                     person.Position =
-                        dest.BNeighbours.Where(
+                        dest.BuildingBlockNeighbours.Where(
                             n =>
                                 n.Type == BuildingBlock.Types.Free &&
                                 n.Room != person.CurrentRoom && n.Room != 0)
@@ -112,7 +112,7 @@ namespace Evacuation_Master_3000
 
             while (current != destination)
             {
-                foreach (BuildingBlock point in current.BNeighbours)
+                foreach (BuildingBlock point in current.BuildingBlockNeighbours)
                 {
                     if (point.IsChecked == false)
                     {

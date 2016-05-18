@@ -131,7 +131,7 @@ namespace Evacuation_Master_3000
             {
                 Person personBlocking = AllPeople.Values.First(p => p.PathList[p.stepsTaken] == target);
                 if (personBlocking.PathList.Count > 0 &&
-                    (person.Position as BuildingBlock).BNeighbours.Any(n => n.Type != Tile.Types.Person))
+                    (person.Position as BuildingBlock).BuildingBlockNeighbours.Any(n => n.Type != Tile.Types.Person))
                 {
                     if (personBlocking.PathList.Count(b => b.Type != Tile.Types.Person) <
                         person.PathList.Count(b => b.Type != Tile.Types.Person))

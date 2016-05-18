@@ -1,18 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using static Evacuation_Master_3000.ImportExportSettings;
 namespace Evacuation_Master_3000
 {
     internal class FloorPlan : IFloorPlan
     {
         // Hash code should be calculated on everything except the Tiles heatmap, so the UI's floorplan can be equal to DATA's floorplan
-        // Even though the heatmap has been actiavted. We just need to reset the heatmap on reruns.
+        // Even though the heatmap has been activated. We just need to reset the heatmap on reruns.
         public FloorPlan()
         {
             Tiles = new Dictionary<string, Tile>();
-            floorPlanAlreadyExist = false;
+            _floorPlanAlreadyExist = false;
         }
 
         public int Width { get; private set; }
@@ -20,13 +18,14 @@ namespace Evacuation_Master_3000
         public int FloorAmount { get; private set; }
         public string Description { get; private set; }
         public Dictionary<string, Tile> Tiles { get; private set; }
-        public Dictionary<string, BuildingBlock> BuildingBlocks { get; set; }
+        private Dictionary<string, BuildingBlock> BuildingBlocks { get; set; }
         public string[] Headers { get; set; }
-        private bool floorPlanAlreadyExist;
+        private bool _floorPlanAlreadyExist;
+        private static int _globalRoomCounter;
 
         public void CreateFloorPlan(int width, int height, int floorAmount, string description, string[] headers)
         {
-            if (floorPlanAlreadyExist)
+            if (_floorPlanAlreadyExist)
                 return;
 
             Width = width;
@@ -47,13 +46,13 @@ namespace Evacuation_Master_3000
                 }
             }
             BuildingBlocks = Tiles.ToDictionary(k => k.Key, v => v.Value as BuildingBlock);
-            floorPlanAlreadyExist = true;
+            _floorPlanAlreadyExist = true;
         }
 
         // This overload is used for Import Images
         public void CreateFloorPlan(int width, int height, Dictionary<string, Tile> tiles)
         {
-            if (floorPlanAlreadyExist)
+            if (_floorPlanAlreadyExist)
                 return;
             Width = width;
             Height = height;
@@ -63,15 +62,15 @@ namespace Evacuation_Master_3000
             Description = "";
             BuildingBlocks = tiles.ToDictionary(k => k.Key, v => v.Value as BuildingBlock);
             
-            floorPlanAlreadyExist = true;
+            _floorPlanAlreadyExist = true;
         }
 
         public void Initiate()
         {
             foreach (BuildingBlock buildingBlock in BuildingBlocks.Values)
             {
-                buildingBlock.BNeighbours.Clear();
-                buildingBlock.Priority = Int32.MaxValue;
+                buildingBlock.BuildingBlockNeighbours.Clear();
+                buildingBlock.Priority = int.MaxValue;
                 buildingBlock.Room = default(int);
             }
             FloorPlanVisualiser.firstTime = true;
@@ -96,10 +95,10 @@ namespace Evacuation_Master_3000
                         {
                             BuildingBlock currentBuildingBlock = BuildingBlocks[coordinate];
                             if (!Equals(buildingBlock, currentBuildingBlock) && (buildingBlock.Type != Tile.Types.Wall) && (currentBuildingBlock.Type != Tile.Types.Wall))
-                                buildingBlock.BNeighbours.Add(currentBuildingBlock);
+                                buildingBlock.BuildingBlockNeighbours.Add(currentBuildingBlock);
                             else if (!Equals(buildingBlock, currentBuildingBlock) && (buildingBlock.Type == Tile.Types.Wall))
                             {
-                                buildingBlock.BNeighbours.Add(currentBuildingBlock);
+                                buildingBlock.BuildingBlockNeighbours.Add(currentBuildingBlock);
                             }
                         }
                     }
@@ -117,13 +116,13 @@ namespace Evacuation_Master_3000
                 {
                     BuildingBlock neighbourAbove = Tiles[coordinatesOfFloorAbove] as BuildingBlock;
                     if (neighbourAbove?.Type == Tile.Types.Stair)
-                        buildingBlock.BNeighbours.Add(neighbourAbove);
+                        buildingBlock.BuildingBlockNeighbours.Add(neighbourAbove);
                 }
                 if (Tiles.ContainsKey(coordinatesOfFloorBelow))
                 {
                     BuildingBlock neighbourBelow = Tiles[coordinatesOfFloorBelow] as BuildingBlock;
                     if (neighbourBelow?.Type == Tile.Types.Stair)
-                        buildingBlock.BNeighbours.Add(neighbourBelow);
+                        buildingBlock.BuildingBlockNeighbours.Add(neighbourBelow);
                 }
             }
         }
@@ -131,10 +130,10 @@ namespace Evacuation_Master_3000
         {
             foreach (BuildingBlock buildingBlock in BuildingBlocks.Values)
             {
-                if (buildingBlock.Type == BuildingBlock.Types.Wall ||
-                    buildingBlock.Type == BuildingBlock.Types.Furniture)
+                if (buildingBlock.Type == Tile.Types.Wall ||
+                    buildingBlock.Type == Tile.Types.Furniture)
                 {
-                    foreach (BuildingBlock neighbour in buildingBlock.BNeighbours)
+                    foreach (BuildingBlock neighbour in buildingBlock.BuildingBlockNeighbours)
                     {
                         if (neighbour.DistanceTo(buildingBlock) > 1) // Then it is a diagonal
                         {
@@ -144,9 +143,9 @@ namespace Evacuation_Master_3000
                                 buildingBlock.Y, neighbour.Z);
                             if (!BuildingBlocks.ContainsKey(illegalConnectedPointCoordinateSetOne) ||
                                 !BuildingBlocks.ContainsKey(illegalConnectedPointCoordinateSetTwo)) continue;
-                            BuildingBlocks[illegalConnectedPointCoordinateSetOne].BNeighbours.Remove(
+                            BuildingBlocks[illegalConnectedPointCoordinateSetOne].BuildingBlockNeighbours.Remove(
                                 BuildingBlocks[illegalConnectedPointCoordinateSetTwo]);
-                            BuildingBlocks[illegalConnectedPointCoordinateSetTwo].BNeighbours.Remove(
+                            BuildingBlocks[illegalConnectedPointCoordinateSetTwo].BuildingBlockNeighbours.Remove(
                                 BuildingBlocks[illegalConnectedPointCoordinateSetOne]);
                         }
                     }
@@ -158,18 +157,18 @@ namespace Evacuation_Master_3000
         private void CalculatePriorities()
         {
             IEnumerable<BuildingBlock> doorlist =
-                BuildingBlocks.Values.Where(d => d.Type == BuildingBlock.Types.Door);
+                BuildingBlocks.Values.Where(d => d.Type == Tile.Types.Door);
             IEnumerable<BuildingBlock> exitList =
-                BuildingBlocks.Values.Where(p => p.Type == BuildingBlock.Types.Exit);
+                BuildingBlocks.Values.Where(p => p.Type == Tile.Types.Exit);
             IEnumerable<BuildingBlock> connectedStairList =
-                BuildingBlocks.Values.Where(p => p.Type == BuildingBlock.Types.Stair && p.BNeighbours.Any(n => n.Z + 1 == p.Z || n.Z - 1 == p.Z));
+                BuildingBlocks.Values.Where(p => p.Type == Tile.Types.Stair && p.BuildingBlockNeighbours.Any(n => n.Z + 1 == p.Z || n.Z - 1 == p.Z));
 
             foreach (BuildingBlock exitBuildingBlock in exitList)
             {
                 exitBuildingBlock.Priority = 0;
                 SetExitAndStairPriority(exitBuildingBlock, doorlist);
             }
-            foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == Int32.MaxValue).OrderBy(cs => cs.Z))
+            foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == int.MaxValue).OrderBy(cs => cs.Z))
             {
                 connectedStair.Priority = 1000 * (connectedStair.Z+1);
                 SetExitAndStairPriority(connectedStair, doorlist);
@@ -186,33 +185,33 @@ namespace Evacuation_Master_3000
                     //Checks for each door, if the doors priority is larger than the surrounding buildingblocks
                     if (door.Priority >
                         (BuildingBlocks.Values.Where(
-                            b => b.BNeighbours.Contains(door) && b.Type == BuildingBlock.Types.Free || b.Type == BuildingBlock.Types.Person)
+                            b => b.BuildingBlockNeighbours.Contains(door) && b.Type == Tile.Types.Free || b.Type == Tile.Types.Person)
                             .Min(n => n.Priority)))
                     {
                         door.Priority =
-                            (BuildingBlocks.Values.Where(b => (b.Type == BuildingBlock.Types.Free || b.Type == Tile.Types.Person) &&
-                                                               b.BNeighbours.Contains(door)).Min(n => n.Priority));
+                            (BuildingBlocks.Values.Where(b => (b.Type == Tile.Types.Free || b.Type == Tile.Types.Person) &&
+                                                               b.BuildingBlockNeighbours.Contains(door)).Min(n => n.Priority));
                         door.Priority++;
                         InitializeRoomPriority(door, door.Priority);
                     }
                 }
-            } while (doorlist.Any(d => d.Priority - d.BNeighbours.Min(n => n.Priority) > 2));
+            } while (doorlist.Any(d => d.Priority - d.BuildingBlockNeighbours.Min(n => n.Priority) > 2));
         }
 
 
-        public static int GlobalRoomCounter;
+       
         private void InitializeRoomPriority(BuildingBlock door, int priorityCounter)
         {
-            GlobalRoomCounter++;
+            _globalRoomCounter++;
             priorityCounter++;
             bool done = false;
             List<BuildingBlock> tileList = BuildingBlocks.Values.Where(t => t.Type == Tile.Types.Free ||
                                                                             t.Type == Tile.Types.Person ||
                                                                             t.Type == Tile.Types.Stair).ToList();
             List<BuildingBlock> currentList =
-                door.BNeighbours.Where(
+                door.BuildingBlockNeighbours.Where(
                     n =>
-                        (n.Type == BuildingBlock.Types.Free || n.Type == Tile.Types.Person) &&
+                        (n.Type == Tile.Types.Free || n.Type == Tile.Types.Person) &&
                         n.Priority > priorityCounter).ToList();
             do
             {
@@ -227,22 +226,22 @@ namespace Evacuation_Master_3000
                         block.Priority = priorityCounter;
                         if (block.Room == 0)
                         {
-                            block.Room = GlobalRoomCounter;
+                            block.Room = _globalRoomCounter;
                         }
                     }
-                    if (tileList.Any(b => b.BNeighbours.Any(n => n.Priority == priorityCounter) &&
+                    if (tileList.Any(b => b.BuildingBlockNeighbours.Any(n => n.Priority == priorityCounter) &&
                         b.Priority > priorityCounter &&
                         (b.Type == Tile.Types.Free || b.Type == Tile.Types.Person)))
                     {
                         foreach (
                             BuildingBlock block in
-                                tileList.Where(b => b.BNeighbours.Any(n => n.Priority == priorityCounter && n.Z == b.Z) &&
+                                tileList.Where(b => b.BuildingBlockNeighbours.Any(n => n.Priority == priorityCounter && n.Z == b.Z) &&
                                                     b.Priority > priorityCounter))
                         {
                             block.Priority = priorityCounter;
                             if (block.Room == 0)
                             {
-                                block.Room = GlobalRoomCounter;
+                                block.Room = _globalRoomCounter;
                             }
                         }
                     }

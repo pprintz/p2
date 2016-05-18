@@ -71,7 +71,7 @@ namespace Evacuation_Master_3000
                     ID = id;
             }
 
-            PersonInteractionStats = new DataSimulationStatistics(this);
+            PersonInteractionStats = new DataSimulationStatistics();
             MovementSpeed = movementSpeed < 5 ? 5 + rand.NextDouble() * 10 : movementSpeed; // Less than 5 means that it was not created.
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;

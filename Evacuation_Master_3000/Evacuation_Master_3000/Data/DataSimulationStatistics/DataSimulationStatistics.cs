@@ -5,17 +5,13 @@ namespace Evacuation_Master_3000
 {
     public class DataSimulationStatistics
     {
-        public DataSimulationStatistics(Person person)
+        public DataSimulationStatistics()
         {
             MovementSteps = new List<MovementStep>();
         }
-
-        public List<MovementStep> MovementSteps { get; set; }
-        public void CountTicksBeingBlocked(int ticksSpentTryingToMove)
-        {
-            TicksWaited += ticksSpentTryingToMove;
-        }
-
+        public int TicksWaited { get; set; }
+        public double TimeWhenEvacuated;
+        public List<MovementStep> MovementSteps { get; }
         private double _distanceTraveled;
         public double DistanceTraveled
         {
@@ -23,7 +19,13 @@ namespace Evacuation_Master_3000
             set { _distanceTraveled = value; }
         }
 
-        public int TicksWaited { get; set; }
-        public double TimeWhenEvacuated;
+        public void CountTicksBeingBlocked(int ticksSpentTryingToMove)
+        {
+            TicksWaited += ticksSpentTryingToMove;
+        }
+
+        
+
+       
     }
 }

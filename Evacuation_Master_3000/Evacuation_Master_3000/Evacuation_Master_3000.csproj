@@ -247,6 +247,7 @@
     </EmbeddedResource>
     <None Include="Controller.cd" />
     <None Include="Data.cd" />
+    <None Include="ImportExport.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

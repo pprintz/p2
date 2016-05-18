@@ -145,7 +145,7 @@ namespace Evacuation_Master_3000
                     sb.AppendLine($"{Environment.NewLine}Longest distance:{Environment.NewLine}" +
                                   $"{personWithLongestDistance.ID} - {personWithLongestDistance.PersonInteractionStats.DistanceTraveled} m{Environment.NewLine}");
                     sb.AppendLine($"Most time before evacuated: {Environment.NewLine}" +
-                                  $"{personWithLongestTimeBeforeEvacuated.ID} - {personWithLongestDistance.PersonInteractionStats.TimeWhenEvacuated} seconds{Environment.NewLine}");
+                                  $"{personWithLongestTimeBeforeEvacuated.ID} - {personWithLongestTimeBeforeEvacuated.PersonInteractionStats.TimeWhenEvacuated} seconds{Environment.NewLine}");
 
                     foreach (Person person1 in EvacuatedPeopleList.OrderBy(p => p.ID))
                     {

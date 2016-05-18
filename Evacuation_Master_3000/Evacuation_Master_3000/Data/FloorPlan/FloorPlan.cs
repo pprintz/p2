@@ -68,6 +68,13 @@ namespace Evacuation_Master_3000
 
         public void Initiate()
         {
+            foreach (BuildingBlock buildingBlock in BuildingBlocks.Values)
+            {
+                buildingBlock.BNeighbours.Clear();
+                buildingBlock.Priority = Int32.MaxValue;
+                buildingBlock.Room = default(int);
+            }
+            FloorPlanVisualiser.firstTime = true;
             CalculateNeighbours();
             CalculatePriorities();
 

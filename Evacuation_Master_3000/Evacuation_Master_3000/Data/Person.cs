@@ -17,6 +17,7 @@ namespace Evacuation_Master_3000
         public int NumberOfBlocks { get; set; }
         public int stepsTaken;
         public int roundsWaitedBecauseOfBlock;
+        public bool NewPersonInGrid { get; set; } = true;
         private bool firstRun = true;
         public Tile Position { get; set; }
         public Tile OriginalPosition { get; set; }

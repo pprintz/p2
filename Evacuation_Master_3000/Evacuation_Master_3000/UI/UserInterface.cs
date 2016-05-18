@@ -28,6 +28,7 @@ namespace Evacuation_Master_3000 {
             }
         }
 
+        public static bool BuildingHasBeenChanged = false;
         public static event ResetClicked OnReset;
         public static event SimulationEnd OnSimulationEnd;
         private MainWindow TheMainWindow { get; }

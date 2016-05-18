@@ -181,6 +181,10 @@ namespace Evacuation_Master_3000
 
         private void SetBlockType(BuildingBlock block, Tile.Types targetType)
         {
+            if (targetType != Tile.Types.Person)
+            {
+                UserInterface.BuildingHasBeenChanged = true;
+            }
             block.Type = targetType;
             block.OriginalType = targetType;
             ColorizeBuildingBlock(block.figure, targetType);
@@ -222,7 +226,7 @@ namespace Evacuation_Master_3000
             previousBlock = null;
         }
 
-        private static bool firstTime = true;
+        public static bool firstTime = true;
 
         private void UpdateVisualsOnEvacuatableMoved(Person person)
         {

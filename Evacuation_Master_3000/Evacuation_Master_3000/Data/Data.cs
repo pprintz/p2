@@ -32,7 +32,7 @@ namespace Evacuation_Master_3000
 
         public Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan)
         {
-            if (SimulationStart)
+            if (UserInterface.BuildingHasBeenChanged)
             {
                 TheFloorPlan.Initiate();
                 foreach (Tile tile in floorPlan.Tiles.Values)
@@ -63,21 +63,26 @@ namespace Evacuation_Master_3000
         public Dictionary<int, Person> StartSimulation(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)                                           //<---- kan formentligt være void?
         {
             this.pathfindingAlgorithm = pathfindingAlgorithm;
-            if (SimulationStart)
+            if (UserInterface.BuildingHasBeenChanged)
             {
                 if (AllPeople != null)
                 {
-                    foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0))
+                    foreach (Person person in AllPeople.Values)
                     {
-                        person.Evacuated = false;
-                        person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                        person.TickLength = tickLength;
-                        person.OnExtendedPathRequest += FindNewPath;
+                        person.PathList.Clear();
+                        if (person.NewPersonInGrid)
+                        {
+                            person.Evacuated = false;
+                            person.OnPersonEvacuated += RemoveEvacuatedPerson;
+                            person.TickLength = tickLength;
+                            person.OnExtendedPathRequest += FindNewPath;
+                            person.NewPersonInGrid = false;
+                        }
                         person.PathList.AddRange(
                             pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
                     }
-                    SimulationStart = false;
                 }
+                UserInterface.BuildingHasBeenChanged = false;
             }
             foreach (Person person1 in AllPeople.Values.Where(p => p.PathList.Count == 0))
             {

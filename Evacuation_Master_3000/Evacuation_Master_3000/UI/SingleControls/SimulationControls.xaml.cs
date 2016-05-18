@@ -1,9 +1,8 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 
 namespace Evacuation_Master_3000
 {
-    public partial class SimulationControls : UserControl
+    public partial class SimulationControls
     {
         public SimulationControls(MainWindow parentWindow)
         {
@@ -14,6 +13,8 @@ namespace Evacuation_Master_3000
             PauseSimulationButton.Click += OnPauseAndContinueButtonClick;
             ResetSimulationButton.Click += OnResetButtonClick;
         }
+
+        private readonly MainWindow _parentWindow;
 
         private void OnResetButtonClick(object sender, RoutedEventArgs e)
         {
@@ -52,12 +53,11 @@ namespace Evacuation_Master_3000
         private void OnSimulationStartClick(object sender, RoutedEventArgs e)
         {
             UserInterface.HasSimulationEnded = false;
-            _parentWindow.controlPanelControl.UserControlTabPanel.SelectedIndex = 2;
+            _parentWindow.ControlPanelControl.UserControlTabPanel.SelectedIndex = 2;
             _parentWindow.TheUserInterface.SimulationStart(
-                (bool)_parentWindow.controlPanelControl.SimulationControls.HeatmapToggle.IsChecked,
-                (bool)_parentWindow.controlPanelControl.SimulationControls.StepByStepToggle.IsChecked, new AStar(_parentWindow.TheUserInterface.LocalFloorPlan), 100);
+                _parentWindow.ControlPanelControl.SimulationControls.HeatmapToggle.IsChecked != null && (bool)_parentWindow.ControlPanelControl.SimulationControls.HeatmapToggle.IsChecked,
+                _parentWindow.ControlPanelControl.SimulationControls.StepByStepToggle.IsChecked != null && (bool)_parentWindow.ControlPanelControl.SimulationControls.StepByStepToggle.IsChecked, new AStar(_parentWindow.TheUserInterface.LocalFloorPlan), 100);
         }
-        MainWindow _parentWindow;
 
     }
 }

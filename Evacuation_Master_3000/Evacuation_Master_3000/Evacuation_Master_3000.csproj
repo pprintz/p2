@@ -149,7 +149,6 @@
       <DependentUpon>FloorPlanVisualiser.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\IUserInterface.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Data\Person.cs" />
     <Compile Include="GlobalFiles\Settings.cs" />
     <Compile Include="Data\FloorPlan\Tile.cs" />
@@ -160,7 +159,6 @@
     <Compile Include="UI\SingleControls\Zoom.xaml.cs">
       <DependentUpon>Zoom.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ZoomDrag.cs" />
     <Page Include="ImageScan\CP_ImageScanpicture.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -206,7 +204,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\ImportExport\Export.cs" />
-    <Compile Include="Graph.cs" />
     <Compile Include="GlobalFiles\ImportExportSettings.cs" />
     <Compile Include="GlobalFiles\IntStringConverter.cs" />
     <Page Include="UI\ControlPanelUI\ControlPanel.xaml">

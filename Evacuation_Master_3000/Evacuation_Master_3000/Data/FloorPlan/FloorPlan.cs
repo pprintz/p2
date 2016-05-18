@@ -73,7 +73,7 @@ namespace Evacuation_Master_3000
                 buildingBlock.Priority = int.MaxValue;
                 buildingBlock.Room = default(int);
             }
-            FloorPlanVisualiser.firstTime = true;
+            FloorPlanVisualiser.FirstTime = true;
             CalculateNeighbours();
             CalculatePriorities();
 

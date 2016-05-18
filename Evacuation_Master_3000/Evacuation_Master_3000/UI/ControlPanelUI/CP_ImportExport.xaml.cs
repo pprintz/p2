@@ -36,15 +36,15 @@ namespace Evacuation_Master_3000
         }
 
         private void OnNew(object sender, RoutedEventArgs e) {
-            ParentWindow.importWindow.OnShowWindow(NewImportWindow.NewOrImport.New);
+            ParentWindow.ImportWindow.OnShowWindow(NewImportWindow.NewOrImport.New);
         }
 
         private void OnImport(object sender, RoutedEventArgs e) {
-            ParentWindow.importWindow.OnShowWindow(NewImportWindow.NewOrImport.Import);
+            ParentWindow.ImportWindow.OnShowWindow(NewImportWindow.NewOrImport.Import);
         }
 
         private void OnExport(object sender, RoutedEventArgs e) {
-            ParentWindow.exportWindow.OnShowWindow();
+            ParentWindow.ExportWindow.OnShowWindow();
         }
 
         private void OnSuccessfullBuildingLoadUp() {

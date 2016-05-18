@@ -64,7 +64,7 @@ namespace Evacuation_Master_3000 {
                 return;
             }
             LocalFloorPlan = OnNewFloorPlan?.Invoke(width, height, floorAmount, description);
-            TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
+            TheMainWindow.FloorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
             _floorplanHasBeenCreated = true;
             OnBuildingPlanSuccessfullLoaded?.Invoke();
         }
@@ -72,7 +72,7 @@ namespace Evacuation_Master_3000 {
         public void ImportFloorPlan(string filePath) {
             LocalFloorPlan = OnImportFloorPlan?.Invoke(filePath);
             People = OnPrepareSimulation?.Invoke(LocalFloorPlan);
-            TheMainWindow.floorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
+            TheMainWindow.FloorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
             OnBuildingPlanSuccessfullLoaded?.Invoke();
         }
 
@@ -88,8 +88,5 @@ namespace Evacuation_Master_3000 {
             OnUISimulationStart?.Invoke(showHeatMap, stepByStep, pathfinding, milliseconds);
         }
 
-        private void VisualizeFloorPlan() {
-            //TheMainWindow.floorPlanVisualiserControl.
-        }
     }
 }

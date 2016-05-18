@@ -8,12 +8,13 @@ namespace Evacuation_Master_3000 {
     /// <summary>
     /// Interaction logic for Zoom.xaml
     /// </summary>
-    public partial class Zoom : UserControl {
+    public partial class Zoom
+    {
         public Zoom(MainWindow parentWindow) {
             InitializeComponent();
 
             ParentWindow = parentWindow;
-            FloorPlanVisualRepresentation = ParentWindow.floorPlanVisualiserControl;
+            FloorPlanVisualRepresentation = ParentWindow.FloorPlanVisualiserControl;
             ParentWindow.TheUserInterface.OnBuildingPlanSuccessfullLoaded += ZoomToFit;
 
             SetupZoom();
@@ -74,16 +75,12 @@ namespace Evacuation_Master_3000 {
         }
 
         private void OnSliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            //var centerOfViewport = new Point(FloorPlanVisualRepresentation.VisualContainerScrollViewer.ViewportWidth / 2,
-            //    FloorPlanVisualRepresentation.VisualContainerScrollViewer.ViewportHeight / 2);
-            //FloorPlanVisualRepresentation.VisualContainerScrollViewer.TranslatePoint(centerOfViewport, FloorPlanVisualRepresentation.VisualContainer);
             FloorPlanVisualRepresentation.VisualContainerScaleTransform.ScaleX = ZoomSlider.Value;
             FloorPlanVisualRepresentation.VisualContainerScaleTransform.ScaleY = ZoomSlider.Value;
-            //_lastCenterPositionOnTarget = ScrollViewer.TranslatePoint(centerOfViewport, Container);
-            ZoomSliderText.Text = (Math.Round(ZoomSlider.Value, 2, MidpointRounding.AwayFromZero)*100).ToString() + "%";
+            ZoomSliderText.Text = Math.Round(ZoomSlider.Value, 2, MidpointRounding.AwayFromZero)*100 + "%";
         }
 
-        public void ZoomToFit() {
+        private void ZoomToFit() {
 
             int buildingWidth = ParentWindow.TheUserInterface.LocalFloorPlan.Width * FloorPlanVisualRepresentation.TileSize;
             int buildingHeight = ParentWindow.TheUserInterface.LocalFloorPlan.Height * FloorPlanVisualRepresentation.TileSize;

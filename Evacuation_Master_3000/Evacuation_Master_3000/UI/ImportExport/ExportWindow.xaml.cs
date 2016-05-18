@@ -34,7 +34,7 @@ namespace Evacuation_Master_3000 {
             get { return _fileName; }
             set {
                 _fileName = value;
-                ExportButton.IsEnabled = string.IsNullOrWhiteSpace(_fileName) ? false : true;
+                ExportButton.IsEnabled = !string.IsNullOrWhiteSpace(_fileName);
                 OnPropertyChanged("Path");
             }
         }
@@ -60,23 +60,25 @@ namespace Evacuation_Master_3000 {
         private DockPanel[] HeadersPanel { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string property) {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        private void OnPropertyChanged(string property)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
 
         private void BrowseDirectory(object sender, RoutedEventArgs e) {
             /* Setup the folder browser */
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.ShowNewFolderButton = true;
-            dialog.SelectedPath = Path;
+            var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                ShowNewFolderButton = true,
+                SelectedPath = Path
+            };
 
             /* Open/Show the folder browser dialog - Capture the result (what button was pressed) */
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
             /* If the user pressed OK, change the path */
             if (result == System.Windows.Forms.DialogResult.OK) 
-                Path = dialog.SelectedPath.ToString();
+                Path = dialog.SelectedPath;
         }
 
         private void OnExportFeedBack(string message, Export.ExportOutcomes outcome) {

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using static Evacuation_Master_3000.ImportExportSettings;
-using System;
 using System.IO;
 
 namespace Evacuation_Master_3000 {
@@ -42,7 +41,7 @@ namespace Evacuation_Master_3000 {
 
         private MainWindow ParentWindow { get; }
         public enum NewOrImport { New, Import }
-        private int BuildingWidthAndHeightMax = 500;
+        private const int BuildingWidthAndHeightMax = 500;
         private int _buildingWidth;
         public int BuildingWidth
         {
@@ -73,8 +72,9 @@ namespace Evacuation_Master_3000 {
                 OnPropertyChanged("BuildingHeight");
             }
         }
-        private int BuildingFloorMax = 40;
+        private const int BuildingFloorMax = 40;
         private int _buildingFloorAmount;
+        public string Description { get; set; }
         public int BuildingFloorAmount
         {
             get { return _buildingFloorAmount; }
@@ -88,7 +88,7 @@ namespace Evacuation_Master_3000 {
                 OnPropertyChanged("BuildingFloorAmount");
             }
         }
-        public string Description { get; set; }
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string property) {

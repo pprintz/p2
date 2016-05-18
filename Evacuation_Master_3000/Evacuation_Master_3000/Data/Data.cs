@@ -32,7 +32,6 @@ namespace Evacuation_Master_3000
 
         public Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan)
         {
-            UserInterface.HasSimulationEnded = false;
             if (SimulationStart)
             {
                 TheFloorPlan.Initiate();

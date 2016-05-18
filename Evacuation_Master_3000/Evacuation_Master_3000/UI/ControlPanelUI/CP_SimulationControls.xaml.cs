@@ -5,7 +5,7 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for CP_SimulationControls.xaml
     /// </summary>
-    public partial class CP_SimulationControls : UserControl
+    public partial class CP_SimulationControls
     {
         public CP_SimulationControls()
         {

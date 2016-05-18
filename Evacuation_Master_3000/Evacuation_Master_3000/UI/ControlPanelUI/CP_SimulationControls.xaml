@@ -14,7 +14,7 @@
                     </Style>
                 </StackPanel.Resources>
                 <CheckBox Content="Show heatmap" Name="HeatmapToggle"/>
-                <CheckBox Content="Step-by-step simulation" Name="StepByStepToggle"/>
+                <CheckBox Content="Step by step" Name="StepByStepToggle"/>
             </StackPanel>
         </GroupBox>
     </StackPanel>

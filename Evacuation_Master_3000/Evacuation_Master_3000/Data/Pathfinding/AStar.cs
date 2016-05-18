@@ -18,13 +18,17 @@ namespace Evacuation_Master_3000
         private BuildingBlock FindNextPathTarget(IEvacuateable person)
         {
             int targetPriority;
-            if ((person.Position as BuildingBlock).Priority % 2 == 0)
+
+            BuildingBlock currentPosition = person.Position as BuildingBlock;
+            if (currentPosition == null) return null;
+
+            if (currentPosition.Priority % 2 == 0)
             {
-                targetPriority = ((person.Position as BuildingBlock).Priority - 2);
+                targetPriority = currentPosition.Priority - 2;
             }
             else
             {
-                targetPriority = ((person.Position as BuildingBlock).Priority - 1);
+                targetPriority = currentPosition.Priority - 1;
             }
             if (person.Position.Type == Tile.Types.Stair && targetPriority != 0)
             {
@@ -38,47 +42,46 @@ namespace Evacuation_Master_3000
         public IEnumerable<Tile> CalculatePath(IEvacuateable person)
         {
             /* Exception needed for when not path is given, and when a person can't find a route. */
-            List<BuildingBlock> exitList =
-                ListOfBuildingBlocks.Where(b => b.Type == BuildingBlock.Types.Exit)
-                    .OrderBy(b => b.DistanceTo(person.Position)).ToList();
+            BuildingBlock current = person.Position as BuildingBlock;
+            if (current == null) return null;
 
-            person.CurrentRoom = (person.Position as BuildingBlock).Room;
+            person.CurrentRoom = current.Room;
             List<Tile> pathList = new List<Tile>();
-            while ((person.Position as BuildingBlock).Type != Tile.Types.Exit)
+            while (current.Type != Tile.Types.Exit)
             {
-                if ((person.Position as BuildingBlock).Priority == Int32.MaxValue)
+                if (current.Priority == int.MaxValue)
                 {
                     throw new PersonException(); //<<---- Personen kan ikke finde ud?? I så fald skal der ikke kastes en exception, men i stedet skal personen håndteres (som i tages ud af simuleringen, der skal gives besked til analyse-delen, at personen ikke er medtaget i simuleringen osv osv osv)
                 }
-                BuildingBlock dest = FindNextPathTarget(person);
-                pathList.AddRange(GetPathFromSourceToDestinationAStar(person, dest));
-                if (dest.Type == Tile.Types.Stair)
+                BuildingBlock destination = FindNextPathTarget(person);
+                pathList.AddRange(GetPathFromSourceToDestinationAStar(person, destination));
+                if (destination.Type == Tile.Types.Stair)
                 {
-                    if (dest.BuildingBlockNeighbours.Count(n => n.Priority < dest.Priority) != 0)
+                    if (destination.BuildingBlockNeighbours.Count(n => n.Priority < destination.Priority) != 0)
                     {
-                    dest = dest.BuildingBlockNeighbours.First(n => n.Priority < dest.Priority);
+                        destination = destination.BuildingBlockNeighbours.First(n => n.Priority < destination.Priority);
                     }
-                    else if (dest.BuildingBlockNeighbours.Count(n => n.Z > dest.Z) != 0)
+                    else if (destination.BuildingBlockNeighbours.Count(n => n.Z > destination.Z) != 0)
                     {
-                    dest = dest.BuildingBlockNeighbours.First(n => n.Z > dest.Z);
+                        destination = destination.BuildingBlockNeighbours.First(n => n.Z > destination.Z);
                     }
-                    person.Position = dest;
-                    person.CurrentRoom = dest.Room;
-                    dest = FindNextPathTarget(person);
-                    pathList.AddRange(GetPathFromSourceToDestinationAStar(person, dest));
+                    person.Position = destination;
+                    person.CurrentRoom = destination.Room;
+                    destination = FindNextPathTarget(person);
+                    pathList.AddRange(GetPathFromSourceToDestinationAStar(person, destination));
                 }
-                if (dest.Type == Tile.Types.Exit)
+                if (destination.Type == Tile.Types.Exit)
                 {
                     break;
                 }
-                if (dest.Priority % 2 == 0 && dest.Type == Tile.Types.Door)
+                if (destination.Priority % 2 == 0 && destination.Type == Tile.Types.Door)
                 {
                     person.Position =
-                        dest.BuildingBlockNeighbours.Where(
+                        destination.BuildingBlockNeighbours.Where(
                             n =>
-                                n.Type == BuildingBlock.Types.Free &&
+                                n.Type == Tile.Types.Free &&
                                 n.Room != person.CurrentRoom && n.Room != 0)
-                            .OrderBy(n => n.DistanceTo(dest))
+                            .OrderBy(n => n.DistanceTo(destination))
                             .First();
                     person.CurrentRoom = ((person.Position as BuildingBlock).Room);
                 }
@@ -87,9 +90,9 @@ namespace Evacuation_Master_3000
             return pathList.Distinct();
         }
 
-        public IEnumerable<Tile> GetPathFromSourceToDestinationAStar(IEvacuateable person, BuildingBlock destination)
+        private IEnumerable<Tile> GetPathFromSourceToDestinationAStar(IEvacuateable person, BuildingBlock destination)
         {
-            bool _firstRun = true;
+            bool firstRun = true;
             SortedSet<BuildingBlock> priorityQueue = new SortedSet<BuildingBlock>(Comparer<BuildingBlock>.Default);
             Dictionary<string, BuildingBlock> closedSet = new Dictionary<string, BuildingBlock>();
             List<BuildingBlock> unvisitedVertices = TheFloorPlan.Tiles.Values.Cast<BuildingBlock>().ToList();
@@ -98,21 +101,22 @@ namespace Evacuation_Master_3000
             {
                 point.LengthToDestination = point.DiagonalDistanceTo(destination);
                 point.Parent = null;
-                if (_firstRun)
-                    _firstRun = false;
+                if (firstRun)
+                    firstRun = false;
                 else
                     point.LengthFromSource = 100000;
                 point.IsChecked = false;
             }
 
             unvisitedVertices.Remove(person.Position as BuildingBlock);
-            (person.Position as BuildingBlock).LengthFromSource = 0;
-            unvisitedVertices.Insert(0, (person.Position as BuildingBlock));
-            BuildingBlock current = unvisitedVertices[0];
+            BuildingBlock currentPosition = person.Position as BuildingBlock;
+            if (currentPosition == null) return null;
+            currentPosition.LengthFromSource = 0;
+            unvisitedVertices.Insert(0, currentPosition);
 
-            while (current != destination)
+            while (!Equals(currentPosition, destination))
             {
-                foreach (BuildingBlock point in current.BuildingBlockNeighbours)
+                foreach (BuildingBlock point in currentPosition.BuildingBlockNeighbours)
                 {
                     if (point.IsChecked == false)
                     {
@@ -122,21 +126,20 @@ namespace Evacuation_Master_3000
                         }
                     }
                 }
-                CheckNeighbors(current, priorityQueue);
+                CheckNeighbors(currentPosition, priorityQueue);
                 if (priorityQueue.Count == 0)
                 {
-                    if (closedSet.ContainsKey(ImportExportSettings.Coordinate(current.X, current.Y, current.Z)) == false)
-                        closedSet.Add(ImportExportSettings.Coordinate(current.X, current.Y, current.Z), current);
+                    if (closedSet.ContainsKey(ImportExportSettings.Coordinate(currentPosition.X, currentPosition.Y, currentPosition.Z)) == false)
+                        closedSet.Add(ImportExportSettings.Coordinate(currentPosition.X, currentPosition.Y, currentPosition.Z), currentPosition);
 
-                    current = ((person.Position as BuildingBlock));
                     foreach (BuildingBlock point in unvisitedVertices)
                     {
                         point.IsChecked = false;
                     }
                     continue;
                 }
-                current.IsChecked = true;
-                current = priorityQueue.First();
+                currentPosition.IsChecked = true;
+                currentPosition = priorityQueue.First();
                 priorityQueue.Clear();
             }
 

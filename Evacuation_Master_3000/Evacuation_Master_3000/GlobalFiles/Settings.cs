@@ -8,12 +8,12 @@ namespace Evacuation_Master_3000
 {
     internal static class Settings
     {   /* Key mapping settings */
-        public static Key ZoomKey { get; set; } = Key.LeftCtrl;
-        public static Key HorizontalScrollKey { get; set; } = Key.LeftShift;
-        public static Key LineToolKey { get; set; } = Key.LeftAlt;
+        public static Key ZoomKey { get; } = Key.LeftCtrl;
+        public static Key HorizontalScrollKey { get; } = Key.LeftShift;
+        public static Key LineToolKey { get; } = Key.LeftAlt;
 
         /* Internal properties and methods */
-        internal static string CoordinateKeyFormat => "({0}, {1}, {2})";
+        private static string CoordinateKeyFormat => "({0}, {1}, {2})";
         /// <summary>
         ///     Converts X, Y and Z coordinates to a string in the form of CoordinateKeyFormat.
         /// </summary>

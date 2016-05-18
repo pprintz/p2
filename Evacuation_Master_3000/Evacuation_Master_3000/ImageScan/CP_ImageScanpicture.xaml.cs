@@ -17,8 +17,8 @@ namespace Evacuation_Master_3000.ImageScan
         private double[,] _pixelsRegular;
         private double[,] _pixelsSobel;
         private double[,] _pixelsCurrentlyActive;
-        private readonly int _maxWidth = 10;
-        private readonly int _maxHeight = 10;
+        private const int _maxWidth = 10;
+        private const int _maxHeight = 10;
         private bool _firstTimeDrawing = true;
         private bool _sobelFilterActivated;
         private ImageScanWindow ParentWindow { get; }

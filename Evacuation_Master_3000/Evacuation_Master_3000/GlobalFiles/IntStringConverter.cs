@@ -26,9 +26,7 @@ namespace Evacuation_Master_3000
             {
                 string s = s1;
                 int number;
-                if (int.TryParse(s, out number))
-                    return number;
-                return EmptyStringValue;
+                return int.TryParse(s, out number) ? number : EmptyStringValue;
             }
             return value;
         }

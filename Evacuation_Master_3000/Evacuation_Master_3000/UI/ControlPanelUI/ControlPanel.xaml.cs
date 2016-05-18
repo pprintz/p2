@@ -5,7 +5,7 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for ControlPanel.xaml
     /// </summary>
-    public partial class ControlPanel : UserControl
+    public partial class ControlPanel
     {
         public ControlPanel(MainWindow parentWindow)
         {
@@ -23,12 +23,12 @@ namespace Evacuation_Master_3000
             UserControlTabPanel.SelectedIndex = 0;
         }
 
-        public MainWindow ParentWindow { get; set; }
+        private MainWindow ParentWindow { get;  }
 
-        public CP_FloorPlanControls FloorPlanControls { get; set; }
-        public CP_SimulationControls SimulationControls { get; set; }
-        public CP_SimulationStats SimulationStats { get; set; }
-        public CP_ImportExport ImportExport { get; set; }
+        private CP_FloorPlanControls FloorPlanControls { get; }
+        public CP_SimulationControls SimulationControls { get; }
+        private CP_SimulationStats SimulationStats { get; }
+        private CP_ImportExport ImportExport { get;}
 
         private void SetupUserControlTabs(MainWindow parentWindow)
         {

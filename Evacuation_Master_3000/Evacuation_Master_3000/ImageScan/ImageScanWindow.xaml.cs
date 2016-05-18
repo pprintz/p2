@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using Evacuation_Master_3000.ImageScan;
 using Evacuation_Master_3000.UI.ControlPanelUI;
 
@@ -8,7 +7,7 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for ImageScanWindow.xaml
     /// </summary>
-    public partial class ImageScanWindow : Window
+    public partial class ImageScanWindow
     {
         public ImageScanWindow(string filePath)
         {

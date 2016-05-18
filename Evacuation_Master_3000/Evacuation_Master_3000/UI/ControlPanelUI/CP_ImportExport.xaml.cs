@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace Evacuation_Master_3000
@@ -7,7 +6,7 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for CP_ImportExport.xaml
     /// </summary>
-    public partial class CP_ImportExport : UserControl
+    public partial class CP_ImportExport
     {
         public CP_ImportExport(MainWindow parentWindow)
         {
@@ -55,8 +54,7 @@ namespace Evacuation_Master_3000
             DescriptionTextBox.Text = string.IsNullOrEmpty(TheFloorPlan.Description) ? string.Empty : TheFloorPlan.Description;
 
             for(int currentFloor = 0; currentFloor < TheFloorPlan.FloorAmount; currentFloor++) {
-                ComboBoxItem comboBox = new ComboBoxItem();
-                comboBox.Content = $"Floor {currentFloor}";
+                ComboBoxItem comboBox = new ComboBoxItem {Content = $"Floor {currentFloor}"};
                 HeaderComboBox.Items.Add(comboBox);
             }
 
@@ -67,10 +65,6 @@ namespace Evacuation_Master_3000
             FileInformationGroup.Visibility = Visibility.Visible;
             DimensionsGroup.Visibility = Visibility.Visible;
         }
-
-        //private void OnExportSuccessfull() {
-        //    FileNamePanel.Visibility = Visibility.Visible;
-        //}
 
     }
 }

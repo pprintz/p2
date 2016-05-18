@@ -8,23 +8,22 @@ namespace Evacuation_Master_3000
     {
         // Remember old path unless changes has been made <-- needs to be implemented
         private static int _idCounter = 1;
-        private static List<int> _idsInUse { get; } = new List<int>();
+        private static List<int> IdsInUse { get; } = new List<int>();
         public readonly List<BuildingBlock> PathList = new List<BuildingBlock>();
         public double MovementSpeed { get; }
-        public double MovementSpeedInMetersPerSecond { get; set; }
-        private int ticksToWaitBeforeNextMove;
-        private int ticksSpentWaiting;
-        public int NumberOfBlocks { get; set; }
-        public int stepsTaken;
-        public int roundsWaitedBecauseOfBlock;
+        public double MovementSpeedInMetersPerSecond { get; }
+        private int _ticksToWaitBeforeNextMove;
+        private int _ticksSpentWaiting;
+        public int StepsTaken;
+        private int _roundsWaitedBecauseOfBlock;
         public bool NewPersonInGrid { get; set; } = true;
-        private bool firstRun = true;
+        private bool _firstRun = true;
         public Tile Position { get; set; }
         public Tile OriginalPosition { get; set; }
         public int CurrentRoom { get; set; }
         public int AmountOfTicksSpent { get; set; }
         private Tile _target;
-        public DataSimulationStatistics PersonInteractionStats { get; set; }
+        public DataSimulationStatistics PersonInteractionStats { get; }
         public event PersonEvacuated OnPersonEvacuated;
         public static event PersonMoved OnPersonMoved;
         private bool _evacuated;
@@ -41,17 +40,17 @@ namespace Evacuation_Master_3000
                 }
                 else
                 {
-                    firstRun = true;
-                    stepsTaken = 0;
+                    _firstRun = true;
+                    StepsTaken = 0;
                     Data.OnTick += ConditionalMove;
                    
                 }
             }
         }
         public int ID { get; }
-        public double TickLength { get; set; }
+        public double TickLength { private get; set; }
         public event ExtendedPathRequest OnExtendedPathRequest;
-        private static Random rand = new Random();
+        private static readonly Random Rand = new Random();
         public Person(BuildingBlock position) : this(0, 0, position) { }
         internal Person(int id, double movementSpeed, BuildingBlock position)
         {
@@ -61,18 +60,19 @@ namespace Evacuation_Master_3000
                 do
                 {
                     newID = _idCounter++;
-                } while (_idsInUse.Contains(newID));
+                } while (IdsInUse.Contains(newID));
                 ID = newID;
             }
-            else { /* non-zeroed, positive value means this is an existing person */
-                if (_idsInUse.Contains(id))
+            else
+            {
+                /* non-zeroed, positive value means this is an existing person */
+                if (IdsInUse.Contains(id))
                     throw new PersonException($"A user with ID {id} already exists!");
-                else
-                    ID = id;
+                ID = id;
             }
 
             PersonInteractionStats = new DataSimulationStatistics();
-            MovementSpeed = movementSpeed < 5 ? 5 + rand.NextDouble() * 10 : movementSpeed; // Less than 5 means that it was not created.
+            MovementSpeed = movementSpeed < 5 ? 5 + Rand.NextDouble() * 10 : movementSpeed; // Less than 5 means that it was not created.
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;
             OriginalPosition = position;
@@ -84,23 +84,23 @@ namespace Evacuation_Master_3000
             AmountOfTicksSpent++;
             if (_target == null)
             {
-                _target = PathList[stepsTaken + 1];
+                _target = PathList[StepsTaken + 1];
                 ResetTickConditions();
-                firstRun = false;
+                _firstRun = false;
             }
-            if (ticksSpentWaiting == ticksToWaitBeforeNextMove)
+            if (_ticksSpentWaiting == _ticksToWaitBeforeNextMove)
             {
                 Move();
                 ResetTickConditions();
             }
             else
             {
-                ticksSpentWaiting++;
+                _ticksSpentWaiting++;
             }
         }
         private void Move()
         {
-            if (PathList.Count == stepsTaken)
+            if (PathList.Count == StepsTaken)
             {
                 if (OnExtendedPathRequest != null)
                 {
@@ -117,46 +117,46 @@ namespace Evacuation_Master_3000
                 // Clear old Tile and increment heatMapCounter
                 //Position.Type = Tile.Types.Free;                //<--- Skal være default type for den individuelle buildingBlock
                 ((BuildingBlock)Position).HeatmapCounter++;
-                if (stepsTaken + 1 < PathList.Count)
+                if (StepsTaken + 1 < PathList.Count)
                 {
-                    _target = PathList[stepsTaken + 1];
+                    _target = PathList[StepsTaken + 1];
                 }
                 if (_target.Type != Tile.Types.Person || _target.OriginalType == Tile.Types.Stair)
                 {
                     // Move to new tile and check if evacuated. If not, keep going.
-                    if (stepsTaken + 1 < PathList.Count)
+                    if (StepsTaken + 1 < PathList.Count)
                     {
-                        PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[stepsTaken],
-                            PathList[stepsTaken + 1])
+                        PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[StepsTaken],
+                            PathList[StepsTaken + 1])
                         { TicksAtArrival = AmountOfTicksSpent });
-                        stepsTaken++;
+                        StepsTaken++;
                     }
                     Position = _target;
                     if (Position.Type == Tile.Types.Exit)
                     {
                         Evacuated = true;
                     }
-                    roundsWaitedBecauseOfBlock = 0;
+                    _roundsWaitedBecauseOfBlock = 0;
                     OnPersonMoved?.Invoke(this);
                 }
                 else
                 {
                     // Counts up the heatmapcounter for every "round" the person needs to wait before moving.
                     ((BuildingBlock)Position).HeatmapCounter++;
-                    PersonInteractionStats.CountTicksBeingBlocked(ticksSpentWaiting);
-                    roundsWaitedBecauseOfBlock++;
-                    if (roundsWaitedBecauseOfBlock >= 3 && _target.Type == Tile.Types.Person)
+                    PersonInteractionStats.CountTicksBeingBlocked(_ticksSpentWaiting);
+                    _roundsWaitedBecauseOfBlock++;
+                    if (_roundsWaitedBecauseOfBlock >= 3 && _target.Type == Tile.Types.Person)
                     {
                         OnExtendedPathRequest?.Invoke(this);
-                        _target = PathList[stepsTaken + 1];
-                        if (PathList.Count > stepsTaken + 1 && _target.Type != Tile.Types.Person)
+                        _target = PathList[StepsTaken + 1];
+                        if (PathList.Count > StepsTaken + 1 && _target.Type != Tile.Types.Person)
                         {
-                            PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[stepsTaken],
-                          PathList[stepsTaken + 1])
+                            PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[StepsTaken],
+                          PathList[StepsTaken + 1])
                             { TicksAtArrival = AmountOfTicksSpent });
-                            stepsTaken++;
-                            Position = PathList[stepsTaken + 1];
-                            roundsWaitedBecauseOfBlock = 0;
+                            StepsTaken++;
+                            Position = PathList[StepsTaken + 1];
+                            _roundsWaitedBecauseOfBlock = 0;
                             OnPersonMoved?.Invoke(this);
                         }
                     }
@@ -164,16 +164,16 @@ namespace Evacuation_Master_3000
             }
             catch (DivideByZeroException)
             {
-                throw new PersonException($"Person with id: {ID} could not find a path out.    {stepsTaken} {PathList.Count}"); // Check if this can ever happen due to catch above ^
+                throw new PersonException($"Person with id: {ID} could not find a path out.    {StepsTaken} {PathList.Count}"); // Check if this can ever happen due to catch above ^
             }
         }
         private void ResetTickConditions()
         {
-            ticksSpentWaiting = 0;
-            ticksToWaitBeforeNextMove = (int)Math.Round((Position.DistanceTo(_target) * GlobalVariables.BlockWidthInMeters / MovementSpeedInMetersPerSecond) * TickLength);
-            if (stepsTaken > 0 && stepsTaken != PathList.Count - 1)
+            _ticksSpentWaiting = 0;
+            _ticksToWaitBeforeNextMove = (int)Math.Round((Position.DistanceTo(_target) * GlobalVariables.BlockWidthInMeters / MovementSpeedInMetersPerSecond) * TickLength);
+            if (StepsTaken > 0 && StepsTaken != PathList.Count - 1)
             {
-                ticksToWaitBeforeNextMove = (int)Math.Round((Position.DistanceTo(PathList[stepsTaken + 1]) * GlobalVariables.BlockWidthInMeters / MovementSpeedInMetersPerSecond) * TickLength);
+                _ticksToWaitBeforeNextMove = (int)Math.Round((Position.DistanceTo(PathList[StepsTaken + 1]) * GlobalVariables.BlockWidthInMeters / MovementSpeedInMetersPerSecond) * TickLength);
             }
         }
     }

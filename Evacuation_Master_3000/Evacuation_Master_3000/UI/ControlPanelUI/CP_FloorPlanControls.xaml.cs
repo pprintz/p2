@@ -7,12 +7,11 @@ namespace Evacuation_Master_3000
     /// <summary>
     /// Interaction logic for CP_FloorPlanControls.xaml
     /// </summary>
-    public partial class CP_FloorPlanControls : UserControl
+    public partial class CP_FloorPlanControls
     {
         public CP_FloorPlanControls(MainWindow parentWindow)
         {
             InitializeComponent();
-            ParentWindow = parentWindow;
             MakeWall.Click += OnRadioButtonClicked;
             MakeDoor.Click += OnRadioButtonClicked;
             MakeFree.Click += OnRadioButtonClicked;
@@ -24,8 +23,6 @@ namespace Evacuation_Master_3000
             MakeWall.IsChecked = true;
             OnRadioButtonClicked(MakeWall, null);
         }
-
-        private MainWindow ParentWindow { get; }
 
         private Tile.Types TileType { get; set; }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -242,8 +241,8 @@ namespace Evacuation_Master_3000
                 }
                 firstTime = false;
             }
-            BuildingBlock prev = person.PathList[person.stepsTaken - 1];
-            BuildingBlock next = person.PathList[person.stepsTaken];
+            BuildingBlock prev = person.PathList[person.StepsTaken - 1];
+            BuildingBlock next = person.PathList[person.StepsTaken];
             Rectangle prevRectangleToColorize;
             AllRectangles.TryGetValue(Coordinate(prev), out prevRectangleToColorize);
             if (prev.OriginalType == Tile.Types.Person)

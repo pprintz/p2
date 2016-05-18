@@ -51,6 +51,7 @@ namespace Evacuation_Master_3000
 
         private void OnSimulationStartClick(object sender, RoutedEventArgs e)
         {
+            UserInterface.HasSimulationEnded = false;
             _parentWindow.controlPanelControl.UserControlTabPanel.SelectedIndex = 2;
             _parentWindow.TheUserInterface.SimulationStart(
                 (bool)_parentWindow.controlPanelControl.SimulationControls.HeatmapToggle.IsChecked,

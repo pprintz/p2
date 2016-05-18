@@ -49,6 +49,10 @@ namespace Evacuation_Master_3000
                     }
                     person.PathList.Add(person.PersonInteractionStats.MovementSteps.Last().DestinationTile as BuildingBlock);
                 }
+                if (person.PathList.First() != person.OriginalPosition)
+                {
+                    person.PathList.Clear();
+                }
                 person.stepsTaken = 0;
                 person.PersonInteractionStats.MovementSteps.Clear();
             }
@@ -92,6 +96,7 @@ namespace Evacuation_Master_3000
                 }
                 if (peopleCount == EvacuatedPeopleList.Count)
                 {
+                    UserInterface.HasSimulationEnded = true;
                     StringBuilder sb = new StringBuilder();
                     //UserInterface.HasSimulationEnded = true;
                     sb.AppendLine($"Statistics for simulation run at {DateTime.Now} by {Environment.UserName}{Environment.NewLine}");

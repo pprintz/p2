@@ -11,8 +11,10 @@ using static Evacuation_Master_3000.Settings;
 namespace Evacuation_Master_3000 {
     internal static class Export {
         public static ExportFloorPlanFeedBack OnExportFeedBack;
+        public enum ExportOutcomes { Succes, Failure }
         public static void ExportBuilding(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople) {
             string exportFeedbackMessage = $"Successfully exported the grid to destination: {filePath}";
+            ExportOutcomes outcome = ExportOutcomes.Succes;
             try {
                 string xmlPath = Path.GetFileNameWithoutExtension(filePath) + ".xml"; //<------- OBS xmlPath er ikke fuld path, kun navn på fil!
                 using (XmlWriter writer = XmlWriter.Create(xmlPath)) {
@@ -70,10 +72,11 @@ namespace Evacuation_Master_3000 {
                 File.Delete(xmlPath);
             }
             catch (Exception e) {
+                outcome = ExportOutcomes.Failure;
                 exportFeedbackMessage = $"Error while exporting! \n Error message: {e.Message}\n\nDestination: {filePath}";
             }
             finally {
-                OnExportFeedBack?.Invoke(exportFeedbackMessage);
+                OnExportFeedBack?.Invoke(exportFeedbackMessage, outcome);
             }
         }
     }

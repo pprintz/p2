@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using static Evacuation_Master_3000.ImportExportSettings;
+using System;
+using System.IO;
 
 namespace Evacuation_Master_3000 {
     /// <summary>
@@ -18,10 +20,7 @@ namespace Evacuation_Master_3000 {
 
             /* Initial setup for the window */
             NewImportTabControl.SelectedIndex = (int)window;
-            BuildingWidth = DefaultWidth;
-            BuildingHeight = DefaultHeight;
-            BuildingFloorAmount = DefaultFloorAmount;
-            Description = DefaultDescription;
+            ResetFields(null, null);
 
             BuildingWidthTextBox.PreviewTextInput += NumberValidationTextBox;
             BuildingHeightTextBox.PreviewTextInput += NumberValidationTextBox;
@@ -30,8 +29,15 @@ namespace Evacuation_Master_3000 {
             BrowseButton.Click += BrowseFiles;
             BrowsePngFiles.Click += BrowseImages;
             CreateNewButtun.Click += CreateNewBuilding;
-
+            ResetToDefaultButton.Click += ResetFields;
             Closing += OnWindowClosing;
+        }
+
+        private void ResetFields(object sender, RoutedEventArgs e) {
+            BuildingWidth = DefaultWidth;
+            BuildingHeight = DefaultHeight;
+            BuildingFloorAmount = DefaultFloorAmount;
+            Description = DefaultDescription;
         }
 
         private MainWindow ParentWindow { get; }
@@ -47,7 +53,8 @@ namespace Evacuation_Master_3000 {
                 if (_buildingWidth > BuildingWidthAndHeightMax)
                 {
                     _buildingWidth = BuildingWidthAndHeightMax;
-                }
+                } else if (_buildingWidth <= 0)
+                    _buildingWidth = 1;
                 OnPropertyChanged("BuildingWidth");
             }
         }
@@ -61,7 +68,8 @@ namespace Evacuation_Master_3000 {
                 if (_buildingHeight > BuildingWidthAndHeightMax)
                 {
                     _buildingHeight = BuildingWidthAndHeightMax;
-                }
+                } else if (_buildingHeight <= 0)
+                    _buildingHeight = 1;
                 OnPropertyChanged("BuildingHeight");
             }
         }
@@ -73,10 +81,10 @@ namespace Evacuation_Master_3000 {
             set
             {
                 _buildingFloorAmount = value;
-                if (_buildingFloorAmount > BuildingFloorMax)
-                {
+                if (_buildingFloorAmount > BuildingFloorMax) {
                     _buildingFloorAmount = BuildingFloorMax;
-                }
+                } else if (_buildingFloorAmount <= 0)
+                    _buildingFloorAmount = 1;
                 OnPropertyChanged("BuildingFloorAmount");
             }
         }
@@ -95,6 +103,10 @@ namespace Evacuation_Master_3000 {
         private void BrowseFiles(object sender, RoutedEventArgs e) {
             OpenFileDialog open = new OpenFileDialog { Filter = "Grid files|*" + Extension };
             if (open.ShowDialog() == true) {
+                if (!File.Exists(open.FileName)) {
+                    ParentWindow.TheUserInterface.DisplayGeneralMessage($"Error: {open.FileName} is not a valid {Extension}-file", "Invalid file name");
+                    return;
+                }
                 ParentWindow.TheUserInterface.ImportFloorPlan(open.FileName);
                 OnSucces();
             }

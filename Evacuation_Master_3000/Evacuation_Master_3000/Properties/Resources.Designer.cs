@@ -59,5 +59,15 @@ namespace Evacuation_Master_3000.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Iconicon_Alpha_Magnets_Letter_e {
+            get {
+                object obj = ResourceManager.GetObject("Iconicon_Alpha_Magnets_Letter_e", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

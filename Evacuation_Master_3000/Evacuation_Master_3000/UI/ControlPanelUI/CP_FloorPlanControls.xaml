@@ -13,18 +13,18 @@
                         <Setter Property="Margin" Value="0,10,0,0"/>
                     </Style>
                 </StackPanel.Resources>
-                <RadioButton x:Name="MakeFree" Tag="Free" GroupName="RadioElevation" Content="Fri"/>
-                <GroupBox Header="Inventar">
+                <RadioButton x:Name="MakeFree" Tag="Free" GroupName="RadioElevation" Content="Free"/>
+                <GroupBox Header="Inventory">
                     <StackPanel>
-                        <RadioButton x:Name="MakeWall" Tag="Wall" GroupName="RadioElevation" Content="Væg" />
-                        <RadioButton x:Name="MakeDoor" Tag="Door" GroupName="RadioElevation" Content="Dør"/>
-                        <RadioButton x:Name="MakeStair" Tag="Stair" GroupName="RadioElevation" Content="Trappe"/>
+                        <RadioButton x:Name="MakeWall" Tag="Wall" GroupName="RadioElevation" Content="Wall" />
+                        <RadioButton x:Name="MakeDoor" Tag="Door" GroupName="RadioElevation" Content="Door"/>
+                        <RadioButton x:Name="MakeStair" Tag="Stair" GroupName="RadioElevation" Content="Stairs"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Miljø">
+                <GroupBox Header="Environment">
                     <StackPanel>
                         <RadioButton x:Name="MakePerson" Tag="Person" GroupName="RadioElevation" Content="Person"/>
-                        <RadioButton x:Name="MakePath" Tag="Exit" GroupName="RadioElevation" Content="Udgang"/>
+                        <RadioButton x:Name="MakePath" Tag="Exit" GroupName="RadioElevation" Content="Exit"/>
                     </StackPanel>
                 </GroupBox>
                 

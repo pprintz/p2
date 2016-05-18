@@ -57,9 +57,6 @@ namespace Evacuation_Master_3000 {
             if (BuildingInformation == null)
                 SetupImport();
 
-            if (!File.Exists(filePath))
-                throw new ImportExportException($"Error while importing building:\n\t-No file with path {filePath} exists!");
-
             using (XmlReader reader = XmlReader.Create(File.OpenRead(filePath))) {
                 while (reader.Read()) {
                     if (reader.NodeType == XmlNodeType.Whitespace || reader.Value == "\n")

@@ -52,6 +52,9 @@
   <PropertyGroup>
     <StartupObject>Evacuation_Master_3000.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Iconicon-Alpha-Magnets-Letter-e.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.2.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.2.0\lib\net45\nunit.framework.dll</HintPath>
@@ -86,6 +89,7 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Data\DataSimulationStatistics\MovementStep.cs" />
     <Compile Include="Data\ImportExport\FloorInformation.cs" />
+    <Compile Include="GlobalExceptionHandler.cs" />
     <Compile Include="GlobalFiles\GlobalVariables.cs" />
     <Compile Include="ImageScan\CP_ImageScanpicture.xaml.cs">
       <DependentUpon>CP_ImageScanpicture.xaml</DependentUpon>
@@ -99,6 +103,11 @@
       <DependentUpon>CP_ImageScanControls.xaml</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\ImportExportException.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UI\ImportExport\ExportWindow.xaml.cs">
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
@@ -227,11 +236,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -266,7 +270,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="UI\Visual\floor_switcher_arrow.png" />
     <Resource Include="UI\Visual\floor_switcher_bar_off.png" />
@@ -277,6 +280,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UI\Visual\floor_switcher_bar_off_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Iconicon-Alpha-Magnets-Letter-e.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Iconicon-Alpha-Magnets-Letter-e.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

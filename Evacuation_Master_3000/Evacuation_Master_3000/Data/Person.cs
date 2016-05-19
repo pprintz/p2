@@ -18,6 +18,7 @@ namespace Evacuation_Master_3000
         private int _roundsWaitedBecauseOfBlock;
         public bool NewPersonInGrid { get; set; } = true;
         private bool _firstRun = true;
+        public bool NoPathAvailable { get; }
         public Tile Position { get; set; }
         public Tile OriginalPosition { get; set; }
         public int CurrentRoom { get; set; }
@@ -43,7 +44,7 @@ namespace Evacuation_Master_3000
                     _firstRun = true;
                     StepsTaken = 0;
                     Data.OnTick += ConditionalMove;
-                   
+
                 }
             }
         }
@@ -75,6 +76,10 @@ namespace Evacuation_Master_3000
             MovementSpeed = movementSpeed < 5 ? 5 + Rand.NextDouble() * 10 : movementSpeed; // Less than 5 means that it was not created.
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;
+            if (position.Priority == Int16.MaxValue)
+            {
+                NoPathAvailable = true;
+            }
             OriginalPosition = position;
         }
 
@@ -100,71 +105,56 @@ namespace Evacuation_Master_3000
         }
         private void Move()
         {
-            if (PathList.Count == StepsTaken)
+            if ((Position as BuildingBlock).Priority == Int16.MaxValue)
             {
-                if (OnExtendedPathRequest != null)
-                {
-                    PathList.AddRange(OnExtendedPathRequest.Invoke(this));
-                }
-                else
-                {
-                    throw new PersonException($"Could not get a path or extended path for person {ID}.");
-                }
-
+                throw new PersonException($"Could not get a path or extended path for person {ID}.");
             }
-            try
-            {
                 // Clear old Tile and increment heatMapCounter
                 //Position.Type = Tile.Types.Free;                //<--- Skal være default type for den individuelle buildingBlock
                 ((BuildingBlock)Position).HeatmapCounter++;
+            if (StepsTaken + 1 < PathList.Count)
+            {
+                _target = PathList[StepsTaken + 1];
+            }
+            if (_target.Type != Tile.Types.Person || _target.OriginalType == Tile.Types.Stair)
+            {
+                // Move to new tile and check if evacuated. If not, keep going.
                 if (StepsTaken + 1 < PathList.Count)
                 {
-                    _target = PathList[StepsTaken + 1];
+                    PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[StepsTaken],
+                        PathList[StepsTaken + 1])
+                    { TicksAtArrival = AmountOfTicksSpent });
+                    StepsTaken++;
                 }
-                if (_target.Type != Tile.Types.Person || _target.OriginalType == Tile.Types.Stair)
+                Position = _target;
+                if (Position.Type == Tile.Types.Exit)
                 {
-                    // Move to new tile and check if evacuated. If not, keep going.
-                    if (StepsTaken + 1 < PathList.Count)
+                    Evacuated = true;
+                }
+                _roundsWaitedBecauseOfBlock = 0;
+                OnPersonMoved?.Invoke(this);
+            }
+            else
+            {
+                // Counts up the heatmapcounter for every "round" the person needs to wait before moving.
+                ((BuildingBlock)Position).HeatmapCounter++;
+                PersonInteractionStats.CountTicksBeingBlocked(_ticksSpentWaiting);
+                _roundsWaitedBecauseOfBlock++;
+                if (_roundsWaitedBecauseOfBlock >= 3 && _target.Type == Tile.Types.Person)
+                {
+                    OnExtendedPathRequest?.Invoke(this);
+                    _target = PathList[StepsTaken + 1];
+                    if (PathList.Count > StepsTaken + 1 && _target.Type != Tile.Types.Person)
                     {
                         PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[StepsTaken],
-                            PathList[StepsTaken + 1])
+                      PathList[StepsTaken + 1])
                         { TicksAtArrival = AmountOfTicksSpent });
                         StepsTaken++;
-                    }
-                    Position = _target;
-                    if (Position.Type == Tile.Types.Exit)
-                    {
-                        Evacuated = true;
-                    }
-                    _roundsWaitedBecauseOfBlock = 0;
-                    OnPersonMoved?.Invoke(this);
-                }
-                else
-                {
-                    // Counts up the heatmapcounter for every "round" the person needs to wait before moving.
-                    ((BuildingBlock)Position).HeatmapCounter++;
-                    PersonInteractionStats.CountTicksBeingBlocked(_ticksSpentWaiting);
-                    _roundsWaitedBecauseOfBlock++;
-                    if (_roundsWaitedBecauseOfBlock >= 3 && _target.Type == Tile.Types.Person)
-                    {
-                        OnExtendedPathRequest?.Invoke(this);
-                        _target = PathList[StepsTaken + 1];
-                        if (PathList.Count > StepsTaken + 1 && _target.Type != Tile.Types.Person)
-                        {
-                            PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[StepsTaken],
-                          PathList[StepsTaken + 1])
-                            { TicksAtArrival = AmountOfTicksSpent });
-                            StepsTaken++;
-                            Position = PathList[StepsTaken + 1];
-                            _roundsWaitedBecauseOfBlock = 0;
-                            OnPersonMoved?.Invoke(this);
-                        }
+                        Position = PathList[StepsTaken + 1];
+                        _roundsWaitedBecauseOfBlock = 0;
+                        OnPersonMoved?.Invoke(this);
                     }
                 }
-            }
-            catch (DivideByZeroException)
-            {
-                throw new PersonException($"Person with id: {ID} could not find a path out.    {StepsTaken} {PathList.Count}"); // Check if this can ever happen due to catch above ^
             }
         }
         private void ResetTickConditions()

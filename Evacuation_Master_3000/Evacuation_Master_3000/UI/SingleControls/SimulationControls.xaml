@@ -13,7 +13,7 @@
         </StackPanel.Resources>
         <GroupItem Name ="PreSimulationControls" Visibility="Visible">
             <StackPanel>
-                <Button Name="StartSimulationButton" Content="Start simulation" Click="OnSimulationStartClick"/>
+                <Button x:Name="StartSimulationButton" Content="Start simulation" Click="OnSimulationStartClick"/>
             </StackPanel>
         </GroupItem>
         <GroupItem Name="PostSimulationControls" Visibility="Collapsed">

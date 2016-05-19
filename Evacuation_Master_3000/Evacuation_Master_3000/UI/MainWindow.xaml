@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Evacuation_Master_3000"
         mc:Ignorable="d"
-        Title="TheRealMainWindow" Height="600" Width="800"
+        Title="Evacuation Master 3000" Height="600" Width="800"
         KeyUp="TheRealMainWindow_OnKeyUp">
     <Grid Name="MainWindowGrid">
         <Grid.ColumnDefinitions>

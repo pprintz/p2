@@ -15,7 +15,7 @@ namespace Evacuation_Master_3000.UI.ControlPanelUI
             InitializeComponent();
             FilePathTextbox.Text = System.IO.Path.GetFileNameWithoutExtension(filepath) + ImportExportSettings.Extension;
             ParentWindow = parentWindow;
-            ContrastSlider.MouseLeftButtonUp += OnChangeInVisualsRequested;
+            //ContrastSlider.MouseLeftButtonUp += OnChangeInVisualsRequested;
         }
 
         private ImageScanWindow ParentWindow { get; }

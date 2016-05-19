@@ -19,7 +19,6 @@ namespace Evacuation_Master_3000
             CpImageScanPicture = new CP_ImageScanPicture(this, filePath);
             ImageContainer.Children.Add(CpImageScanPicture);
             Grid.SetColumn(CpImageScanPicture, 0);
-            CpImageScanPicture.CreateOrUpdateVisualRepresentation();
             Show();
         }
 

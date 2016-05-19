@@ -65,9 +65,9 @@ namespace Evacuation_Master_3000.ImageScan
         {
             if (_firstTimeDrawing)
             {
-                for (int y = 1; y < ImageHeight; y++)
+                for (int y = 0; y < ImageHeight; y++)
                 {
-                    for (int x = 1; x < ImageWidth; x++)
+                    for (int x = 0; x < ImageWidth; x++)
                     {
                         int[] coordinates = {x, y};
 
@@ -77,7 +77,7 @@ namespace Evacuation_Master_3000.ImageScan
                             Width = 10,
                             Tag = coordinates,
                             Fill = DecideColor(_pixelsCurrentlyActive[y, x]),
-                            Margin = new System.Windows.Thickness(0, 0, x*10*2 + x, y*10*2 + y)
+                            Margin = new System.Windows.Thickness(0, 0, x * 10 * 2 + x, y * 10 * 2 + y)
                         };
                         BuildingBlockContainer.Children.Add(rect);
                     }

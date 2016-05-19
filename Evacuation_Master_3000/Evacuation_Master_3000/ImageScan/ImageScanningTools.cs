@@ -54,13 +54,13 @@ namespace Evacuation_Master_3000.ImageScan
             {
                 for (int x = 0; x < image.Width; x++)
                 {
-                    pixels[y, x] = ConvertPixelToGrayscale(image.GetPixel(x, y));
+                    pixels[y,x] = ConvertPixelToGrayscale(image.GetPixel(x, y));
                 }
             }
             return pixels;
         }
 
-        private static double ConvertPixelToGrayscale(System.Drawing.Color pixel)
+        private static double ConvertPixelToGrayscale(Color pixel)
         {
             return (double)(pixel.R + pixel.G + pixel.B) / 3;
         }

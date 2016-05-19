@@ -24,6 +24,9 @@ namespace Evacuation_Master_3000
         private bool _floorPlanAlreadyExist;
         private static int _globalRoomCounter;
 
+        public static event FunctionDone OnFloorPlanReset;
+        public static event FunctionDone OnCalculateNeighboursDone;
+        public static event FunctionDone OnCalculatePriorityDone;
         public void CreateFloorPlan(int width, int height, int floorAmount, string description, string[] headers)
         {
             if (_floorPlanAlreadyExist)
@@ -74,9 +77,12 @@ namespace Evacuation_Master_3000
                 buildingBlock.Priority = Int16.MaxValue;
                 buildingBlock.Room = default(int);
             }
+            OnFloorPlanReset?.Invoke(this, null);
             FloorPlanVisualiser.FirstTime = true;
             CalculateNeighbours();
+            OnCalculateNeighboursDone?.Invoke(this, null);
             CalculatePriorities();
+            OnCalculatePriorityDone?.Invoke(this, null);
 
         }
         private void CalculateNeighbours()

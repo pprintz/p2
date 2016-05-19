@@ -20,7 +20,7 @@ namespace Evacuation_Master_3000
         private Dictionary<int, Person> _allPeople;
         private Dictionary<int, Person> AllPeople => _allPeople;
         public event PersonMoved OnSendPersonMoved;
-        public static event StopAnimation OnPriorityAndPathCalculationDone;
+        public static event FunctionDone OnPathCalculationDone;
         public static event Tick OnTick;
 
         public Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan)
@@ -87,7 +87,7 @@ namespace Evacuation_Master_3000
                 person.PathList.AddRange(
                     pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
             }
-            OnPriorityAndPathCalculationDone?.Invoke(null, null);
+            OnPathCalculationDone?.Invoke(this, null);
             StartTicks();
             return AllPeople;
             

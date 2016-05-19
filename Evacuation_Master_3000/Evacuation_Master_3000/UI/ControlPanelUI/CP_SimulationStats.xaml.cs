@@ -65,6 +65,7 @@ namespace Evacuation_Master_3000
             PersonsEvacuatedProgressBarText.Text = "0%";
             CurrentNumberOfEvacuatedPersons.Text = "0";
             PeopleWithNoPathAmount.Text = "0";
+            UserInterface.IsSimulationReady = true;
         }
        
         private void UpdateTicksAndTime()
@@ -96,6 +97,7 @@ namespace Evacuation_Master_3000
                 if (peopleCount == _evacuatedPeopleList.Count)
                 {
                     UserInterface.HasSimulationEnded = true;
+                    UserInterface.IsSimulationReady = false;
                     StringBuilder sb = new StringBuilder();
                     //UserInterface.HasSimulationEnded = true;
                     sb.AppendLine($"Statistics for simulation run at {DateTime.Now} by {Environment.UserName}{Environment.NewLine}");

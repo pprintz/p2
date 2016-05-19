@@ -9,17 +9,37 @@
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Title="LoadingWindow" Height="135.571" Width="200">
-    <Grid Margin="0,0,0,-0.4">
-        <StatusBar Name="SBar" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Background="LightBlue" Margin="0,0,0,1.6" Height="134" Width="200" >
-            <StatusBarItem/>
-        </StatusBar>
-        <Image gif:ImageBehavior.AnimatedSource="loading.gif" Height="101" HorizontalAlignment="Left" VerticalAlignment="Center" 
+        Title="LoadingWindow" Height="40" Width="200">
+    <DockPanel Width="200" >
+
+        <TextBlock x:Name="LoadingHeaderText" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Loading..." VerticalAlignment="Top" Width="175" Height="25"/>
+        <Image gif:ImageBehavior.AnimatedSource="loading.gif" Height="25" HorizontalAlignment="Right" VerticalAlignment="Center" Width ="25"
                     Visibility="Visible"
                     gif:ImageBehavior.RepeatBehavior="Forever"
                      Name ="LoadingGif"
-                     gif:ImageBehavior.AutoStart="False" Margin="0,30,0,-0.2" Width="100"
+                     gif:ImageBehavior.AutoStart="False" Margin="0,0,0,15"
        />
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Loading.." VerticalAlignment="Top" Width="200"/>
-    </Grid>
+        <StatusBar DockPanel.Dock="Bottom" Height="15" Width="200" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Visible">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid Margin="1,0,0,0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="15" />
+                            <RowDefinition Height="15" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0" Grid.Row="0">
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="1" Grid.Row="0">
+            <TextBlock Name ="ContentLoad" Text="loading priorities"/>
+            </StatusBarItem>
+        </StatusBar>
+    </DockPanel>
+
 </Window>

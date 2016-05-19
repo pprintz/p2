@@ -9,16 +9,20 @@ namespace Evacuation_Master_3000 {
         }
 
         public static bool IsSimulationPaused = false;
-        private static bool _hasSimulationEnded;
-        public static bool HasSimulationEnded {
+        private static bool _hasSimulationEnded = true;
+
+        public static bool HasSimulationEnded
+        {
             get { return _hasSimulationEnded; }
-            set {
-                if (value) {
+            set
+            {
+                if (value)
+                {
                     OnSimulationEnd?.Invoke();
                 }
                 _hasSimulationEnded = value;
             }
-        }
+        } 
 
         public static bool ResetButtonClicked {
             set {
@@ -28,6 +32,7 @@ namespace Evacuation_Master_3000 {
             }
         }
 
+        public static bool IsSimulationReady = true;
         public static bool BuildingHasBeenChanged = false;
         public static event ResetClicked OnReset;
         public static event SimulationEnd OnSimulationEnd;

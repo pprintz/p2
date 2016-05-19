@@ -63,19 +63,9 @@ namespace Evacuation_Master_3000.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon favicon {
+        internal static System.Drawing.Icon EVM3_logo_larger {
             get {
-                object obj = ResourceManager.GetObject("favicon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Iconicon_Alpha_Magnets_Letter_e {
-            get {
-                object obj = ResourceManager.GetObject("Iconicon_Alpha_Magnets_Letter_e", resourceCulture);
+                object obj = ResourceManager.GetObject("EVM3_logo_larger", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

@@ -96,6 +96,15 @@ namespace Evacuation_Master_3000 {
             return (BuildingInformationCollection)BuildingInformation;
         }
 
+        public static T AttributeConverter<T>(string input)
+        {
+            string value = input;
+            var result = TypeDescriptor.GetConverter(typeof(T));
+            if (typeof(T) == typeof(double) && value.Contains('.'))
+                value = input.Replace('.', ',');
+            return (T)result.ConvertFrom(value);
+        }
+
         internal static void EffectuateFloorPlanSettings(BuildingInformationCollection buildingInformation, ref IFloorPlan floorPlan, ref Dictionary<int, Person> allPeople) {
             const int freeTypeIntRepresentation = (int)Tile.Types.Free;
             /* Step 1: Subject the types of each tile to the type of the tile in the BuildingInformationCollection */

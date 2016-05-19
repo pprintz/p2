@@ -29,7 +29,7 @@ namespace Evacuation_Master_3000
 
         private void ResetPeopleAndSimulationInformation()
         {
-            foreach (Person person in _parentWindow.TheUserInterface.LocalPeopleDictionary.Values)
+            foreach (Person person in _parentWindow.TheUserInterface.LocalPeopleDictionary.Values.Where(p => !p.NoPathAvailable))
             {
                 if (!Equals(person.OriginalPosition, person.Position))
                 {
@@ -64,6 +64,7 @@ namespace Evacuation_Master_3000
             PersonsEvacuatedProgressBarFill.Width = 0;
             PersonsEvacuatedProgressBarText.Text = "0%";
             CurrentNumberOfEvacuatedPersons.Text = "0";
+            PeopleWithNoPathAmount.Text = "0";
         }
        
         private void UpdateTicksAndTime()
@@ -74,7 +75,8 @@ namespace Evacuation_Master_3000
         }
         private void UpdateSimulationStats(Person person)
         {
-            int peopleCount = _parentWindow.TheUserInterface.LocalPeopleDictionary.Count;
+            int peopleCount = _parentWindow.TheUserInterface.LocalPeopleDictionary.Count(p => !p.Value.NoPathAvailable);
+            PeopleWithNoPathAmount.Text = (_parentWindow.TheUserInterface.LocalPeopleDictionary.Count-peopleCount) + "";
             TotalPersonCount.Text = peopleCount + "";
             _fillWidthPerPerson = (PersonsEvacuatedProgressBarBackground.ActualWidth) / peopleCount;
             if (person.Evacuated)
@@ -170,6 +172,7 @@ namespace Evacuation_Master_3000
                     Directory.CreateDirectory(Environment.CurrentDirectory + @"\Statistics");
                     string nameOfStatsFile = $"{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Year}.txt";
                     string path = Environment.CurrentDirectory + @"\Statistics\" + nameOfStatsFile;
+                    StatisticsTextbox.Text = $"Look at:{Environment.NewLine}{path}";
                     File.WriteAllText(path, stringToWrite);
                 }
             }

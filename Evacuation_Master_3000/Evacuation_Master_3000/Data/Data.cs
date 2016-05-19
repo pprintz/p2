@@ -57,7 +57,7 @@ namespace Evacuation_Master_3000
             {
                 if (AllPeople != null)
                 {
-                    foreach (Person person in AllPeople.Values)
+                    foreach (Person person in AllPeople.Values.Where(p => !p.NoPathAvailable))
                     {
                         person.PathList.Clear();
                         if (person.NewPersonInGrid)
@@ -77,7 +77,7 @@ namespace Evacuation_Master_3000
 
             if (AllPeople == null) return null;
 
-            foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0))
+            foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0 && !p.NoPathAvailable))
             {
                 person.Evacuated = false;
                 person.OnPersonEvacuated += RemoveEvacuatedPerson;
@@ -93,7 +93,7 @@ namespace Evacuation_Master_3000
 
         private void StartTicks()
         {
-            while (AllPeople.Values.Any(p => !p.Evacuated) && !UserInterface.IsSimulationPaused && !UserInterface.HasSimulationEnded)
+            while (AllPeople.Values.Any(p => !p.Evacuated && !p.NoPathAvailable) && !UserInterface.IsSimulationPaused && !UserInterface.HasSimulationEnded)
             {
                 Yield(1);
                 if (!UserInterface.HasSimulationEnded)

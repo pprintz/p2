@@ -53,11 +53,15 @@
 string str = time .ToString(@"hh\:mm\:ss\:fff");-->
                     </DockPanel>
                 </GroupItem>
-                <TextBlock x:Name="TicksElapsed" HorizontalAlignment="Right" Text="0"/>
+                <TextBlock x:Name="TicksElapsed" HorizontalAlignment="Right" Text="0" RenderTransformOrigin="0.508,0.256"/>
+                <DockPanel>
+                    <TextBlock x:Name="PeopleWithNoPath" HorizontalAlignment="Left" Text="People with no path:"/>
+                    <TextBlock x:Name="PeopleWithNoPathAmount" HorizontalAlignment="Right" Text="0"/>
+                </DockPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Statistics" Name="StatisticsGroupBox" Height="74">
-            <TextBlock Name="StatisticsTextbox" HorizontalAlignment="Right" Text="##" Margin="0,0,0.2,0.2" Width="134"/>
+        <GroupBox Header="Statistics" Name="StatisticsGroupBox" Height="174">
+            <TextBlock Name="StatisticsTextbox" HorizontalAlignment="Left" Margin="0,10,0.2,-0.4" Width="134" TextWrapping="Wrap"/>
         </GroupBox>
     </StackPanel>
 </UserControl>

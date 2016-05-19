@@ -30,7 +30,7 @@ namespace Evacuation_Master_3000
             {
                 targetPriority = currentPosition.Priority - 1;
             }
-            if (person.Position.Type == Tile.Types.Stair && targetPriority != 0)
+            if (person.Position.Type == Tile.Types.Stair && targetPriority >= 1000)
             {
                 targetPriority += 2;
             }

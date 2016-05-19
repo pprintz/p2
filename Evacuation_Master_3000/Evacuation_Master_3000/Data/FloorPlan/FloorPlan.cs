@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Evacuation_Master_3000.ImportExportSettings;
@@ -70,7 +71,7 @@ namespace Evacuation_Master_3000
             foreach (BuildingBlock buildingBlock in BuildingBlocks.Values)
             {
                 buildingBlock.BuildingBlockNeighbours.Clear();
-                buildingBlock.Priority = int.MaxValue;
+                buildingBlock.Priority = Int16.MaxValue;
                 buildingBlock.Room = default(int);
             }
             FloorPlanVisualiser.FirstTime = true;
@@ -168,7 +169,7 @@ namespace Evacuation_Master_3000
                 exitBuildingBlock.Priority = 0;
                 SetExitAndStairPriority(exitBuildingBlock, doorlist);
             }
-            foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == int.MaxValue).OrderBy(cs => cs.Z))
+            foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == Int16.MaxValue).OrderBy(cs => cs.Z))
             {
                 connectedStair.Priority = 1000 * (connectedStair.Z+1);
                 SetExitAndStairPriority(connectedStair, doorlist);
@@ -180,7 +181,7 @@ namespace Evacuation_Master_3000
             InitializeRoomPriority(exitOrStair, exitOrStair.Priority);
             do
             {
-                foreach (BuildingBlock door in doorlist)
+                foreach (BuildingBlock door in doorlist.Where(d => d.Z == exitOrStair.Z))
                 {
                     //Checks for each door, if the doors priority is larger than the surrounding buildingblocks
                     if (door.Priority >

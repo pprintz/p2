@@ -280,10 +280,7 @@
     <Resource Include="UI\Visual\floor_switcher_bar_off_2.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Iconicon-Alpha-Magnets-Letter-e.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Iconicon-Alpha-Magnets-Letter-e.ico" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="EVM3_logo_larger.ico" />

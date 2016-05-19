@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Evacuation_Master_3000"
         mc:Ignorable="d"
-        Title="ExportWindow" Height="295" Width="300"
+        Title="Export" Height="295" Width="300"
         ResizeMode="NoResize"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>

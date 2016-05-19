@@ -74,6 +74,7 @@ namespace Evacuation_Master_3000 {
             People = OnPrepareSimulation?.Invoke(LocalFloorPlan);
             TheMainWindow.FloorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
             OnBuildingPlanSuccessfullLoaded?.Invoke();
+            BuildingHasBeenChanged = true;
         }
 
         public void ExportFloorPlan(string filePath) {
@@ -81,7 +82,8 @@ namespace Evacuation_Master_3000 {
             LocalFloorPlan = OnExportFloorPlan?.Invoke(filePath, LocalFloorPlan, People);
         }
 
-        public void SimulationStart(bool showHeatMap, bool stepByStep, IPathfinding pathfinding, int milliseconds) {
+        public void SimulationStart(bool showHeatMap, bool stepByStep, IPathfinding pathfinding, int milliseconds)
+        {
             HeatMapActivated = showHeatMap;
             HasSimulationEnded = false;
             People = OnPrepareSimulation?.Invoke(LocalFloorPlan);

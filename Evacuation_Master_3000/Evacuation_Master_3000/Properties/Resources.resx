@@ -117,11 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-<<<<<<< HEAD
-=======
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="EVM3_logo_larger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EVM3_logo_larger.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
->>>>>>> ce70a0981b5e4ca237c1d629f13b9e9ae5172adb
 </root>

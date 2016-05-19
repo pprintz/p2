@@ -26,6 +26,7 @@ namespace Evacuation_Master_3000.UI.SingleControls
             FloorPlan.OnCalculateNeighboursDone += UpdateLoadingOnNeighboursDone;
             FloorPlan.OnCalculatePriorityDone += UpdateLoadingOnPriorityDone;
             Data.OnPathCalculationDone += StopLoading;
+            ImageBehavior.SetAutoStart(LoadingGif, true);
         }
 
 
@@ -61,7 +62,6 @@ namespace Evacuation_Master_3000.UI.SingleControls
                 ImageBehavior.SetAnimatedSource(LoadingGif, image);
                 _controller = ImageBehavior.GetAnimationController(LoadingGif);
                 Show();
-                ImageBehavior.SetAutoStart(LoadingGif, true);
                 LoadingHeaderText.Text = "Resetting floor..";
             });
         }

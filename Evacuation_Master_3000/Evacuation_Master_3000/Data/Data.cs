@@ -20,6 +20,7 @@ namespace Evacuation_Master_3000
         private Dictionary<int, Person> _allPeople;
         private Dictionary<int, Person> AllPeople => _allPeople;
         public event PersonMoved OnSendPersonMoved;
+        public static event StopAnimation OnPriorityAndPathCalculationDone;
         public static event Tick OnTick;
 
         public Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan)
@@ -86,6 +87,7 @@ namespace Evacuation_Master_3000
                 person.PathList.AddRange(
                     pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
             }
+            OnPriorityAndPathCalculationDone?.Invoke(null, null);
             StartTicks();
             return AllPeople;
             
@@ -104,7 +106,7 @@ namespace Evacuation_Master_3000
             }
 
         }
-        private static void Yield(long ticks)
+        public static void Yield(long ticks)
         {
             long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
             while (DateTime.Now.Ticks < dtEnd)

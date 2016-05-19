@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 
 namespace Evacuation_Master_3000
 {
     public delegate void PersonEvacuated(Person person);
     public delegate IEnumerable<BuildingBlock> ExtendedPathRequest(Person person);
     public delegate void PersonMoved(Person person);
+    public delegate void StopAnimation(object sender, RoutedEventArgs e);
     public delegate void SimulationEnd();
     public delegate void ResetClicked();
     public delegate Dictionary<int, Person> PrepareSimulation(IFloorPlan floorPlan);

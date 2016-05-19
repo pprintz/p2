@@ -16,7 +16,7 @@ namespace Evacuation_Master_3000 {
             string exportFeedbackMessage = $"Successfully exported the grid to destination: {filePath}";
             ExportOutcomes outcome = ExportOutcomes.Succes;
             try {
-                string xmlPath = Path.GetFileNameWithoutExtension(filePath) + ".xml"; //<------- OBS xmlPath er ikke fuld path, kun navn på fil!
+                string xmlPath = Path.GetFileNameWithoutExtension(filePath) + ".xml";
                 using (XmlWriter writer = XmlWriter.Create(xmlPath)) {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("BuildingPlan");

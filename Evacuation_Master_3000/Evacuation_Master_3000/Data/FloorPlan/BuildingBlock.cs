@@ -16,7 +16,6 @@ namespace Evacuation_Master_3000
         public readonly HashSet<BuildingBlock> BuildingBlockNeighbours = new HashSet<BuildingBlock>();
         public int HeatmapCounter { get; set; }
         public Rectangle Figure { get; set; }
-        //Room info prop
 
         public int CompareTo(BuildingBlock other)
         {

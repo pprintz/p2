@@ -96,7 +96,7 @@ namespace Evacuation_Master_3000 {
 
         public void OnShowWindow() {
             DockPanel templateHeader = HeaderTemplate;
-            double heightOfTemplate = templateHeader.ActualHeight; //ELLER 25 FLAT OUT!!! BECAUSE OF REASONS!! DON'T YOU DARE ASK ABOUT IT! IT IS HOW IT IS!!!!1!!!one!
+            double heightOfTemplate = templateHeader.ActualHeight;
             Headers = ParentWindow.TheUserInterface.LocalFloorPlan.Headers;
             FloorAmount = ParentWindow.TheUserInterface.LocalFloorPlan.FloorAmount;
             HeadersPanel = new DockPanel[FloorAmount];

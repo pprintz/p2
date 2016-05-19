@@ -6,5 +6,5 @@
              xmlns:local="clr-namespace:Evacuation_Master_3000.ImageScan"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UniformGrid Name="BuildingBlockContainer" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+    <Grid Name="BuildingBlockContainer" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 </UserControl>

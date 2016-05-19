@@ -17,8 +17,8 @@ namespace Evacuation_Master_3000.ImageScan
         private double[,] _pixelsRegular;
         private double[,] _pixelsSobel;
         private double[,] _pixelsCurrentlyActive;
-        private const int _maxWidth = 10;
-        private const int _maxHeight = 10;
+        private const int _maxWidth = 500;
+        private const int _maxHeight = 500;
         private bool _firstTimeDrawing = true;
         private bool _sobelFilterActivated;
         private ImageScanWindow ParentWindow { get; }
@@ -42,8 +42,6 @@ namespace Evacuation_Master_3000.ImageScan
             CalculateAndSetupVisualRepresentation(imageFilePath);
             _contrastThreshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
         }
-
-        
 
         private void CalculateAndSetupVisualRepresentation(string imageFilePath)
         {
@@ -78,7 +76,8 @@ namespace Evacuation_Master_3000.ImageScan
                             Height = 10,
                             Width = 10,
                             Tag = coordinates,
-                            Fill = DecideColor(_pixelsCurrentlyActive[y, x])
+                            Fill = DecideColor(_pixelsCurrentlyActive[y, x]),
+                            Margin = new System.Windows.Thickness(0, 0, x*10*2 + x, y*10*2 + y)
                         };
                         BuildingBlockContainer.Children.Add(rect);
                     }

@@ -47,7 +47,7 @@ namespace Evacuation_Master_3000
         private IFloorPlan LocalFloorPlan { get; set; }
         private Dictionary<string, Person> LocalPeople { get; set; }
         private Grid[] _floorContainer;
-        private SwitchBetweenFloorsControl FloorSwitcherControls { get; set; }              //<<------ OBS er det nødvendigt med property til at gemme floorswitchcontrols i???
+        private SwitchBetweenFloorsControl FloorSwitcherControls { get; set; }            
         private Dictionary<string, Rectangle> AllRectangles { get; }
         public int TileSize { get; } = 10;
 
@@ -55,9 +55,6 @@ namespace Evacuation_Master_3000
         {
 
             LocalPeople = people.ToDictionary(k => Coordinate(k.Value.Position), v => v.Value);
-            //localPeople = people.Where(p => !localPeople.Values.Contains(p as Person)).ToDictionary(k => Coordinate(k.Position.X, k.Position.Y, k.Position.Z), v => v as Person);
-            //First find all tiles with changes - this is done with clever use of lambda expressions
-            //tilesWithChanges = floorPlan.Tiles.Values.Where(t => !t.Equals(localFloorPlan.Tiles[Coordinate(t.X, t.Y, t.Z)])).ToDictionary(k => Coordinate(k.X, k.Y, k.Z), v => v);
 
             //Override the local floorplan to correspond to the new floorplan
             LocalFloorPlan = floorPlan;
@@ -137,9 +134,6 @@ namespace Evacuation_Master_3000
             VisualContainer.Children.Clear();
             VisualContainer.Children.Add(_floorContainer[currentFloor]);
             /* Logik der sørger for at det er den korrekte floor der vises */
-
-            //Obs kan problemet løses lettere i stil af dette: ??
-            //VisualContainer.Children[currentFloor].Visibility = Visibility.Visible;
         }
 
         public delegate Tile.Types BuildingBlockTypeFetch();
@@ -261,7 +255,6 @@ namespace Evacuation_Master_3000
             }
         }
 
-        /* Might need re-work - lavet QnD! */
         private void ColorizeBuildingBlock(Rectangle buildingBlockRepresentation, Tile.Types type)
         {
             Color newColor;

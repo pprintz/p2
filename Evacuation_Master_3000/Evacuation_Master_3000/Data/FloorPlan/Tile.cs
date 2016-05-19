@@ -30,15 +30,14 @@ namespace Evacuation_Master_3000
         public int Y { get; }
         public int Z { get; } // Translates into the floor level
         public HashSet<Tile> Neighbours { get; }
-        // Needs to remember original Types for after a person leaves. <<--- Needs implementation
 
         public double DiagonalDistanceTo(BuildingBlock point)
         {
             double xDistance = Math.Abs(X - point.X);
             double yDistance = Math.Abs(Y - point.Y);
             if (xDistance > yDistance)
-                return 14 * yDistance + 10 * (xDistance - yDistance);
-            return 14 * xDistance + 10 * (yDistance - xDistance);
+                return Math.Sqrt(2) * yDistance + 1 * (xDistance - yDistance);
+            return Math.Sqrt(2) * xDistance + 1 * (yDistance - xDistance);
         }
         public double DistanceTo(Tile other)
         {

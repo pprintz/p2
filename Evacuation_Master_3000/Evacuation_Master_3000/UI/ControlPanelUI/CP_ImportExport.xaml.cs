@@ -50,7 +50,6 @@ namespace Evacuation_Master_3000
         private void OnSuccessfullBuildingLoadUp() {
             TheFloorPlan = ParentWindow.TheUserInterface.LocalFloorPlan;
 
-            //FileNameText.Text = floorPlan. ???
             DescriptionTextBox.Text = string.IsNullOrEmpty(TheFloorPlan.Description) ? string.Empty : TheFloorPlan.Description;
 
             for(int currentFloor = 0; currentFloor < TheFloorPlan.FloorAmount; currentFloor++) {

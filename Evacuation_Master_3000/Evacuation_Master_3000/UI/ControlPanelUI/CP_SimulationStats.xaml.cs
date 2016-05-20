@@ -72,9 +72,14 @@ namespace Evacuation_Master_3000
             UserInterface.IsSimulationReady = true;
         }
 
+        public static bool UpdateTickCondition;
         private bool _hasSimSpeedBeenChanged;
         private void ChangeSimSpeed(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            foreach (Person person in _parentWindow.TheUserInterface.LocalPeopleDictionary.Values)
+            {
+                person.UpdateTickCondition = true;
+            }
             _hasSimSpeedBeenChanged = true;
         }
         private int _ticksBeforeChange;

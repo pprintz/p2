@@ -53,7 +53,6 @@ namespace Evacuation_Master_3000
                 }
             }
         }
-
         public Person(BuildingBlock position) : this(0, 0, position) { }
         internal Person(int id, double movementSpeed, BuildingBlock position)
         {
@@ -85,9 +84,17 @@ namespace Evacuation_Master_3000
             OriginalPosition = position;
         }
 
+        public bool UpdateTickCondition  = false;
 
         public void ConditionalMove()
         { // Person should be removed from event thingy when evacuated
+            if (UpdateTickCondition)
+            {
+                double percentageStepDone = AmountOfTicksSpent/(double)_ticksToWaitBeforeNextMove;
+                ResetTickConditions();
+                AmountOfTicksSpent = (int)(_ticksToWaitBeforeNextMove*percentageStepDone);
+                UpdateTickCondition = false;
+            }
             AmountOfTicksSpent++;
             if (_target == null)
             {

@@ -94,7 +94,6 @@ namespace Evacuation_Master_3000
             OnPathCalculationDone?.Invoke(this, null);
             StartTicks();
             return AllPeople;
-            
         }
 
         private void StartTicks()
@@ -181,7 +180,7 @@ namespace Evacuation_Master_3000
         public IFloorPlan ExportFloorPlan(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople)
         {
             Export.ExportBuilding(filePath, floorPlan, allPeople);
-            return TheFloorPlan;   
+            return TheFloorPlan;
 
         }
     }

@@ -22,7 +22,6 @@ namespace Evacuation_Master_3000.ImageScan
         private bool _firstTimeDrawing = true;
         private bool _sobelFilterActivated;
         private ImageScanWindow ParentWindow { get; }
-        private readonly double _contrastThreshold;
         public bool SobelFilterActivated
         {
             private get { return _sobelFilterActivated; }
@@ -37,9 +36,10 @@ namespace Evacuation_Master_3000.ImageScan
 
         public CP_ImageScanPicture(ImageScanWindow parentWindow, string imageFilePath)
         {
+            
             InitializeComponent();
             ParentWindow = parentWindow;
-            _contrastThreshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
+
             CalculateAndSetupVisualRepresentation(imageFilePath);  
         }
 
@@ -111,12 +111,12 @@ namespace Evacuation_Master_3000.ImageScan
         {
             if (SobelFilterActivated)
             {
-                return pixelValue >= _contrastThreshold
+                return pixelValue >= ParentWindow.CpImageScanControls.ContrastSlider.Value
                     ? new SolidColorBrush(Colors.Black)
                     : new SolidColorBrush(Colors.White);
             }
             // The Sobel filter gives a high value if there is a big contrast.
-            return pixelValue >= _contrastThreshold
+            return pixelValue >= ParentWindow.CpImageScanControls.ContrastSlider.Value
                 ? new SolidColorBrush(Colors.White)
                 : new SolidColorBrush(Colors.Black);
         }
@@ -131,9 +131,9 @@ namespace Evacuation_Master_3000.ImageScan
                 {
                     Tile.Types theType;
                     if (SobelFilterActivated)
-                        theType = _pixelsCurrentlyActive[y, x] >= _contrastThreshold ? Tile.Types.Wall: Tile.Types.Free;
+                        theType = _pixelsCurrentlyActive[y, x] >= ParentWindow.CpImageScanControls.ContrastSlider.Value ? Tile.Types.Wall: Tile.Types.Free;
                     else
-                        theType = _pixelsCurrentlyActive[y, x] <= _contrastThreshold ? Tile.Types.Wall : Tile.Types.Free;
+                        theType = _pixelsCurrentlyActive[y, x] <= ParentWindow.CpImageScanControls.ContrastSlider.Value ? Tile.Types.Wall : Tile.Types.Free;
 
                     Tile currentTile = new Tile(x, y, 0, theType);
 

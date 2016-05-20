@@ -13,7 +13,7 @@ namespace Evacuation_Master_3000
         public double MovementSpeed { get; }
 
         public int ID { get; }
-        public double SimulationSpeed { private get; set; }
+        public double SimulationSpeed { get; set; }
         public event ExtendedPathRequest OnExtendedPathRequest;
         private static readonly Random Rand = new Random();
         public double MovementSpeedInMetersPerSecond { get; }

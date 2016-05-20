@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Evacuation_Master_3000
@@ -18,8 +20,10 @@ namespace Evacuation_Master_3000
             Person.OnPersonMoved += UpdateSimulationStats;
             Data.OnTick += UpdateTicksAndTime;
             UserInterface.OnReset += ResetPeopleAndSimulationInformation;
+            SimulationSpeed.ValueChanged += ChangeSimSpeed;
             _parentWindow = parentWindow;
         }
+
 
         readonly List<Person> _evacuatedPeopleList = new List<Person>();
         private int _ticks;
@@ -57,6 +61,8 @@ namespace Evacuation_Master_3000
                 person.PersonInteractionStats.MovementSteps.Clear();
             }
             _ticks = -1;
+            _ticksBeforeChange = 0;
+            _oldSimSpeed = 0;
             _evacuatedPeopleList.Clear();
             UpdateTicksAndTime();
             PersonsEvacuatedProgressBarFill.Width = 0;
@@ -65,17 +71,41 @@ namespace Evacuation_Master_3000
             PeopleWithNoPathAmount.Text = "0";
             UserInterface.IsSimulationReady = true;
         }
-       
+
+        private bool _hasSimSpeedBeenChanged;
+        private void ChangeSimSpeed(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _hasSimSpeedBeenChanged = true;
+        }
+        private int _ticksBeforeChange;
+        private double _timeElapsedField;
+        private double _totalTimeElapsedField;
+        private double _timeElapsedBeforeChange;
+        private double _oldSimSpeed;
+        private int _totalTicksBeforeChange;
         private void UpdateTicksAndTime()
         {
+            if (_hasSimSpeedBeenChanged)
+            {
+                _ticksBeforeChange = (_ticks - _ticksBeforeChange);
+                _totalTicksBeforeChange += _ticksBeforeChange;
+                if (_ticksBeforeChange != 0)
+                {
+                    _timeElapsedBeforeChange += Math.Round(_ticksBeforeChange / _oldSimSpeed, 2);
+                }
+                _hasSimSpeedBeenChanged = false;
+            }
             _ticks++;
-            TimeElapsedInDateTimeFormat.Text = Math.Round((double)_ticks / SimulationSpeed.Value, 2) + " Seconds";
+            _timeElapsedField = Math.Round((Math.Abs(_ticks - _totalTicksBeforeChange)) / SimulationSpeed.Value, 2);
+            _totalTimeElapsedField = _timeElapsedBeforeChange + _timeElapsedField;
+            TimeElapsedInDateTimeFormat.Text = _totalTimeElapsedField + "Seconds";
             TicksElapsed.Text = _ticks + " Ticks";
+            _oldSimSpeed = SimulationSpeed.Value;
         }
         private void UpdateSimulationStats(Person person)
         {
             int peopleCount = _parentWindow.TheUserInterface.LocalPeopleDictionary.Count(p => !p.Value.NoPathAvailable);
-            PeopleWithNoPathAmount.Text = (_parentWindow.TheUserInterface.LocalPeopleDictionary.Count-peopleCount) + "";
+            PeopleWithNoPathAmount.Text = (_parentWindow.TheUserInterface.LocalPeopleDictionary.Count - peopleCount) + "";
             TotalPersonCount.Text = peopleCount + "";
             _fillWidthPerPerson = (PersonsEvacuatedProgressBarBackground.ActualWidth) / peopleCount;
             if (person.Evacuated)

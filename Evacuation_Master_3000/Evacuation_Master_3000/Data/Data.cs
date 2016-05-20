@@ -53,6 +53,10 @@ namespace Evacuation_Master_3000
 
         public Dictionary<int, Person> StartSimulation(bool heatmap, IPathfinding pathfindingAlgorithm, int simulationSpeed)                                           //<---- kan formentligt være void?
         {
+            foreach (Person person in AllPeople.Values.Where(p => p.SimulationSpeed != simulationSpeed))
+            {
+                person.SimulationSpeed = simulationSpeed;
+            }
             if (UserInterface.BuildingHasBeenChanged)
             {
                 if (AllPeople != null)

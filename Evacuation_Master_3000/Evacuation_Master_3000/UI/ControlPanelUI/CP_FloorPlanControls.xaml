@@ -27,9 +27,16 @@
                         <RadioButton x:Name="MakePath" Tag="Exit" GroupName="RadioElevation" Content="Exit"/>
                     </StackPanel>
                 </GroupBox>
-                
-                
-                
+
+
+
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Key functions">
+            <StackPanel>
+                <TextBlock>Hold <Italic>Alt</Italic> while drawing to create lines</TextBlock>
+                <TextBlock>Hold <Italic>Control</Italic> while scrolling to zoom</TextBlock>
+                <TextBlock>Hold <Italic>Shift</Italic> to scroll sideways</TextBlock>
             </StackPanel>
         </GroupBox>
     </StackPanel>

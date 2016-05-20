@@ -7,6 +7,6 @@
              mc:Ignorable="d" >
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
         <Slider Value="1" Minimum="0.10" Maximum="5" x:Name="ZoomSlider" Width="350" Margin="0, 0, 10, 0"/>
-        <TextBlock x:Name="ZoomSliderText"/>
+        <TextBlock x:Name="ZoomSliderText" ToolTip="Left click: Full&#x0a;Right click: Fit"/>
     </StackPanel>
 </UserControl>

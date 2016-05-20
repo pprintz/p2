@@ -40,7 +40,6 @@ namespace Evacuation_Master_3000 {
             ZoomSlider.ValueChanged += OnSliderValueChanged;
             ZoomSliderText.MouseLeftButtonDown += ResetZoom;
             ZoomSliderText.MouseRightButtonDown += ZoomToFit;
-            //OnSliderValueChanged(null, null);
         }
 
         private void MouseInVisual(object sender, MouseEventArgs e) => IsMouseHoveringVisual = true;

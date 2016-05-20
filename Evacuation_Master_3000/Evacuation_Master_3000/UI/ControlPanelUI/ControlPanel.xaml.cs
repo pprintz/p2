@@ -15,7 +15,7 @@ namespace Evacuation_Master_3000
             SimulationStats = new CP_SimulationStats(ParentWindow);
             ImportExport = new CP_ImportExport(ParentWindow);
             Import.OnImportFeedBack += OnImportedFloorPlan;
-            SetupUserControlTabs(parentWindow);
+            SetupUserControlTabs();
         }
 
         private void OnImportedFloorPlan() {
@@ -28,7 +28,7 @@ namespace Evacuation_Master_3000
         public CP_SimulationStats SimulationStats { get; }
         private CP_ImportExport ImportExport { get;}
 
-        private void SetupUserControlTabs(MainWindow parentWindow)
+        private void SetupUserControlTabs()
         {
             TabItem floorPlanControls = new TabItem
             {
@@ -52,7 +52,7 @@ namespace Evacuation_Master_3000
             UserControlTabPanel.Items.Insert(1, simulationStats);
             UserControlTabPanel.Items.Insert(2, importExport);
 
-            UserControlTabPanel.SelectedIndex = 2;
+            UserControlTabPanel.SelectedIndex = 0;
         }
     }
 }

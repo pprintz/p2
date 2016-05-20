@@ -215,16 +215,16 @@ namespace Evacuation_Master_3000
             List<BuildingBlock> tileList = BuildingBlocks.Values.Where(t => t.Type == Tile.Types.Free ||
                                                                             t.Type == Tile.Types.Person ||
                                                                             t.Type == Tile.Types.Stair).ToList();
-            List<BuildingBlock> currentList =
+            List<BuildingBlock> doorNeighbours =
                 door.BuildingBlockNeighbours.Where(
                     n =>
                         (n.Type == Tile.Types.Free || n.Type == Tile.Types.Person) &&
                         n.Priority > targetPriority).ToList();
-            if (currentList.Count == 0)
+            if (doorNeighbours.Count == 0)
             {
                 done = true;
             }
-            foreach (BuildingBlock block in currentList)
+            foreach (BuildingBlock block in doorNeighbours)
             {
                 block.Priority = targetPriority;
                 if (block.Room == 0)

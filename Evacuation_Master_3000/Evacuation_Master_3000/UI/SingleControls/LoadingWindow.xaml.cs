@@ -27,8 +27,8 @@ namespace Evacuation_Master_3000.UI.SingleControls
             FloorPlan.OnCalculatePriorityDone += UpdateLoadingOnPriorityDone;
             Data.OnPathCalculationDone += StopLoading;
             ImageBehavior.SetAutoStart(LoadingGif, true);
+            SimulationControls.OnStopLoadingWindow += StopLoading;
         }
-
 
 
         private void StopLoading(object sender, RoutedEventArgs e)

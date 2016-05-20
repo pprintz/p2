@@ -39,8 +39,8 @@ namespace Evacuation_Master_3000.ImageScan
         {
             InitializeComponent();
             ParentWindow = parentWindow;
-            CalculateAndSetupVisualRepresentation(imageFilePath);
             _contrastThreshold = ParentWindow.CpImageScanControls.ContrastSlider.Value;
+            CalculateAndSetupVisualRepresentation(imageFilePath);  
         }
 
         private void CalculateAndSetupVisualRepresentation(string imageFilePath)

@@ -133,9 +133,6 @@
     <Compile Include="UI\SingleControls\SimulationControls.xaml.cs">
       <DependentUpon>SimulationControls.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ControlPanelUI\CP_SimulationControls.xaml.cs">
-      <DependentUpon>CP_SimulationControls.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Data\Pathfinding\AStar.cs" />
     <Compile Include="Data\Data.cs" />
     <Compile Include="Data\DataSimulationStatistics\DataSimulationStatistics.cs" />
@@ -203,10 +200,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\SingleControls\SimulationControls.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\ControlPanelUI\CP_SimulationControls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

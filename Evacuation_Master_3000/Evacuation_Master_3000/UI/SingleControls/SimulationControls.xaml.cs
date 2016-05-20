@@ -1,10 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using Evacuation_Master_3000.UI.SingleControls;
 using System.Threading;
-using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace Evacuation_Master_3000
 {
@@ -21,16 +17,17 @@ namespace Evacuation_Master_3000
         }
 
         private readonly MainWindow _parentWindow;
+        private LoadingWindow _loadingWindow;
 
         private void OnResetButtonClick(object sender, RoutedEventArgs e)
         {
             Thread thread = new Thread(() =>
             {
-                if (loadingWindow == null)
+                if (_loadingWindow == null)
                 {
-                    loadingWindow = new LoadingWindow();
+                    _loadingWindow = new LoadingWindow();
                 }
-                loadingWindow.StartAnimation();
+                _loadingWindow.StartAnimation();
                 System.Windows.Threading.Dispatcher.Run();
             });
             thread.SetApartmentState(ApartmentState.STA);
@@ -72,44 +69,37 @@ namespace Evacuation_Master_3000
             PostSimulationControls.Visibility = Visibility.Collapsed;
         }
 
-        private LoadingWindow loadingWindow;
+
         private void OnSimulationStartClick(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(UserInterface.HasSimulationEnded);
-            Console.WriteLine(UserInterface.IsSimulationPaused);
-            Console.WriteLine(UserInterface.IsSimulationReady);
             if (UserInterface.HasSimulationEnded && UserInterface.IsSimulationReady)
             {
                 Thread thread = new Thread(() =>
                 {
-                    if (loadingWindow == null)
+                    if (_loadingWindow == null)
                     {
-                        loadingWindow = new LoadingWindow();
+                        _loadingWindow = new LoadingWindow();
                     }
-                    loadingWindow.StartAnimation();
+                    _loadingWindow.StartAnimation();
                     System.Windows.Threading.Dispatcher.Run();
                 });
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
 
                 UserInterface.HasSimulationEnded = false;
-                _parentWindow.ControlPanelControl.UserControlTabPanel.SelectedIndex = 2;
+                _parentWindow.ControlPanelControl.UserControlTabPanel.SelectedIndex = 1;
                 _parentWindow.TheUserInterface.SimulationStart(
-                    _parentWindow.ControlPanelControl.SimulationControls.HeatmapToggle.IsChecked != null &&
-                    (bool)_parentWindow.ControlPanelControl.SimulationControls.HeatmapToggle.IsChecked,
-                    _parentWindow.ControlPanelControl.SimulationControls.StepByStepToggle.IsChecked != null &&
-                    (bool)_parentWindow.ControlPanelControl.SimulationControls.StepByStepToggle.IsChecked,
-                    new AStar(_parentWindow.TheUserInterface.LocalFloorPlan), 100);
+                    _parentWindow.ControlPanelControl.SimulationStats.HeatmapToggle.IsChecked != null &&
+                    (bool)_parentWindow.ControlPanelControl.SimulationStats.HeatmapToggle.IsChecked,
+                    new AStar(_parentWindow.TheUserInterface.LocalFloorPlan), (int)_parentWindow.ControlPanelControl.SimulationStats.SimulationSpeed.Value);
             }
             else
             {
-                _parentWindow.ControlPanelControl.UserControlTabPanel.SelectedIndex = 2;
+                _parentWindow.ControlPanelControl.UserControlTabPanel.SelectedIndex = 1;
                 _parentWindow.TheUserInterface.SimulationStart(
-                    _parentWindow.ControlPanelControl.SimulationControls.HeatmapToggle.IsChecked != null &&
-                    (bool)_parentWindow.ControlPanelControl.SimulationControls.HeatmapToggle.IsChecked,
-                    _parentWindow.ControlPanelControl.SimulationControls.StepByStepToggle.IsChecked != null &&
-                    (bool)_parentWindow.ControlPanelControl.SimulationControls.StepByStepToggle.IsChecked,
-                    new AStar(_parentWindow.TheUserInterface.LocalFloorPlan), 100);
+                    _parentWindow.ControlPanelControl.SimulationStats.HeatmapToggle.IsChecked != null &&
+                    (bool)_parentWindow.ControlPanelControl.SimulationStats.HeatmapToggle.IsChecked,
+                    new AStar(_parentWindow.TheUserInterface.LocalFloorPlan), (int)_parentWindow.ControlPanelControl.SimulationStats.SimulationSpeed.Value);
             }
         }
     }

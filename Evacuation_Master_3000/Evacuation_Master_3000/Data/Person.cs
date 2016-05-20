@@ -11,6 +11,11 @@ namespace Evacuation_Master_3000
         private static List<int> IdsInUse { get; } = new List<int>();
         public readonly List<BuildingBlock> PathList = new List<BuildingBlock>();
         public double MovementSpeed { get; }
+
+        public int ID { get; }
+        public double SimulationSpeed { private get; set; }
+        public event ExtendedPathRequest OnExtendedPathRequest;
+        private static readonly Random Rand = new Random();
         public double MovementSpeedInMetersPerSecond { get; }
         private int _ticksToWaitBeforeNextMove;
         private int _ticksSpentWaiting;
@@ -48,10 +53,7 @@ namespace Evacuation_Master_3000
                 }
             }
         }
-        public int ID { get; }
-        public double TickLength { private get; set; }
-        public event ExtendedPathRequest OnExtendedPathRequest;
-        private static readonly Random Rand = new Random();
+
         public Person(BuildingBlock position) : this(0, 0, position) { }
         internal Person(int id, double movementSpeed, BuildingBlock position)
         {
@@ -160,10 +162,10 @@ namespace Evacuation_Master_3000
         private void ResetTickConditions()
         {
             _ticksSpentWaiting = 0;
-            _ticksToWaitBeforeNextMove = (int)Math.Round((Position.DistanceTo(_target) * GlobalVariables.BlockWidthInMeters / MovementSpeedInMetersPerSecond) * TickLength);
+            _ticksToWaitBeforeNextMove = (int)Math.Round((Position.DistanceTo(_target) * GlobalVariables.BlockWidthInMeters / MovementSpeedInMetersPerSecond) * SimulationSpeed);
             if (StepsTaken > 0 && StepsTaken != PathList.Count - 1)
             {
-                _ticksToWaitBeforeNextMove = (int)Math.Round((Position.DistanceTo(PathList[StepsTaken + 1]) * GlobalVariables.BlockWidthInMeters / MovementSpeedInMetersPerSecond) * TickLength);
+                _ticksToWaitBeforeNextMove = (int)Math.Round((Position.DistanceTo(PathList[StepsTaken + 1]) * GlobalVariables.BlockWidthInMeters / MovementSpeedInMetersPerSecond) * SimulationSpeed);
             }
         }
     }

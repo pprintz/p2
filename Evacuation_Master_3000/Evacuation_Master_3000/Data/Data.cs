@@ -19,7 +19,6 @@ namespace Evacuation_Master_3000
         public IFloorPlan TheFloorPlan { get; }
         private Dictionary<int, Person> _allPeople;
         private Dictionary<int, Person> AllPeople => _allPeople;
-        public event PersonMoved OnSendPersonMoved;
         public static event FunctionDone OnPathCalculationDone;
         public static event Tick OnTick;
 
@@ -52,7 +51,7 @@ namespace Evacuation_Master_3000
             return AllPeople;
         }
 
-        public Dictionary<int, Person> StartSimulation(bool heatmap, bool stepByStep, IPathfinding pathfindingAlgorithm, int tickLength)                                           //<---- kan formentligt være void?
+        public Dictionary<int, Person> StartSimulation(bool heatmap, IPathfinding pathfindingAlgorithm, int simulationSpeed)                                           //<---- kan formentligt være void?
         {
             if (UserInterface.BuildingHasBeenChanged)
             {
@@ -63,9 +62,10 @@ namespace Evacuation_Master_3000
                         person.PathList.Clear();
                         if (person.NewPersonInGrid)
                         {
+                            // Refactor into one function <<<<<<<<<<<<<<<<<<<<
                             person.Evacuated = false;
                             person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                            person.TickLength = tickLength;
+                            person.SimulationSpeed = simulationSpeed;
                             person.OnExtendedPathRequest += FindNewPath;
                             person.NewPersonInGrid = false;
                         }
@@ -82,7 +82,7 @@ namespace Evacuation_Master_3000
             {
                 person.Evacuated = false;
                 person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                person.TickLength = tickLength;
+                person.SimulationSpeed = simulationSpeed;
                 person.OnExtendedPathRequest += FindNewPath;
                 person.PathList.AddRange(
                     pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
@@ -141,13 +141,6 @@ namespace Evacuation_Master_3000
             return null;
         }
 
-     
-
-        public DataSimulationStatistics GetSimulationStatistics()
-        {
-            throw new NotImplementedException();
-        }
-
         private readonly List<Person> _unevacuatedPeople;
 
         public IFloorPlan ImportFloorPlan(string fileName)
@@ -184,7 +177,7 @@ namespace Evacuation_Master_3000
         public IFloorPlan ExportFloorPlan(string filePath, IFloorPlan floorPlan, Dictionary<int, Person> allPeople)
         {
             Export.ExportBuilding(filePath, floorPlan, allPeople);
-            return TheFloorPlan;       ////<<<-------- OBS OBS OBS skal TheFloorPlan sættes til floorPlan (metode parameter)???
+            return TheFloorPlan;   
 
         }
     }

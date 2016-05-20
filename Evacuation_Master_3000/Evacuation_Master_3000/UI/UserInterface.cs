@@ -9,20 +9,8 @@ namespace Evacuation_Master_3000 {
         }
 
         public static bool IsSimulationPaused = false;
-        private static bool _hasSimulationEnded = true;
 
-        public static bool HasSimulationEnded
-        {
-            get { return _hasSimulationEnded; }
-            set
-            {
-                if (value)
-                {
-                    OnSimulationEnd?.Invoke();
-                }
-                _hasSimulationEnded = value;
-            }
-        } 
+        public static bool HasSimulationEnded { get; set; } = true;
 
         public static bool ResetButtonClicked {
             set {
@@ -33,9 +21,8 @@ namespace Evacuation_Master_3000 {
         }
 
         public static bool IsSimulationReady = true;
-        public static bool BuildingHasBeenChanged = false;
+        public static bool BuildingHasBeenChanged;
         public static event ResetClicked OnReset;
-        public static event SimulationEnd OnSimulationEnd;
         private MainWindow TheMainWindow { get; }
         public event PrepareSimulation OnPrepareSimulation;
         public event UISimulationStart OnUISimulationStart;
@@ -59,11 +46,8 @@ namespace Evacuation_Master_3000 {
         }
         public void DisplayGeneralMessage(string message) { DisplayGeneralMessage(message, string.Empty); }
 
-        public void DisplayStatistics(DataSimulationStatistics dataSimulationStatistics) {
-            throw new NotImplementedException();
-        }
-
-        public void CreateFloorplan(int width, int height, int floorAmount, string description) {
+        public void CreateFloorplan(int width, int height, int floorAmount, string description)
+        {
             if (_floorplanHasBeenCreated) {
                 DisplayGeneralMessage("A building has already been made.");
                 return;
@@ -74,7 +58,8 @@ namespace Evacuation_Master_3000 {
             OnBuildingPlanSuccessfullLoaded?.Invoke();
         }
 
-        public void ImportFloorPlan(string filePath) {
+        public void ImportFloorPlan(string filePath)
+        {
             LocalFloorPlan = OnImportFloorPlan?.Invoke(filePath);
             People = OnPrepareSimulation?.Invoke(LocalFloorPlan);
             TheMainWindow.FloorPlanVisualiserControl.ImplementFloorPlan(LocalFloorPlan, People);
@@ -87,12 +72,12 @@ namespace Evacuation_Master_3000 {
             LocalFloorPlan = OnExportFloorPlan?.Invoke(filePath, LocalFloorPlan, People);
         }
 
-        public void SimulationStart(bool showHeatMap, bool stepByStep, IPathfinding pathfinding, int milliseconds)
+        public void SimulationStart(bool heatMapActivated, IPathfinding pathfinding, int milliseconds)
         {
-            HeatMapActivated = showHeatMap;
+            HeatMapActivated = heatMapActivated;
             HasSimulationEnded = false;
             People = OnPrepareSimulation?.Invoke(LocalFloorPlan);
-            OnUISimulationStart?.Invoke(showHeatMap, stepByStep, pathfinding, milliseconds);
+            OnUISimulationStart?.Invoke(heatMapActivated, pathfinding, milliseconds);
         }
 
     }

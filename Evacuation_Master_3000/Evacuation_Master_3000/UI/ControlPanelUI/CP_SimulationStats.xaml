@@ -6,6 +6,18 @@
              xmlns:local="clr-namespace:Evacuation_Master_3000"
              mc:Ignorable="d">
     <StackPanel>
+        <GroupBox Header="Simulation settings">
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type CheckBox}">
+                        <Setter Property="Margin" Value="0,5,0,5"/>
+                    </Style>
+                </StackPanel.Resources>
+                <CheckBox Content="Show heatmap" Name="HeatmapToggle"/>
+                <Label x:Name="Simulation_Speed_label" Content="Simulation Speed:"/>
+                <Slider  x:Name="SimulationSpeed" Minimum="100" Maximum="10000" IsDirectionReversed="True" Value="100"  Margin="0, 10"/>
+            </StackPanel>
+        </GroupBox>
         <GroupBox Header="Simulation stats" Name="SimulationStatsGroupBox">
             <StackPanel>
                 <StackPanel.Resources>
@@ -37,7 +49,8 @@
                                 </Grid.ColumnDefinitions>
                                 <Rectangle Name="PersonsEvacuatedProgressBarBackground" Fill="DimGray" Margin="0,1"/>
                                 <Rectangle Name="PersonsEvacuatedProgressBarFill" HorizontalAlignment="Left" VerticalAlignment="Center" Height="12" Width="0" Fill="Red" Margin="0,1"/>
-                                <!-- Bindings: Width er procentdel af evakuerede personer. Fill skifter farve efter samme udregning som HeatMap. Text er procentdel evakuerede personer -->
+                                <!-- Bindings: Width er procentdel af evakuerede personer. Fill skifter farve efter samme udregning som 
+                                . Text er procentdel evakuerede personer -->
                                 <TextBlock Name="PersonsEvacuatedProgressBarText" Text="0%" HorizontalAlignment="Center" Margin="62,-1,14,1" Width="60"/>
                             </Grid>
                         </GroupItem>

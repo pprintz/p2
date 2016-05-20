@@ -5,7 +5,6 @@ namespace Evacuation_Master_3000
         // Sends params dict with 
         void Display();
         void DisplayGeneralMessage(string errorMessage);
-        void DisplayStatistics(DataSimulationStatistics dataSimulationStatistics);
         event PrepareSimulation OnPrepareSimulation;
         event UISimulationStart OnUISimulationStart;
         event ImportFloorPlan OnImportFloorPlan;

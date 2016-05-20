@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Evacuation_Master_3000
@@ -44,7 +43,6 @@ namespace Evacuation_Master_3000
                 {
                     person.Evacuated = false;
                     person.PathList.Clear();
-                    Console.WriteLine(person.PersonInteractionStats.MovementSteps.Count);
                     foreach (MovementStep movementStep in person.PersonInteractionStats.MovementSteps)
                     {
                         person.PathList.Add(movementStep.SourceTile as BuildingBlock);
@@ -71,7 +69,7 @@ namespace Evacuation_Master_3000
         private void UpdateTicksAndTime()
         {
             _ticks++;
-            TimeElapsedInDateTimeFormat.Text = Math.Round((double)_ticks / 100, 2) + " Seconds";
+            TimeElapsedInDateTimeFormat.Text = Math.Round((double)_ticks / SimulationSpeed.Value, 2) + " Seconds";
             TicksElapsed.Text = _ticks + " Ticks";
         }
         private void UpdateSimulationStats(Person person)
@@ -92,14 +90,13 @@ namespace Evacuation_Master_3000
                     CurrentNumberOfEvacuatedPersons.Text = _evacuatedPeopleList.Count + "";
                     double percentageEvacuated = ((double)_evacuatedPeopleList.Count) / peopleCount * 100;
                     PersonsEvacuatedProgressBarText.Text = Math.Round(percentageEvacuated, 2) + "%";
-                    person.PersonInteractionStats.TimeWhenEvacuated = Math.Round((double)_ticks / 100, 2);
+                    person.PersonInteractionStats.TimeWhenEvacuated = Math.Round((double)_ticks / SimulationSpeed.Value, 2);
                 }
                 if (peopleCount == _evacuatedPeopleList.Count)
                 {
                     UserInterface.HasSimulationEnded = true;
                     UserInterface.IsSimulationReady = false;
                     StringBuilder sb = new StringBuilder();
-                    //UserInterface.HasSimulationEnded = true;
                     sb.AppendLine($"Statistics for simulation run at {DateTime.Now} by {Environment.UserName}{Environment.NewLine}");
                     double timeElapsed = _evacuatedPeopleList.Max(p => p.PersonInteractionStats.TimeWhenEvacuated);
                     sb.AppendLine($"Time elapsed in simulation: {timeElapsed} seconds");
@@ -158,7 +155,7 @@ namespace Evacuation_Master_3000
                             $"Distance traveled in meters: {person1.PersonInteractionStats.DistanceTraveled} m{Environment.NewLine}" +
                             $"Movement speed: {Math.Round(person1.MovementSpeedInMetersPerSecond, 2)} m/s{Environment.NewLine}" +
                             $"Time at evacuation: {person1.PersonInteractionStats.TimeWhenEvacuated} seconds{Environment.NewLine}" +
-                            $"Time waited because of blocked path: {Math.Round((double)person1.PersonInteractionStats.TicksWaited / 100, 2)} seconds{Environment.NewLine}{Environment.NewLine}" +
+                            $"Time waited because of blocked path: {Math.Round((double)person1.PersonInteractionStats.TicksWaited / SimulationSpeed.Value, 2)} seconds{Environment.NewLine}{Environment.NewLine}" +
                             $"List of steps:");
                         foreach (MovementStep movementStep in person1.PersonInteractionStats.MovementSteps)
                         {
@@ -167,7 +164,7 @@ namespace Evacuation_Master_3000
                                 $"Step:{movementStepCounter}   From: {ImportExportSettings.Coordinate(movementStep.SourceTile)}\n" +
                                 $" - To: {ImportExportSettings.Coordinate(movementStep.DestinationTile)}\n" +
                                 $"      Distance in meters: {movementStep.DistanceInMeters} m{Environment.NewLine}" +
-                                $"          Time at arrival: {Math.Round((double)movementStep.TicksAtArrival / 100, 2)} seconds{Environment.NewLine}");
+                                $"          Time at arrival: {Math.Round((double)movementStep.TicksAtArrival / SimulationSpeed.Value, 2)} seconds{Environment.NewLine}");
                         }
                     }
                     string stringToWrite = sb.ToString();

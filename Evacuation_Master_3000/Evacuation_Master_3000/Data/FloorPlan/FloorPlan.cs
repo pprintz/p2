@@ -62,10 +62,10 @@ namespace Evacuation_Master_3000
             Height = height;
             Tiles = tiles;
             FloorAmount = 1; // Currently the Import Images can only handle one floor at a time.
-            Headers = new[] {""};
+            Headers = new[] { "" };
             Description = "";
             BuildingBlocks = tiles.ToDictionary(k => k.Key, v => v.Value as BuildingBlock);
-            
+
             _floorPlanAlreadyExist = true;
         }
 
@@ -177,14 +177,14 @@ namespace Evacuation_Master_3000
             }
             foreach (BuildingBlock connectedStair in connectedStairList.Where(cs => cs.Priority == Int16.MaxValue).OrderBy(cs => cs.Z))
             {
-                connectedStair.Priority = 1000 * (connectedStair.Z+1);
+                connectedStair.Priority = 1000 * (connectedStair.Z + 1);
                 SetExitAndStairPriority(connectedStair, doorlist);
             }
 
         }
         private void SetExitAndStairPriority(BuildingBlock exitOrStair, IEnumerable<BuildingBlock> doorlist)
         {
-            InitializeRoomPriority(exitOrStair, exitOrStair.Priority);
+            InitializeRoomPriority(exitOrStair);
             do
             {
                 foreach (BuildingBlock door in doorlist.Where(d => d.Z == exitOrStair.Z))
@@ -199,18 +199,18 @@ namespace Evacuation_Master_3000
                             (BuildingBlocks.Values.Where(b => (b.Type == Tile.Types.Free || b.Type == Tile.Types.Person) &&
                                                                b.BuildingBlockNeighbours.Contains(door)).Min(n => n.Priority));
                         door.Priority++;
-                        InitializeRoomPriority(door, door.Priority);
+                        InitializeRoomPriority(door);
                     }
                 }
             } while (doorlist.Any(d => d.Priority - d.BuildingBlockNeighbours.Min(n => n.Priority) > 2));
         }
 
 
-       
-        private void InitializeRoomPriority(BuildingBlock door, int priorityCounter)
+
+        private void InitializeRoomPriority(BuildingBlock door)
         {
             _globalRoomCounter++;
-            priorityCounter++;
+            int targetPriority = door.Priority + 1;
             bool done = false;
             List<BuildingBlock> tileList = BuildingBlocks.Values.Where(t => t.Type == Tile.Types.Free ||
                                                                             t.Type == Tile.Types.Person ||
@@ -219,43 +219,40 @@ namespace Evacuation_Master_3000
                 door.BuildingBlockNeighbours.Where(
                     n =>
                         (n.Type == Tile.Types.Free || n.Type == Tile.Types.Person) &&
-                        n.Priority > priorityCounter).ToList();
+                        n.Priority > targetPriority).ToList();
+            if (currentList.Count == 0)
+            {
+                done = true;
+            }
+            foreach (BuildingBlock block in currentList)
+            {
+                block.Priority = targetPriority;
+                if (block.Room == 0)
+                {
+                    block.Room = _globalRoomCounter;
+                }
+            }
             do
             {
-                if (currentList.Count == 0)
+                if (tileList.Any(b => b.BuildingBlockNeighbours.Any(n => n.Priority == targetPriority) &&
+                    b.Priority > targetPriority &&
+                    (b.Type == Tile.Types.Free || b.Type == Tile.Types.Person)))
                 {
-                    done = true;
-                }
-                else
-                {
-                    foreach (BuildingBlock block in currentList)
+                    foreach (
+                        BuildingBlock block in
+                            tileList.Where(b => b.BuildingBlockNeighbours.Any(n => n.Priority == targetPriority && n.Z == b.Z) &&
+                                                b.Priority > targetPriority))
                     {
-                        block.Priority = priorityCounter;
+                        block.Priority = targetPriority;
                         if (block.Room == 0)
                         {
                             block.Room = _globalRoomCounter;
                         }
                     }
-                    if (tileList.Any(b => b.BuildingBlockNeighbours.Any(n => n.Priority == priorityCounter) &&
-                        b.Priority > priorityCounter &&
-                        (b.Type == Tile.Types.Free || b.Type == Tile.Types.Person)))
-                    {
-                        foreach (
-                            BuildingBlock block in
-                                tileList.Where(b => b.BuildingBlockNeighbours.Any(n => n.Priority == priorityCounter && n.Z == b.Z) &&
-                                                    b.Priority > priorityCounter))
-                        {
-                            block.Priority = priorityCounter;
-                            if (block.Room == 0)
-                            {
-                                block.Room = _globalRoomCounter;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        done = true;
-                    }
+                }
+                else
+                {
+                    done = true;
                 }
             } while (!done);
         }

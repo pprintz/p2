@@ -41,14 +41,14 @@ namespace Evacuation_Master_3000 {
 
         private MainWindow ParentWindow { get; }
         public enum NewOrImport { New, Import }
-        private const int BuildingWidthAndHeightMax = 500;
+        private const int BuildingWidthAndHeightMax = 250;
         private int _buildingWidth;
         public int BuildingWidth
         {
             get { return _buildingWidth; }
             set
             {
-                _buildingWidth = value;
+                _buildingWidth = value ;
                 if (_buildingWidth > BuildingWidthAndHeightMax)
                 {
                     _buildingWidth = BuildingWidthAndHeightMax;
@@ -63,7 +63,7 @@ namespace Evacuation_Master_3000 {
             get { return _buildingHeight; }
             set
             {
-                _buildingHeight = value;
+                _buildingHeight = value ;
                 if (_buildingHeight > BuildingWidthAndHeightMax)
                 {
                     _buildingHeight = BuildingWidthAndHeightMax;
@@ -127,7 +127,7 @@ namespace Evacuation_Master_3000 {
         
 
         private void CreateNewBuilding(object sender, RoutedEventArgs e) {
-            ParentWindow.TheUserInterface.CreateFloorplan(BuildingWidth, BuildingHeight, BuildingFloorAmount, Description);
+            ParentWindow.TheUserInterface.CreateFloorplan(BuildingWidth * 2, BuildingHeight * 2, BuildingFloorAmount, Description);
             OnSucces();
         }
 

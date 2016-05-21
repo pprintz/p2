@@ -102,7 +102,7 @@ namespace Evacuation_Master_3000
 
                         BuildingBlock current = (LocalFloorPlan.Tiles[Coordinate(x, y, z)] as BuildingBlock);
                         current.Figure = figure;                                                //<<-------------------- Lige nu bliver current.figure ikke brugt til de to nedenstående assignments - er det meningen/hensigten?
-                        figure.ToolTip = current.Priority + " , " + current.Room;
+                        figure.ToolTip = current.ToString();
                         figure.MouseLeftButtonDown += OnBuildingBlockClick;
 
 

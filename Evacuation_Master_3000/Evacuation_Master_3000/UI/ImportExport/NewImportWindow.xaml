@@ -29,12 +29,12 @@
                                     </Style>
                                 </StackPanel.Resources>
                                 <DockPanel>
-                                    <TextBlock Name="BuildingWidthLabel" Text="Building width*: " />
+                                    <TextBlock Name="BuildingWidthLabel" Text="Building width in meters*: " />
                                     <TextBox Name="BuildingWidthTextBox" Width="125" HorizontalAlignment="Right"
                                                  Text="{Binding Path=BuildingWidth, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToString}}"/>
                                 </DockPanel>
                                 <DockPanel>
-                                    <TextBlock Name="BuildingHeightLabel" Text="Building height*: " />
+                                    <TextBlock Name="BuildingHeightLabel" Text="Building height in meters*: " />
                                     <TextBox Name="BuildingHeightTextBox" Width="125" HorizontalAlignment="Right"
                                                  Text="{Binding Path=BuildingHeight, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntToString}}"/>
                                 </DockPanel>

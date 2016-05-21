@@ -27,8 +27,8 @@ namespace Evacuation_Master_3000
         }
 
         /* Grid default values */
-        public static int DefaultWidth => 100;
-        public static int DefaultHeight => 100;
+        public static int DefaultWidth => 50;
+        public static int DefaultHeight => 50;
         public static int DefaultFloorAmount => 1;
         public static string DefaultDescription => string.Empty;
 

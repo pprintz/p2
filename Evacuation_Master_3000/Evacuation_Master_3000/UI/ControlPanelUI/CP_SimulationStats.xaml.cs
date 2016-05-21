@@ -62,6 +62,9 @@ namespace Evacuation_Master_3000
             }
             _ticks = -1;
             _ticksBeforeChange = 0;
+            _timeElapsedField = 0;
+            _timeElapsedBeforeChange = 0;
+            _totalTimeElapsedField = 0;
             _oldSimSpeed = 0;
             _evacuatedPeopleList.Clear();
             UpdateTicksAndTime();
@@ -76,11 +79,14 @@ namespace Evacuation_Master_3000
         private bool _hasSimSpeedBeenChanged;
         private void ChangeSimSpeed(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            foreach (Person person in _parentWindow.TheUserInterface.LocalPeopleDictionary.Values)
+            if (UserInterface.IsSimulationPaused)
             {
-                person.UpdateTickCondition = true;
+                foreach (Person person in _parentWindow.TheUserInterface.LocalPeopleDictionary.Values)
+                {
+                    person.UpdateTickCondition = true;
+                }
+                _hasSimSpeedBeenChanged = true;
             }
-            _hasSimSpeedBeenChanged = true;
         }
         private int _ticksBeforeChange;
         private double _timeElapsedField;

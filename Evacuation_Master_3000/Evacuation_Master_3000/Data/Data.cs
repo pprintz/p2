@@ -66,11 +66,7 @@ namespace Evacuation_Master_3000
                         person.PathList.Clear();
                         if (person.NewPersonInGrid)
                         {
-                            // Refactor into one function <<<<<<<<<<<<<<<<<<<<
-                            person.Evacuated = false;
-                            person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                            person.SimulationSpeed = simulationSpeed;
-                            person.OnExtendedPathRequest += FindNewPath;
+                            AddPersonToSimulation(person, pathfindingAlgorithm, simulationSpeed);
                             person.NewPersonInGrid = false;
                         }
                         person.PathList.AddRange(
@@ -81,21 +77,28 @@ namespace Evacuation_Master_3000
             }
 
             if (AllPeople == null) return null;
-
             foreach (Person person in AllPeople.Values.Where(p => p.PathList.Count == 0 && !p.NoPathAvailable))
             {
-                person.Evacuated = false;
-                person.OnPersonEvacuated += RemoveEvacuatedPerson;
-                person.SimulationSpeed = simulationSpeed;
-                person.OnExtendedPathRequest += FindNewPath;
+                if (person.NewPersonInGrid)
+                {
+                    AddPersonToSimulation(person, pathfindingAlgorithm, simulationSpeed);
+                    person.NewPersonInGrid = false;
+                }
                 person.PathList.AddRange(
-                    pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
+                             pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
             }
             OnPathCalculationDone?.Invoke(this, null);
             StartTicks();
             return AllPeople;
         }
 
+        private void AddPersonToSimulation(Person person, IPathfinding pathfindingAlgorithm, int simulationSpeed)
+        {
+            person.Evacuated = false;
+            person.OnPersonEvacuated += RemoveEvacuatedPerson;
+            person.SimulationSpeed = simulationSpeed;
+            person.OnExtendedPathRequest += FindNewPath;
+        }
         private void StartTicks()
         {
             while (AllPeople.Values.Any(p => !p.Evacuated && !p.NoPathAvailable) && !UserInterface.IsSimulationPaused && !UserInterface.HasSimulationEnded)

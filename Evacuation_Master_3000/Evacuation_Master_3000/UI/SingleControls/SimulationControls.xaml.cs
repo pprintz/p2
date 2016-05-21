@@ -45,11 +45,13 @@ namespace Evacuation_Master_3000
         {
             if (!UserInterface.IsSimulationPaused)
             {
+                _parentWindow.ControlPanelControl.SimulationStats.SimulationSpeed.IsEnabled = true;
                 UserInterface.IsSimulationPaused = true;
                 PauseSimulationButton.Content = "Continue";
             }
             else
             {
+                _parentWindow.ControlPanelControl.SimulationStats.SimulationSpeed.IsEnabled = false;
                 PauseSimulationButton.Content = "Pause";
                 UserInterface.IsSimulationReady = true;
                 UserInterface.IsSimulationPaused = false;

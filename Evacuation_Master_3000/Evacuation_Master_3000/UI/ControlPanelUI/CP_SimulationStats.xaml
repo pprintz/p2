@@ -15,7 +15,7 @@
                 </StackPanel.Resources>
                 <CheckBox Content="Show heatmap" Name="HeatmapToggle"/>
                 <Label x:Name="Simulation_Speed_label" Content="Simulation Speed:"/>
-                <Slider  x:Name="SimulationSpeed" Minimum="100" Maximum="10000" IsDirectionReversed="True" Value="100"  Margin="0, 10"/>
+                <Slider  x:Name="SimulationSpeed" Minimum="100" Maximum="10000" IsDirectionReversed="True" Value="100"  Margin="0, 10" IsEnabled="False"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Simulation stats" Name="SimulationStatsGroupBox">

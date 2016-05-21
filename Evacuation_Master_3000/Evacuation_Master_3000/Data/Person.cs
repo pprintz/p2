@@ -96,7 +96,7 @@ namespace Evacuation_Master_3000
                 UpdateTickCondition = false;
             }
             AmountOfTicksSpent++;
-            if (_target == null)
+            if (_firstRun)
             {
                 _target = PathList[StepsTaken + 1];
                 ResetTickConditions();

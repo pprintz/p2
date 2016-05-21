@@ -53,7 +53,7 @@ namespace Evacuation_Master_3000
                     throw new PersonException(); // Person can't evacuate
                 }
                 BuildingBlock destination = FindNextPathTarget(person);
-                pathList.AddRange(GetPathFromSourceToDestinationAStar(person, destination));
+                pathList.AddRange(GetPathUsingAStar(person, destination));
                 if (destination.Type == Tile.Types.Stair)
                 {
                     if (destination.BuildingBlockNeighbours.Count(n => n.Priority < destination.Priority) != 0)
@@ -67,7 +67,7 @@ namespace Evacuation_Master_3000
                     person.Position = destination;
                     person.CurrentRoom = destination.Room;
                     destination = FindNextPathTarget(person);
-                    pathList.AddRange(GetPathFromSourceToDestinationAStar(person, destination));
+                    pathList.AddRange(GetPathUsingAStar(person, destination));
                 }
                 if (destination.Type == Tile.Types.Exit)
                 {
@@ -89,7 +89,7 @@ namespace Evacuation_Master_3000
             return pathList.Distinct();
         }
 
-        private IEnumerable<Tile> GetPathFromSourceToDestinationAStar(IEvacuateable person, BuildingBlock destination)
+        private IEnumerable<Tile> GetPathUsingAStar(IEvacuateable person, BuildingBlock destination)
         {
             bool firstRun = true;
             SortedSet<BuildingBlock> priorityQueue = new SortedSet<BuildingBlock>(Comparer<BuildingBlock>.Default);
@@ -115,13 +115,13 @@ namespace Evacuation_Master_3000
 
             while (!Equals(currentPosition, destination))
             {
-                foreach (BuildingBlock point in currentPosition.BuildingBlockNeighbours)
+                foreach (BuildingBlock buildingBlock in currentPosition.BuildingBlockNeighbours)
                 {
-                    if (point.IsChecked == false)
+                    if (buildingBlock.IsChecked == false)
                     {
-                        if (!closedSet.ContainsKey(ImportExportSettings.Coordinate(point.X, point.Y, point.Z)))
+                        if (!closedSet.ContainsKey(ImportExportSettings.Coordinate(buildingBlock.X, buildingBlock.Y, buildingBlock.Z)))
                         {
-                            priorityQueue.Add(point);
+                            priorityQueue.Add(buildingBlock);
                         }
                     }
                 }
@@ -131,9 +131,9 @@ namespace Evacuation_Master_3000
                     if (closedSet.ContainsKey(ImportExportSettings.Coordinate(currentPosition.X, currentPosition.Y, currentPosition.Z)) == false)
                         closedSet.Add(ImportExportSettings.Coordinate(currentPosition.X, currentPosition.Y, currentPosition.Z), currentPosition);
 
-                    foreach (BuildingBlock point in unvisitedVertices)
+                    foreach (BuildingBlock buildingBlock in unvisitedVertices)
                     {
-                        point.IsChecked = false;
+                        buildingBlock.IsChecked = false;
                     }
                     continue;
                 }

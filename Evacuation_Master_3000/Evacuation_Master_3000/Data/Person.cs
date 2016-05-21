@@ -74,7 +74,10 @@ namespace Evacuation_Master_3000
             }
 
             PersonInteractionStats = new DataSimulationStatistics();
-            MovementSpeed = movementSpeed < 5 ? 5 + Rand.NextDouble() * 10 : movementSpeed; // Less than 5 means that it was not created.
+            MovementSpeed = movementSpeed < 3 ? 3 + Rand.NextDouble() * 5 : movementSpeed; // Less than 5 means that it was not created.
+            MovementSpeed = 3 + Rand.NextDouble()*5;
+            Console.WriteLine(MovementSpeed);
+            // 3 - 8 kmt
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;
             if (position.Priority == Int16.MaxValue)

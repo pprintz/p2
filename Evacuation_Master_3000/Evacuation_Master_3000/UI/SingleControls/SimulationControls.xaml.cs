@@ -87,7 +87,6 @@ namespace Evacuation_Master_3000
                 });
                 thread.SetApartmentState(ApartmentState.STA);
                 thread.Start();
-
                 UserInterface.HasSimulationEnded = false;
                 _parentWindow.ControlPanelControl.UserControlTabPanel.SelectedIndex = 1;
                 _parentWindow.TheUserInterface.SimulationStart(

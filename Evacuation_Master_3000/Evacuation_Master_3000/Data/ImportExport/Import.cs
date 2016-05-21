@@ -100,8 +100,10 @@ namespace Evacuation_Master_3000 {
         {
             string value = input;
             var result = TypeDescriptor.GetConverter(typeof(T));
-            if (typeof(T) == typeof(double) && value.Contains('.'))
-                value = input.Replace('.', ',');
+            if (typeof(T) == typeof(double)) {
+                value = input.Replace(",", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                value = input.Replace(".", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+            }
             return (T)result.ConvertFrom(value);
         }
 

@@ -103,7 +103,7 @@ namespace Evacuation_Master_3000
             _ticks++;
             _timeElapsedField = Math.Round((Math.Abs(_ticks - _totalTicksBeforeChange)) / SimulationSpeed.Value, 2);
             _totalTimeElapsedField = _timeElapsedBeforeChange + _timeElapsedField;
-            TimeElapsedInDateTimeFormat.Text = _totalTimeElapsedField + "Seconds";
+            TimeElapsedInDateTimeFormat.Text = _totalTimeElapsedField + " Seconds";
             TicksElapsed.Text = _ticks + " Ticks";
             _oldSimSpeed = SimulationSpeed.Value;
         }
@@ -125,7 +125,7 @@ namespace Evacuation_Master_3000
                     CurrentNumberOfEvacuatedPersons.Text = _evacuatedPeopleList.Count + "";
                     double percentageEvacuated = ((double)_evacuatedPeopleList.Count) / peopleCount * 100;
                     PersonsEvacuatedProgressBarText.Text = Math.Round(percentageEvacuated, 2) + "%";
-                    person.PersonInteractionStats.TimeWhenEvacuated = Math.Round((double)_ticks / SimulationSpeed.Value, 2);
+                    person.PersonInteractionStats.TimeWhenEvacuated = _totalTimeElapsedField;
                 }
                 if (peopleCount == _evacuatedPeopleList.Count)
                 {

@@ -58,8 +58,8 @@ namespace Evacuation_Master_3000
                 HeaderComboBox.Items.Add(comboBox);
             }
 
-            WidthText.Text = TheFloorPlan.Width.ToString();
-            HeightText.Text = TheFloorPlan.Height.ToString();
+            WidthText.Text = TheFloorPlan.Width/2 + "m";
+            HeightText.Text = TheFloorPlan.Height/2 + "m";
             FloorsText.Text = TheFloorPlan.FloorAmount.ToString();
 
             FileInformationGroup.Visibility = Visibility.Visible;

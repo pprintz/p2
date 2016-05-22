@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P2TestEnvironment", "P2TestEnvironment\P2TestEnvironment.csproj", "{ECD03F6D-2BC8-40E6-8B68-51D1C88981B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evacuation_Master_3000", "..\..\..\Projekter\p2\Evacuation_Master_3000\Evacuation_Master_3000\Evacuation_Master_3000.csproj", "{773904C3-60C2-4001-B032-165A9A96CA9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evacuation_Master_3000", "..\Evacuation_Master_3000\Evacuation_Master_3000\Evacuation_Master_3000.csproj", "{773904C3-60C2-4001-B032-165A9A96CA9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

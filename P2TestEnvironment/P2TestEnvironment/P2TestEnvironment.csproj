@@ -55,7 +55,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Projekter\p2\Evacuation_Master_3000\Evacuation_Master_3000\Evacuation_Master_3000.csproj">
+    <ProjectReference Include="..\..\Evacuation_Master_3000\Evacuation_Master_3000\Evacuation_Master_3000.csproj">
       <Project>{773904c3-60c2-4001-b032-165a9a96ca9e}</Project>
       <Name>Evacuation_Master_3000</Name>
     </ProjectReference>

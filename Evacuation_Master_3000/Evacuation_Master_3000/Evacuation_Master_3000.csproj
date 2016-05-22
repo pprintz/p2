@@ -93,7 +93,6 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Data\DataSimulationStatistics\MovementStep.cs" />
     <Compile Include="Data\ImportExport\FloorInformation.cs" />
-    <Compile Include="GlobalExceptionHandler.cs" />
     <Compile Include="GlobalFiles\GlobalVariables.cs" />
     <Compile Include="ImageScan\CP_ImageScanPicture.xaml.cs">
       <DependentUpon>CP_ImageScanPicture.xaml</DependentUpon>

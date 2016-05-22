@@ -76,7 +76,7 @@ namespace Evacuation_Master_3000
             PersonInteractionStats = new DataSimulationStatistics();
             // 3 - 8 kmt
             MovementSpeed = movementSpeed < 3 ? 3 + Rand.NextDouble() * 5 : movementSpeed; // Less than 5 means that it was not created.
-            MovementSpeed = 3 + Rand.NextDouble()*5;
+            MovementSpeed = 3 + Rand.NextDouble() * 5;
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;
             if (position.Priority == Int16.MaxValue)
@@ -86,15 +86,15 @@ namespace Evacuation_Master_3000
             OriginalPosition = position;
         }
 
-        public bool UpdateTickCondition  = false;
+        public bool UpdateTickCondition = false;
 
         public void ConditionalMove()
         { // Person should be removed from event thingy when evacuated
             if (UpdateTickCondition)
             {
-                double percentageStepDone = AmountOfTicksSpent/(double)_ticksToWaitBeforeNextMove;
+                double percentageStepDone = AmountOfTicksSpent / (double)_ticksToWaitBeforeNextMove;
                 ResetTickConditions();
-                AmountOfTicksSpent = (int)(_ticksToWaitBeforeNextMove*percentageStepDone);
+                AmountOfTicksSpent = (int)(_ticksToWaitBeforeNextMove * percentageStepDone);
                 UpdateTickCondition = false;
             }
             AmountOfTicksSpent++;
@@ -116,13 +116,9 @@ namespace Evacuation_Master_3000
         }
         private void Move()
         {
-            if ((Position as BuildingBlock).Priority == Int16.MaxValue)
-            {
-                throw new PersonException($"Could not get a path or extended path for person {ID}.");
-            }
-                // Clear old Tile and increment heatMapCounter
-                //Position.Type = Tile.Types.Free;                //<--- Skal være default type for den individuelle buildingBlock
-                ((BuildingBlock)Position).HeatmapCounter++;
+            // Clear old Tile and increment heatMapCounter
+            //Position.Type = Tile.Types.Free;                //<--- Skal være default type for den individuelle buildingBlock
+            ((BuildingBlock)Position).HeatmapCounter++;
             if (StepsTaken + 1 < PathList.Count)
             {
                 _target = PathList[StepsTaken + 1];
@@ -151,7 +147,7 @@ namespace Evacuation_Master_3000
                 ((BuildingBlock)Position).HeatmapCounter++;
                 PersonInteractionStats.CountTicksBeingBlocked(_ticksSpentWaiting);
                 _roundsWaitedBecauseOfBlock++;
-                if (_roundsWaitedBecauseOfBlock >= 3 && _target.Type == Tile.Types.Person)
+                if (_roundsWaitedBecauseOfBlock >= 5 && _target.Type == Tile.Types.Person)
                 {
                     OnExtendedPathRequest?.Invoke(this);
                     _target = PathList[StepsTaken + 1];

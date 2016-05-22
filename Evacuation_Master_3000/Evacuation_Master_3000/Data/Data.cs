@@ -129,7 +129,7 @@ namespace Evacuation_Master_3000
         {
             BuildingBlock target = person.PathList[person.StepsTaken + 1];
             BuildingBlock pos = person.PathList[person.StepsTaken];
-            if (AllPeople.Values.Count(p => p.PathList[p.StepsTaken] == target && p.PathList.Count > p.StepsTaken + 1 && p.PathList[p.StepsTaken + 1] == pos) == 1)
+            if (AllPeople.Values.Count(p => p.PathList.Count > p.StepsTaken + 1 && p.PathList[p.StepsTaken] == target  && p.PathList[p.StepsTaken + 1] == pos) == 1)
             {
                 Person personBlocking = AllPeople.Values.First(p => p.PathList[p.StepsTaken] == target);
                 if (personBlocking.PathList.Count > 0 &&

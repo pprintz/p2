@@ -29,6 +29,7 @@ namespace Evacuation_Master_3000
         public static event FunctionDone OnCalculatePriorityDone;
         public void CreateFloorPlan(int width, int height, int floorAmount, string description, string[] headers)
         {
+            //HVIS DU ÆNDRER DENNE FUNKTION, SIG DET TIL JEPPE
             if (_floorPlanAlreadyExist)
                 return;
 

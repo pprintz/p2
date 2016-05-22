@@ -19,6 +19,7 @@ namespace Evacuation_Master_3000
             HeaderComboBox.SelectionChanged += OnSelectionChanged;
             HeaderTextBox.TextChanged += OnHeaderTextChanged;
             ParentWindow.TheUserInterface.OnBuildingPlanSuccessfullLoaded += OnSuccessfullBuildingLoadUp;
+            HeaderComboBox.SelectedIndex = 0;
             FileInformationGroup.Visibility = Visibility.Collapsed;
             DimensionsGroup.Visibility = Visibility.Collapsed;
             FileNamePanel.Visibility = Visibility.Collapsed;

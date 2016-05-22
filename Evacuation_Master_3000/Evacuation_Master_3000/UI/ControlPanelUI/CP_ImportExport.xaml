@@ -25,10 +25,6 @@
                     <GroupItem>
                         <StackPanel>
                             <ComboBox Name="HeaderComboBox" Text="Header">
-                                <!--<ComboBoxItem Content="Floor 1" Name="nummer1" />
-                                <ComboBoxItem Content="Floor 2" Name="number2" />
-                                <ComboBoxItem Content="Floor 3" Name="numero3" />-->
-                                <!-- Skal dynamisk indsættes ved import/new -->
                             </ComboBox>
                             <DockPanel>
                                 <TextBlock Name="HeaderDescription" Text="Header: "/>

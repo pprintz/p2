@@ -18,7 +18,7 @@ namespace Evacuation_Master_3000
 
         public IFloorPlan TheFloorPlan { get; }
         private Dictionary<int, Person> _allPeople;
-        private Dictionary<int, Person> AllPeople => _allPeople;
+        internal Dictionary<int, Person> AllPeople => _allPeople;
         public static event FunctionDone OnPathCalculationDone;
         public static event Tick OnTick;
 

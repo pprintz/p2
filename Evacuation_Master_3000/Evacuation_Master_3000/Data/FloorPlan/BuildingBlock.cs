@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Windows.Shapes;
 
+[assembly: InternalsVisibleTo("P2TestEnvironment")]
 namespace Evacuation_Master_3000
 {
     public class BuildingBlock : Tile, IComparable<BuildingBlock>
     {
         public BuildingBlock(int x, int y, int z = 0, Types type = Types.Free) : base(x, y, z, type) { }
         public bool IsChecked { get; set; }
-        public double LengthToDestination { private get; set; }
+        public double LengthToDestination { internal get; set; }
         public int Room { get; set; }
         public int Priority { get; set; } = int.MaxValue;
         public double LengthFromSource { get; set; } = double.MaxValue;

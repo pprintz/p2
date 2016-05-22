@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using static Evacuation_Master_3000.ImportExportSettings;
+
+[assembly: InternalsVisibleTo("P2TestEnvironment")]
 namespace Evacuation_Master_3000
 {
     internal class FloorPlan : IFloorPlan
@@ -19,7 +22,7 @@ namespace Evacuation_Master_3000
         public int FloorAmount { get; private set; }
         public string Description { get; private set; }
         public Dictionary<string, Tile> Tiles { get; private set; }
-        private Dictionary<string, BuildingBlock> BuildingBlocks { get; set; }
+        internal Dictionary<string, BuildingBlock> BuildingBlocks { get; set; }
         public string[] Headers { get; set; }
         private bool _floorPlanAlreadyExist;
         private static int _globalRoomCounter;

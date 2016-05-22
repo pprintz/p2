@@ -37,7 +37,7 @@ namespace P2TestEnvironment
         /// <summary>
         /// Tests wether or not the tiles has the correct neighbours
         /// </summary>
-        [Test]
+        //[Test]
         public void FloorPlanTileNeighbourTest()
         {
             FloorPlan floorPlan = new FloorPlan();

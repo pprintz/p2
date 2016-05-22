@@ -16,7 +16,7 @@ namespace P2TestEnvironment
         {
             BuildingBlock block = new BuildingBlock(0,0);
             Person person = new Person(block);
-            Assert.AreEqual(0,person.ID);
+            Assert.AreEqual(1,person.ID);
             Assert.AreEqual(false,person.Evacuated);
             Assert.AreEqual(new List<BuildingBlock>(), person.PathList);
             Tile tile = person.Position;

@@ -111,14 +111,6 @@ namespace P2TestEnvironment
             Assert.AreNotEqual(eDistance, dDistance);
         }
         [Test]
-        public void DiagonalDistanceFromIntMaxToIntMIn()
-        {
-            BuildingBlock pointOne = new BuildingBlock(Int32.MaxValue, Int32.MaxValue);
-            BuildingBlock pointTwo = new BuildingBlock(Int32.MinValue+1, Int32.MinValue+1);
-            var distance = pointOne.DiagonalDistanceTo(pointTwo);
-            Assert.AreEqual(((Int32.MaxValue * Math.Sqrt(2)) + (Int32.MinValue+1 * Math.Sqrt(2))), distance);
-        }
-        [Test]
         public void DistanceTo()
         {
             BuildingBlock pointOne = new BuildingBlock(1, 1, 1);

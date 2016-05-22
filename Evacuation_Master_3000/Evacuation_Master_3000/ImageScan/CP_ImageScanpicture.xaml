@@ -5,5 +5,5 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Evacuation_Master_3000.ImageScan"
              mc:Ignorable="d" d:DesignWidth="497.531" d:DesignHeight="658.117" >
-    <Grid Name="BuildingBlockContainer" Background="Gray" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+    <UniformGrid Name="BuildingBlockContainer" Background="Gray" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
 </UserControl>

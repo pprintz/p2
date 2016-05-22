@@ -76,8 +76,7 @@ namespace Evacuation_Master_3000.ImageScan
                             Height = 10,
                             Width = 10,
                             Tag = coordinates,
-                            Fill = DecideColor(_pixelsCurrentlyActive[y, x]),
-                            Margin = new System.Windows.Thickness(0, 0, x * 10 * 2 + x, y * 10 * 2 + y)
+                            Fill = DecideColor(_pixelsCurrentlyActive[y, x])
                         };
                         BuildingBlockContainer.Children.Add(rect);
                     }

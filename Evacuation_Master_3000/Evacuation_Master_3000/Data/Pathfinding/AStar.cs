@@ -14,30 +14,7 @@ namespace Evacuation_Master_3000
 
         private List<BuildingBlock> ListOfBuildingBlocks { get; set; }
 
-        private BuildingBlock FindNextPathTarget(IEvacuateable person)
-        {
-            int targetPriority;
 
-            BuildingBlock currentPosition = person.Position as BuildingBlock;
-            if (currentPosition == null) return null;
-
-            if (currentPosition.Priority % 2 == 0)
-            {
-                targetPriority = currentPosition.Priority - 2;
-            }
-            else
-            {
-                targetPriority = currentPosition.Priority - 1;
-            }
-            if (person.Position.Type == Tile.Types.Stair && targetPriority >= 1000)
-            {
-                targetPriority += 2;
-            }
-            return ListOfBuildingBlocks.Where(
-                 b =>
-                    b.Priority == targetPriority && b.Z == person.Position.Z &&
-                    b.BuildingBlockNeighbours.Any(n => n.Room == person.CurrentRoom)).OrderBy(b => b.DistanceTo(person.Position)).First();
-        }
         public IEnumerable<Tile> CalculatePath(IEvacuateable person)
         {
             /* Exception needed for when not path is given, and when a person can't find a route. */
@@ -87,6 +64,30 @@ namespace Evacuation_Master_3000
             }
             person.Position = pathList.First();
             return pathList.Distinct();
+        }
+        private BuildingBlock FindNextPathTarget(IEvacuateable person)
+        {
+            int targetPriority;
+
+            BuildingBlock currentPosition = person.Position as BuildingBlock;
+            if (currentPosition == null) return null;
+
+            if (currentPosition.Priority % 2 == 0)
+            {
+                targetPriority = currentPosition.Priority - 2;
+            }
+            else
+            {
+                targetPriority = currentPosition.Priority - 1;
+            }
+            if (person.Position.Type == Tile.Types.Stair && targetPriority >= 1000)
+            {
+                targetPriority += 2;
+            }
+            return ListOfBuildingBlocks.Where(
+                 b =>
+                    b.Priority == targetPriority && b.Z == person.Position.Z &&
+                    b.BuildingBlockNeighbours.Any(n => n.Room == person.CurrentRoom)).OrderBy(b => b.DistanceTo(person.Position)).First();
         }
 
         private IEnumerable<Tile> GetPathUsingAStar(IEvacuateable person, BuildingBlock destination)

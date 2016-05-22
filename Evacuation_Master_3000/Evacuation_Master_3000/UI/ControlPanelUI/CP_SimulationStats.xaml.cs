@@ -124,8 +124,8 @@ namespace Evacuation_Master_3000
                 if (!_evacuatedPeopleList.Contains(person))
                 {
                     _evacuatedPeopleList.Add(person);
-                    int multiplier = (int)Math.Round(255f / peopleCount);
-                    int count = multiplier * _evacuatedPeopleList.Count;
+                    double multiplier = 255f / peopleCount;
+                    double count = multiplier * _evacuatedPeopleList.Count;
                     PersonsEvacuatedProgressBarFill.Fill = BarColor(count);
                     PersonsEvacuatedProgressBarFill.Width = _fillWidthPerPerson * _evacuatedPeopleList.Count;
                     CurrentNumberOfEvacuatedPersons.Text = _evacuatedPeopleList.Count + "";
@@ -218,7 +218,7 @@ namespace Evacuation_Master_3000
             }
         }
 
-        private static SolidColorBrush BarColor(int count)
+        private static SolidColorBrush BarColor(double count)
         {
             if (count > 255)
             {

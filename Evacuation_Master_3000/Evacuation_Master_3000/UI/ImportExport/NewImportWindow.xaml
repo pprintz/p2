@@ -86,7 +86,7 @@
                         </Style>
                     </StackPanel.Resources>
                     <Button Name="BrowseButton" Width="175" Height="40" Content="Browse Buildings"/>
-                    <Button Name="BrowsePngFiles" Width="175" Height="40" Content="Browse Images" />
+                    <Button Name="BrowsePngFiles" Width="175" Height="40" Content="Browse Images (Beta)" />
                 </StackPanel>
                 
             </TabItem>

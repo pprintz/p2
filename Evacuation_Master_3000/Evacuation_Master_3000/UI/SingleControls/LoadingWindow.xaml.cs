@@ -48,7 +48,7 @@ namespace Evacuation_Master_3000.UI.SingleControls
                 ImageBehavior.SetAnimatedSource(LoadingGif, image);
                 Show();
                 this.Focus();
-                if (!UserInterface.BuildingHasBeenChanged)
+                if (UserInterface.BuildingHasBeenChanged)
                 {
                     LoadingHeaderText.Text = "Calculating path for new people";
                 }

@@ -13,10 +13,11 @@ namespace Evacuation_Master_3000.ImageScan
             double imageHeight = theImage.Height;
             if (imageWidth > maxWidth || theImage.Height > maxHeight)
             {
-
+                // Finds out whether the width or height is more off. 
                 double scalingFactorWidth = maxWidth / imageWidth;
                 double scalingFactorHeight = maxHeight / imageHeight;
                 double scalingFactor = scalingFactorWidth < scalingFactorHeight ? scalingFactorWidth : scalingFactorHeight;
+                // Then scales everything down based on the largest scalingFactor.
                 return ResizeImage(theImage, (int)(imageWidth * scalingFactor), (int)(imageHeight * scalingFactor));
             }
             // Simply returns the same image if resizing wasn't necessary.
@@ -25,6 +26,8 @@ namespace Evacuation_Master_3000.ImageScan
 
         private static Bitmap ResizeImage(Image image, int width, int height)
         {
+            // Borrowed from http://stackoverflow.com/questions/1922040/resize-an-image-c-sharp
+            // Ensures a high quality resizing.
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 

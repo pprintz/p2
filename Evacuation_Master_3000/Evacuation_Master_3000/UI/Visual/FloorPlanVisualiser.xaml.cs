@@ -173,20 +173,24 @@ namespace Evacuation_Master_3000
 
         private void DrawLine(BuildingBlock block, Tile.Types targetType)
         {
-            int deltaX = block.X - previousBlock.X;
-            int deltaY = block.Y - previousBlock.Y;
-            if (deltaX == 0 && deltaY == 0)
+            if (block.X == previousBlock.X && block.Y == previousBlock.Y)
             {
                 // The same block has been pressed twice.
                 return;
             }
+            int deltaX = block.X - previousBlock.X; 
+            int deltaY = block.Y - previousBlock.Y;
+
+            // deltaTilt is the tilt of the line per pixel
             double deltaTilt = Math.Min(Math.Abs((double)deltaY / (double)deltaX), Math.Abs((double)deltaY)) * Math.Sign((double)deltaY / (double)deltaX);
             double tilt = 0;
 
             int i = 0;
+            // Iterates through each line in X
             do
             {
                 int j = 0;
+                // Iterates though each pixel in the current X line, until j is bigger or equal to deltaTilt
                 do
                 {
                     int x = i + previousBlock.X;

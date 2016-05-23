@@ -47,7 +47,15 @@ namespace Evacuation_Master_3000.UI.SingleControls
                 image.EndInit();
                 ImageBehavior.SetAnimatedSource(LoadingGif, image);
                 Show();
-                LoadingHeaderText.Text = "Resetting floor..";
+                this.Focus();
+                if (!UserInterface.BuildingHasBeenChanged)
+                {
+                    LoadingHeaderText.Text = "Calculating path for new people";
+                }
+                else
+                {
+                    LoadingHeaderText.Text = "Resetting floor..";
+                }
             });
         }
     }

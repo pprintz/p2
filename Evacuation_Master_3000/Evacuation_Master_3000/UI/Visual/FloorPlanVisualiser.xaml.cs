@@ -24,7 +24,9 @@ namespace Evacuation_Master_3000
             _mainWindow = mainWindow;
             AllRectangles = new Dictionary<string, Rectangle>();
         }
-
+        /// <summary>
+        /// Resets the visualisation of the building, according to each tile's original type.
+        /// </summary>
         private void UpdateVisualOnReset()
         {
             foreach (BuildingBlock buildingBlock in LocalFloorPlan.Tiles.Values.Where(t => t.OriginalType != t.Type).Cast<BuildingBlock>())
@@ -207,6 +209,10 @@ namespace Evacuation_Master_3000
 
         public static bool FirstTime = true;
 
+        /// <summary>
+        /// Updates the visualisation of the building according to a persons step in the simulation.
+        /// </summary>
+        /// <param name="person"></param>
         private void UpdateVisualsOnEvacuatableMoved(Person person)
         {
             if (FirstTime)

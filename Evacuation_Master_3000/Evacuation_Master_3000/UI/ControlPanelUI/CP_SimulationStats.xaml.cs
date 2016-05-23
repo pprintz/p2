@@ -202,7 +202,7 @@ namespace Evacuation_Master_3000
                             "_____________________________________________________________________________________________________________");
                         int movementStepCounter = 0;
                         sb.AppendLine(
-                            $"Person: {person1.ID}, Position{ImportExportSettings.Coordinate(person.OriginalPosition)}{Environment.NewLine}" +
+                            $"Person: {person1.ID}, Position{Settings.Coordinate(person.OriginalPosition)}{Environment.NewLine}" +
                             $"Steps taken: {person1.StepsTaken}{Environment.NewLine}" +
                             $"Distance traveled in meters: {person1.PersonInteractionStats.DistanceTraveled} m{Environment.NewLine}" +
                             $"Movement speed: {Math.Round(person1.MovementSpeedInMetersPerSecond, 2)} m/s{Environment.NewLine}" +
@@ -213,8 +213,8 @@ namespace Evacuation_Master_3000
                         {
                             movementStepCounter++;
                             sb.AppendLine(
-                                $"Step:{movementStepCounter}   From: {ImportExportSettings.Coordinate(movementStep.SourceTile)}\n" +
-                                $" - To: {ImportExportSettings.Coordinate(movementStep.DestinationTile)}\n" +
+                                $"Step:{movementStepCounter}   From: {Settings.Coordinate(movementStep.SourceTile)}\n" +
+                                $" - To: {Settings.Coordinate(movementStep.DestinationTile)}\n" +
                                 $"      Distance in meters: {movementStep.DistanceInMeters} m{Environment.NewLine}" +
                                 $"          Time at arrival: {Math.Round((double)movementStep.TicksAtArrival / SimulationSpeed.Value, 2)} seconds{Environment.NewLine}");
                         }

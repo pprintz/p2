@@ -13,7 +13,7 @@ namespace Evacuation_Master_3000.UI.ControlPanelUI
         public CP_ImageScanControls(ImageScanWindow parentWindow, string filepath)
         {
             InitializeComponent();
-            FilePathTextbox.Text = System.IO.Path.GetFileNameWithoutExtension(filepath) + ImportExportSettings.Extension;
+            FilePathTextbox.Text = System.IO.Path.GetFileNameWithoutExtension(filepath) + Settings.Extension;
             ParentWindow = parentWindow;
             //ContrastSlider.MouseLeftButtonUp += OnChangeInVisualsRequested;
         }

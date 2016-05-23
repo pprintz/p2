@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Evacuation_Master_3000.ImageScan;
-using static Evacuation_Master_3000.ImportExportSettings;
+using static Evacuation_Master_3000.Settings;
 using System.Windows.Controls;
 
 namespace Evacuation_Master_3000
@@ -61,9 +61,6 @@ namespace Evacuation_Master_3000
             //Override the local floorplan to correspond to the new floorplan
             LocalFloorPlan = floorPlan;
 
-            /* Ideen er vel, at man skal kalde ImplementFloorPlan() for hver ændring, d.v.s. ifm alle simuleringer osv. 
-            I så fald skal der tages højde for, at der ikke genereres en ny visualRepresentation hver gang
-            - det er nemmere at iterate gennem alle ændringer og ændre elevation types tilsvarende */
             if (_floorContainer == null)
                 CreateVisualRepresentation();
 
@@ -103,7 +100,7 @@ namespace Evacuation_Master_3000
                             ColorizeBuildingBlock(figure, LocalFloorPlan.Tiles[Coordinate(x, y, z)].Type);
 
                         BuildingBlock current = (LocalFloorPlan.Tiles[Coordinate(x, y, z)] as BuildingBlock);
-                        current.Figure = figure;                                                //<<-------------------- Lige nu bliver current.figure ikke brugt til de to nedenstående assignments - er det meningen/hensigten?
+                        current.Figure = figure;
                         figure.ToolTip = current.ToString();
                         figure.MouseLeftButtonDown += OnBuildingBlockClick;
 
@@ -122,7 +119,7 @@ namespace Evacuation_Master_3000
         {
             /* Setup and insert floor switcher controls */
             FloorSwitcherControls = new SwitchBetweenFloorsControl();
-            FloorSwitcherControls.OnChangeVisualFloorChange += ChangeFloor; /* Callback når der er trykket op/ned mellem floors */
+            FloorSwitcherControls.OnChangeVisualFloorChange += ChangeFloor; /* Callback when a floor-button has been pressed */
             FloorSwitcherControls.HorizontalAlignment = HorizontalAlignment.Right;
             FloorSwitcherControls.VerticalAlignment = VerticalAlignment.Bottom;
             FloorSwitcherControls.Margin = new Thickness(0, 0, 25, 25);
@@ -135,7 +132,6 @@ namespace Evacuation_Master_3000
         {
             VisualContainer.Children.Clear();
             VisualContainer.Children.Add(_floorContainer[currentFloor]);
-            /* Logik der sørger for at det er den korrekte floor der vises */
         }
 
         public delegate Tile.Types BuildingBlockTypeFetch();
@@ -145,7 +141,7 @@ namespace Evacuation_Master_3000
         private void OnBuildingBlockClick(object sender, MouseButtonEventArgs e)
         {
             Tile.Types type = (Tile.Types)OnBuildingBlockTypeFetch?.Invoke();       //Get the type of the currently radio'ed FloorPlanControl-type
-            Rectangle senderRectangle = sender as Rectangle;                    //Get a reference to the sender rectangle
+            Rectangle senderRectangle = sender as Rectangle;                        //Get a reference to the sender rectangle
             if (senderRectangle == null) throw new GeneralInternalException();
             BuildingBlock senderBlock = (BuildingBlock)LocalFloorPlan.Tiles[senderRectangle.Tag.ToString()];
 

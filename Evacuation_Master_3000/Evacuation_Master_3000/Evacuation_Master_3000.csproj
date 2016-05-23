@@ -105,7 +105,6 @@
     <Compile Include="ImageScan\CP_ImageScanControls.xaml.cs">
       <DependentUpon>CP_ImageScanControls.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Exceptions\ImportExportException.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -207,7 +206,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\ImportExport\Export.cs" />
-    <Compile Include="GlobalFiles\ImportExportSettings.cs" />
     <Compile Include="GlobalFiles\IntStringConverter.cs" />
     <Page Include="UI\ControlPanelUI\ControlPanel.xaml">
       <SubType>Designer</SubType>

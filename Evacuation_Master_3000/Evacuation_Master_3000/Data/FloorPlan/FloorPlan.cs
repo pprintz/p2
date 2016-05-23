@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using static Evacuation_Master_3000.ImportExportSettings;
+using static Evacuation_Master_3000.Settings;
 
 [assembly: InternalsVisibleTo("P2TestEnvironment")]
 namespace Evacuation_Master_3000
@@ -32,7 +32,6 @@ namespace Evacuation_Master_3000
         public static event FunctionDone OnCalculatePriorityDone;
         public void CreateFloorPlan(int width, int height, int floorAmount, string description, string[] headers)
         {
-            //HVIS DU ÆNDRER DENNE FUNKTION, SIG DET TIL JEPPE
             if (_floorPlanAlreadyExist)
                 return;
 

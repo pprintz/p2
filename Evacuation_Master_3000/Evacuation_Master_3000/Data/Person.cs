@@ -6,7 +6,6 @@ namespace Evacuation_Master_3000
 {
     public class Person : IEvacuateable
     {
-        // Remember old path unless changes has been made <-- needs to be implemented
         private static int _idCounter = 1;
         private static List<int> IdsInUse { get; } = new List<int>();
         public readonly List<BuildingBlock> PathList = new List<BuildingBlock>();
@@ -119,7 +118,6 @@ namespace Evacuation_Master_3000
         private void Move()
         {
             // Clear old Tile and increment heatMapCounter
-            //Position.Type = Tile.Types.Free;                //<--- Skal være default type for den individuelle buildingBlock
             ((BuildingBlock)Position).HeatmapCounter++;
             if (StepsTaken + 1 < PathList.Count)
             {

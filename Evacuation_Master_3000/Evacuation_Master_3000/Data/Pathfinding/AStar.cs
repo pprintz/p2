@@ -122,7 +122,7 @@ namespace Evacuation_Master_3000
                 {
                     if (buildingBlock.IsChecked == false)
                     {
-                        if (!closedSet.ContainsKey(ImportExportSettings.Coordinate(buildingBlock.X, buildingBlock.Y, buildingBlock.Z)))
+                        if (!closedSet.ContainsKey(Settings.Coordinate(buildingBlock.X, buildingBlock.Y, buildingBlock.Z)))
                         {
                             priorityQueue.Add(buildingBlock);
                         }
@@ -131,8 +131,8 @@ namespace Evacuation_Master_3000
                 CheckNeighbors(currentPosition, priorityQueue);
                 if (priorityQueue.Count == 0)
                 {
-                    if (closedSet.ContainsKey(ImportExportSettings.Coordinate(currentPosition.X, currentPosition.Y, currentPosition.Z)) == false)
-                        closedSet.Add(ImportExportSettings.Coordinate(currentPosition.X, currentPosition.Y, currentPosition.Z), currentPosition);
+                    if (closedSet.ContainsKey(Settings.Coordinate(currentPosition.X, currentPosition.Y, currentPosition.Z)) == false)
+                        closedSet.Add(Settings.Coordinate(currentPosition.X, currentPosition.Y, currentPosition.Z), currentPosition);
 
                     foreach (BuildingBlock buildingBlock in unvisitedVertices)
                     {

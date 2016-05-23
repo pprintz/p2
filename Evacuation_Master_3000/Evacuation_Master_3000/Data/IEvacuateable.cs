@@ -4,9 +4,9 @@
     {
         int ID { get; }
         void ConditionalMove();
-        Tile Position { get; set; } // Should be private set
-        Tile OriginalPosition { get; set; } // Should be private set
-        bool Evacuated { get; set; } // Should be private set
+        Tile Position { get; set; }
+        Tile OriginalPosition { get; set; }
+        bool Evacuated { get; set; }
         int CurrentRoom { get; set; }
         int AmountOfTicksSpent { get; set; }
         }

@@ -12,9 +12,9 @@ namespace Evacuation_Master_3000 {
             InitializeComponent();
 
             ParentWindow = parentWindow;
-            Extension = ImportExportSettings.Extension;
+            Extension = Settings.Extension;
             FileName = string.Empty;
-            Path = ImportExportSettings.GridDirectoryPath;
+            Path = Settings.GridDirectoryPath;
             WindowBaseHeight = Height;
             BrowseButton.Click += BrowseDirectory;
             ExportButton.Click += ExportBuilding;

@@ -3,7 +3,8 @@ using System.Windows.Input;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
-using static Evacuation_Master_3000.ImportExportSettings;
+using static Evacuation_Master_3000.Settings;
+
 using System.IO;
 
 namespace Evacuation_Master_3000 {

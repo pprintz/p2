@@ -1,7 +1,7 @@
 ﻿#region
-
+using System;
 using System.Windows.Input;
-
+using System.IO;
 #endregion
 
 namespace Evacuation_Master_3000
@@ -11,6 +11,24 @@ namespace Evacuation_Master_3000
         public static Key ZoomKey { get; } = Key.LeftCtrl;
         public static Key HorizontalScrollKey { get; } = Key.LeftShift;
         public static Key LineToolKey { get; } = Key.LeftAlt;
+
+        /* Building file extension */
+        public static string Extension => ".grid";
+
+        public static string GridDirectoryPath {
+            get {
+                string fullPath = AppDomain.CurrentDomain.BaseDirectory + @"Grids";
+                if (!Directory.Exists(fullPath))
+                    Directory.CreateDirectory(fullPath);
+                return fullPath;
+            }
+        }
+
+        /* Building plan default values */
+        public static int DefaultWidth => 50;
+        public static int DefaultHeight => 50;
+        public static int DefaultFloorAmount => 1;
+        public static string DefaultDescription => string.Empty;
 
         /* Internal properties and methods */
         private static string CoordinateKeyFormat => "({0}, {1}, {2})";

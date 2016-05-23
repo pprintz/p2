@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Evacuation_Master_3000.ImportExportSettings;
+using static Evacuation_Master_3000.Settings;
+
 namespace Evacuation_Master_3000
 {
     public class Tile

@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using static Evacuation_Master_3000.Settings;
 
 using System.IO;
+using System;
 
 namespace Evacuation_Master_3000 {
     /// <summary>
@@ -25,10 +26,10 @@ namespace Evacuation_Master_3000 {
             BuildingWidthTextBox.PreviewTextInput += NumberValidationTextBox;
             BuildingHeightTextBox.PreviewTextInput += NumberValidationTextBox;
             BuildingFloorAmountTextBox.PreviewTextInput += NumberValidationTextBox;
-
+            PropertyChanged += SetButtonActiveOrDeactive;
             BrowseButton.Click += BrowseFiles;
             BrowsePngFiles.Click += BrowseImages;
-            CreateNewButtun.Click += CreateNewBuilding;
+            CreateNewButton.Click += CreateNewBuilding;
             ResetToDefaultButton.Click += ResetFields;
             Closing += OnWindowClosing;
         }
@@ -53,8 +54,8 @@ namespace Evacuation_Master_3000 {
                 if (_buildingWidth > BuildingWidthAndHeightMax)
                 {
                     _buildingWidth = BuildingWidthAndHeightMax;
-                } else if (_buildingWidth <= 0)
-                    _buildingWidth = 1;
+                }
+
                 OnPropertyChanged("BuildingWidth");
             }
         }
@@ -68,8 +69,8 @@ namespace Evacuation_Master_3000 {
                 if (_buildingHeight > BuildingWidthAndHeightMax)
                 {
                     _buildingHeight = BuildingWidthAndHeightMax;
-                } else if (_buildingHeight <= 0)
-                    _buildingHeight = 1;
+                } 
+
                 OnPropertyChanged("BuildingHeight");
             }
         }
@@ -84,8 +85,8 @@ namespace Evacuation_Master_3000 {
                 _buildingFloorAmount = value;
                 if (_buildingFloorAmount > BuildingFloorMax) {
                     _buildingFloorAmount = BuildingFloorMax;
-                } else if (_buildingFloorAmount <= 0)
-                    _buildingFloorAmount = 1;
+                } 
+
                 OnPropertyChanged("BuildingFloorAmount");
             }
         }
@@ -99,6 +100,10 @@ namespace Evacuation_Master_3000 {
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) {
             Regex regex = new Regex("[^0-9]");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void SetButtonActiveOrDeactive(object sender, PropertyChangedEventArgs e) {
+            CreateNewButton.IsEnabled = BuildingFloorAmount <= 0 || BuildingHeight <= 0 || BuildingWidth <= 0 ? false : true;
         }
 
         private void BrowseFiles(object sender, RoutedEventArgs e) {

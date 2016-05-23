@@ -86,7 +86,7 @@ namespace Evacuation_Master_3000.ImageScan
             }
             else
             {
-                foreach (Rectangle rect in BuildingBlockContainer.Children)
+                foreach (System.Windows.Shapes.Rectangle rect in BuildingBlockContainer.Children)
                 {
                     if (rect is System.Windows.Shapes.Rectangle)
                     {

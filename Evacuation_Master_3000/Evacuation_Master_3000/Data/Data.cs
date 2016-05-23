@@ -26,20 +26,14 @@ namespace Evacuation_Master_3000
         {
             if (UserInterface.BuildingHasBeenChanged)
             {
-                TheFloorPlan.Initiate();
+                TheFloorPlan.Initiate();  //Assign priority, and calculates neighbours, if the building has been changed. 
                 foreach (Tile tile in floorPlan.Tiles.Values)
                 {
                     tile.OriginalType = tile.Type;
-                    if (tile.OriginalType == Tile.Types.Person)
-                    {
-                        Person current = new Person(tile as BuildingBlock);
-                        if (AllPeople.Values.All(p => !Equals(p.OriginalPosition, tile)))
-                        {
-                            AllPeople.Add(current.ID, current);
-                        }
-                    }
+                  
                 }
             }
+            //adds all the new persons to the simulation
             foreach (Tile value in floorPlan.Tiles.Values.Where(t => t.OriginalType == Tile.Types.Person))
             {
                 if (AllPeople.Values.All(p => !Equals(p.OriginalPosition, value)))
@@ -53,6 +47,7 @@ namespace Evacuation_Master_3000
 
         public Dictionary<int, Person> StartSimulation(bool heatmap, IPathfinding pathfindingAlgorithm, int simulationSpeed)                                           //<---- kan formentligt være void?
         {
+            //If the simulation scroller has been touched, the person gets another value in ticksToWait.
             foreach (Person person in AllPeople.Values.Where(p => p.SimulationSpeed != simulationSpeed))
             {
                 person.SimulationSpeed = simulationSpeed;
@@ -61,9 +56,10 @@ namespace Evacuation_Master_3000
             {
                 if (AllPeople != null)
                 {
-                    foreach (Person person in AllPeople.Values.Where(p => !p.NoPathAvailable))
+                    foreach (Person person in AllPeople.Values.Where(p => !p.NoPathAvailable)) // IF the building has been changed, calculate new routes.
                     {
                         person.PathList.Clear();
+                        //If its a new person, the person subscribes to the simulation events..
                         if (person.NewPersonInGrid)
                         {
                             AddPersonToSimulation(person, pathfindingAlgorithm, simulationSpeed);
@@ -87,11 +83,13 @@ namespace Evacuation_Master_3000
                 person.PathList.AddRange(
                              pathfindingAlgorithm.CalculatePath(person).Cast<BuildingBlock>().ToList());
             }
+            //Event to the loading bar, to update it.
             OnPathCalculationDone?.Invoke(this, null);
             StartTicks();
             return AllPeople;
         }
 
+        //Subscribes to the correct simulation events, when evacuated is set to false, it subscrives to OnPersonMoved event.
         private void AddPersonToSimulation(Person person, IPathfinding pathfindingAlgorithm, int simulationSpeed)
         {
             person.Evacuated = false;
@@ -103,6 +101,7 @@ namespace Evacuation_Master_3000
         {
             while (AllPeople.Values.Any(p => !p.Evacuated && !p.NoPathAvailable) && !UserInterface.IsSimulationPaused && !UserInterface.HasSimulationEnded)
             {
+                // See Yield function
                 Yield(1);
                 if (!UserInterface.HasSimulationEnded)
                 {
@@ -112,6 +111,7 @@ namespace Evacuation_Master_3000
             }
 
         }
+        //Waits 1 tick and runs the OnTick synchroniously in the background
         public static void Yield(long ticks)
         {
             long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
@@ -124,9 +124,10 @@ namespace Evacuation_Master_3000
         {
             OnTick -= person.ConditionalMove;
         }
-
+        //Method using to person, when person is blocked more than 5 rounds.
         private IEnumerable<BuildingBlock> FindNewPath(Person person)
         {
+            //Gets the personblocking's pathlist
             BuildingBlock target = person.PathList[person.StepsTaken + 1];
             BuildingBlock pos = person.PathList[person.StepsTaken];
             if (AllPeople.Values.Count(p => p.PathList.Count > p.StepsTaken + 1 && p.PathList[p.StepsTaken] == target  && p.PathList[p.StepsTaken + 1] == pos) == 1)

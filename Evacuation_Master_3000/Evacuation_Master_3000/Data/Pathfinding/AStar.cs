@@ -33,9 +33,10 @@ namespace Evacuation_Master_3000
                 pathList.AddRange(GetPathUsingAStar(person, destination));
                 if (destination.Type == Tile.Types.Stair)
                 {
+                    //Walks to the neighbour stairs where the priority is lower(this prevents moving up though).. Look next else if
                     if (destination.BuildingBlockNeighbours.Count(n => n.Priority < destination.Priority) != 0)
                     {
-                        destination = destination.BuildingBlockNeighbours.First(n => n.Priority < destination.Priority);
+                        destination = destination.BuildingBlockNeighbours.OrderBy(n => n.Priority).First(n => n.Priority < destination.Priority);
                     }
                     else if (destination.BuildingBlockNeighbours.Count(n => n.Z > destination.Z) != 0)
                     {
@@ -50,6 +51,7 @@ namespace Evacuation_Master_3000
                 {
                     break;
                 }
+                //If its a door, then it takes the next free tile in the opposite room of the person position.
                 if (destination.Priority % 2 == 0 && destination.Type == Tile.Types.Door)
                 {
                     person.Position =
@@ -153,6 +155,7 @@ namespace Evacuation_Master_3000
             path.Reverse();
             return path;
         }
+        //Checks the total weight of each of the neighbours, and sets the parent. This is needed to sort the SortedSet
         private void CheckNeighbors(BuildingBlock currentPoint, SortedSet<BuildingBlock> priorityQueue)
         {
             foreach (BuildingBlock neighbour in priorityQueue)

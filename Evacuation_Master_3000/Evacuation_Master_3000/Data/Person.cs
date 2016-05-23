@@ -79,6 +79,8 @@ namespace Evacuation_Master_3000
             MovementSpeed = 3 + Rand.NextDouble() * 5;
             MovementSpeedInMetersPerSecond = (MovementSpeed * 1000) / 60 / 60;
             Position = position;
+            //If their position is int16.maxvalue, if the priority is not assigned == That there is no path,
+            //They will not be touched in the simulation, but will be added to the counter in CP_SimulationStats
             if (position.Priority == Int16.MaxValue)
             {
                 NoPathAvailable = true;
@@ -125,7 +127,7 @@ namespace Evacuation_Master_3000
             }
             if (_target.Type != Tile.Types.Person || _target.OriginalType == Tile.Types.Stair)
             {
-                // Move to new tile and check if evacuated. If not, keep going.
+                // Move to new tile and check if evacuated. If not, keep going. Update the persons statistics..
                 if (StepsTaken + 1 < PathList.Count)
                 {
                     PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[StepsTaken],
@@ -149,8 +151,10 @@ namespace Evacuation_Master_3000
                 _roundsWaitedBecauseOfBlock++;
                 if (_roundsWaitedBecauseOfBlock >= 5 && _target.Type == Tile.Types.Person)
                 {
+                    //Gets a new path for the person and sets the new target tile
                     OnExtendedPathRequest?.Invoke(this);
                     _target = PathList[StepsTaken + 1];
+                    //Executes the step
                     if (PathList.Count > StepsTaken + 1 && _target.Type != Tile.Types.Person)
                     {
                         PersonInteractionStats.MovementSteps.Add(new MovementStep(this, PathList[StepsTaken],

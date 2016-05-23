@@ -21,6 +21,7 @@ namespace Evacuation_Master_3000
 
         private void OnResetButtonClick(object sender, RoutedEventArgs e)
         {
+            //Makes a new thread and loads the loadingwindow, and starts the animation.
             Thread thread = new Thread(() =>
             {
                 if (_loadingWindow == null)

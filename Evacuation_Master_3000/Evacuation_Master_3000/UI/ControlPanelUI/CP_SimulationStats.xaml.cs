@@ -29,7 +29,10 @@ namespace Evacuation_Master_3000
         private int _ticks;
         private double _fillWidthPerPerson;
         private readonly MainWindow _parentWindow;
-
+        /// <summary>
+        /// Resets everything when we click reset, resets the stats, and person pathlist. Clears each evacuated people pathlist,
+        /// and copies the steps from the stats to path.
+        /// </summary>
         private void ResetPeopleAndSimulationInformation()
         {
             foreach (Person person in _parentWindow.TheUserInterface.LocalPeopleDictionary.Values.Where(p => !p.NoPathAvailable))
@@ -94,6 +97,9 @@ namespace Evacuation_Master_3000
         private double _timeElapsedBeforeChange;
         private double _oldSimSpeed;
         private int _totalTicksBeforeChange;
+        /// <summary>
+        /// Updates the ticks, somewhat updates the ticks correctly, if the simulation speed increases or decreases. Still some minor issues.
+        /// </summary>
         private void UpdateTicksAndTime()
         {
             if (_hasSimSpeedBeenChanged)
@@ -113,6 +119,10 @@ namespace Evacuation_Master_3000
             TicksElapsed.Text = _ticks + " Ticks";
             _oldSimSpeed = SimulationSpeed.Value;
         }
+        /// <summary>
+        /// Updates the simulation stats, bar, evacuated people count etc.
+        /// </summary>
+        /// <param name="person"></param>
         private void UpdateSimulationStats(Person person)
         {
             int peopleCount = _parentWindow.TheUserInterface.LocalPeopleDictionary.Count(p => !p.Value.NoPathAvailable);
@@ -135,6 +145,7 @@ namespace Evacuation_Master_3000
                 }
                 if (peopleCount == _evacuatedPeopleList.Count)
                 {
+                    //Simulation has ended, so now we writes to the text file, uses stringbuilder all the way through
                     UserInterface.HasSimulationEnded = true;
                     UserInterface.IsSimulationReady = false;
                     StringBuilder sb = new StringBuilder();
@@ -217,7 +228,11 @@ namespace Evacuation_Master_3000
                 }
             }
         }
-
+        /// <summary>
+        /// Used to give a color to the simulation bar.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
         private static SolidColorBrush BarColor(double count)
         {
             if (count > 255)

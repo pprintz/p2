@@ -50,6 +50,7 @@ namespace P2TestEnvironment
             Assert.AreNotEqual(null, tile);
             Assert.AreEqual(8, tile.Neighbours.Count); //Fejl, tile naboer bliver ikke initialiseret
 
+            Tile otherTile;
             int x = 0, y = 0;
             foreach (Tile t in tile.Neighbours)
             {
@@ -57,7 +58,6 @@ namespace P2TestEnvironment
                 {
                     x++;
                 }
-                Tile otherTile;
                 floorPlan.Tiles.TryGetValue(Coordinate(x, y, 0), out otherTile);
                 Assert.AreNotEqual(null, otherTile);
                 Assert.AreEqual(otherTile, t);
@@ -70,8 +70,6 @@ namespace P2TestEnvironment
             }
             Assert.AreEqual(0, x);
             Assert.AreEqual(3, y);
-
-
         }
 
         /// <summary>
@@ -89,6 +87,8 @@ namespace P2TestEnvironment
             floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 1, 0), out block);
             Assert.AreNotEqual(null, block);
             Assert.AreEqual(8, block.BuildingBlockNeighbours.Count);
+
+            BuildingBlock otherBlock;
             int x = 0, y = 0;
             foreach (BuildingBlock buildingBlock in block.BuildingBlockNeighbours)
             {
@@ -96,7 +96,6 @@ namespace P2TestEnvironment
                 {
                     x++;
                 }
-                BuildingBlock otherBlock;
                 floorPlan.BuildingBlocks.TryGetValue(Coordinate(x, y, 0), out otherBlock);
                 Assert.AreNotEqual(null, otherBlock);
                 Assert.AreEqual(otherBlock, buildingBlock);
@@ -109,6 +108,75 @@ namespace P2TestEnvironment
             }
             Assert.AreEqual(0, x);
             Assert.AreEqual(3, y);
+
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(0, 0, 0), out block);
+            Assert.AreNotEqual(null, block);
+            Assert.AreEqual(3, block.BuildingBlockNeighbours.Count);
+
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 0, 0), out otherBlock);
+            Assert.IsTrue(block.BuildingBlockNeighbours.Any(b => Equals(b, otherBlock)));
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(0, 1, 0), out otherBlock);
+            Assert.IsTrue(block.BuildingBlockNeighbours.Any(b => Equals(b, otherBlock)));
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 1, 0), out otherBlock);
+            Assert.IsTrue(block.BuildingBlockNeighbours.Any(b => Equals(b, otherBlock)));
+        }
+
+        [Test]
+        public void FloorPlanBuildingBlockWallHorizontalVerticalNeighbourTest()
+        {
+            FloorPlan floorPlan = new FloorPlan();
+            floorPlan.CreateFloorPlan(3, 3, 1, "test", new[] { "1" });
+
+            BuildingBlock block;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 0, 0), out block);
+            block.Type = Tile.Types.Wall;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(0, 1, 0), out block);
+            block.Type = Tile.Types.Wall;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 2, 0), out block);
+            block.Type = Tile.Types.Wall;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(2, 1, 0), out block);
+            block.Type = Tile.Types.Wall;
+
+            floorPlan.Initiate();
+            Assert.AreEqual(9, floorPlan.BuildingBlocks.Count);
+            Assert.AreEqual(9, floorPlan.Tiles.Count);
+
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 1, 0), out block);
+            Assert.AreEqual(0, block.BuildingBlockNeighbours.Count);
+        }
+
+        [Test]
+        public void FloorPlanBuildingBlockWallDiagonalNeighbourTest()
+        {
+            FloorPlan floorPlan = new FloorPlan();
+            floorPlan.CreateFloorPlan(3, 3, 1, "test", new[] { "1" });
+
+            BuildingBlock block;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(0, 0, 0), out block);
+            block.Type = Tile.Types.Wall;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(0, 2, 0), out block);
+            block.Type = Tile.Types.Wall;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(2, 0, 0), out block);
+            block.Type = Tile.Types.Wall;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(2, 2, 0), out block);
+            block.Type = Tile.Types.Wall;
+
+            floorPlan.Initiate();
+            Assert.AreEqual(9, floorPlan.BuildingBlocks.Count);
+            Assert.AreEqual(9, floorPlan.Tiles.Count);
+
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 1, 0), out block);
+            Assert.AreEqual(4, block.BuildingBlockNeighbours.Count);
+
+            BuildingBlock otherBlock;
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 0, 0), out otherBlock);
+            Assert.IsTrue(block.BuildingBlockNeighbours.Any(b => Equals(b, otherBlock)));
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(0, 1, 0), out otherBlock);
+            Assert.IsTrue(block.BuildingBlockNeighbours.Any(b => Equals(b, otherBlock)));
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 2, 0), out otherBlock);
+            Assert.IsTrue(block.BuildingBlockNeighbours.Any(b => Equals(b, otherBlock)));
+            floorPlan.BuildingBlocks.TryGetValue(Coordinate(2, 1, 0), out otherBlock);
+            Assert.IsTrue(block.BuildingBlockNeighbours.Any(b => Equals(b, otherBlock)));
         }
 
         /// <summary>
@@ -163,11 +231,11 @@ namespace P2TestEnvironment
             TestBlock(6, 0, 0, floorPlan, ref testVal);
             TestBlock(5, 0, 0, floorPlan, ref testVal);
             TestBlock(3, 0, 0, floorPlan, ref testVal);
-//            TestBlock(1, 0, 0, floorPlan, ref testVal);
+            //            TestBlock(1, 0, 0, floorPlan, ref testVal);
             TestBlock(1, 0, 1, floorPlan, ref testVal);
             TestBlock(3, 0, 1, floorPlan, ref testVal);
             TestBlock(5, 0, 1, floorPlan, ref testVal);
-//            TestBlock(9, 0, 1, floorPlan, ref testVal);
+            //            TestBlock(9, 0, 1, floorPlan, ref testVal);
             TestBlock(9, 0, 2, floorPlan, ref testVal);
         }
 

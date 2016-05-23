@@ -82,6 +82,15 @@ namespace P2TestEnvironment
             var distance = pointOne.DiagonalDistanceTo(pointTwo);
             Assert.AreEqual((Math.Abs(min) * Math.Sqrt(2)), distance);
         }
+        [Test]
+        public void DiagonalDistanceIfBothPointsAreOnTheSamePosition()
+        {
+            int min = (Int32.MinValue + 1) / 2;
+            BuildingBlock pointOne = new BuildingBlock(0, 0);
+            BuildingBlock pointTwo = new BuildingBlock(0, 0);
+            var distance = pointOne.DiagonalDistanceTo(pointTwo);
+            Assert.AreEqual(0, distance);
+        }
 
         [Test]
         public void CompareDiagonalAndEuclid()

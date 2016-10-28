@@ -14,6 +14,9 @@ namespace P2TestEnvironment
     [TestFixture]
     class FloorPlanTests
     {
+        /// <summary>
+        /// Tests whether the floorplan initializes to flooramount  = 0 and with nul description.
+        /// </summary>
         [Test]
         public void FloorPlanConstructorTest()
         {
@@ -22,6 +25,9 @@ namespace P2TestEnvironment
             Assert.AreEqual(null, floorPlan.Description);
         }
 
+        /// <summary>
+        /// Tests whether the constructor workes correctly for the floorplan.
+        /// </summary>
         [Test]
         public void FloorPlanCreateTest()
         {
@@ -35,7 +41,7 @@ namespace P2TestEnvironment
         }
 
         /// <summary>
-        /// Tests wether or not the tiles has the correct neighbours
+        /// Tests whether or not the tiles has the correct neighbours
         /// </summary>
         //[Test]
         public void FloorPlanTileNeighbourTest()
@@ -73,7 +79,7 @@ namespace P2TestEnvironment
         }
 
         /// <summary>
-        /// Tests wether or not the building blocks has the correct neighbours
+        /// Tests whether or not the building blocks has the correct neighbours
         /// </summary>
         [Test]
         public void FloorPlanBuildingBlockNeighbourTest()
@@ -121,6 +127,9 @@ namespace P2TestEnvironment
             Assert.IsTrue(block.BuildingBlockNeighbours.Any(b => Equals(b, otherBlock)));
         }
 
+        /// <summary>
+        /// Tests whether a wall is included as a neighbour in an open space next it.      
+        /// </summary>
         [Test]
         public void FloorPlanBuildingBlockWallHorizontalVerticalNeighbourTest()
         {
@@ -144,7 +153,10 @@ namespace P2TestEnvironment
             floorPlan.BuildingBlocks.TryGetValue(Coordinate(1, 1, 0), out block);
             Assert.AreEqual(0, block.BuildingBlockNeighbours.Count);
         }
-
+        
+        /// <summary>
+        /// Tests whether the function CheckForConnectionsThroughDiagonalUnwalkableElements works as intended.
+        /// </summary>
         [Test]
         public void FloorPlanBuildingBlockWallDiagonalNeighbourTest()
         {
